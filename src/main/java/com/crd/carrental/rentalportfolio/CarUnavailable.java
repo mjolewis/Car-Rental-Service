@@ -8,11 +8,11 @@ package com.crd.carrental.rentalportfolio;
  *********************************************************************************************************************/
 public class CarUnavailable extends RentalComponent {
     private String location;
-    private String carType;
+    private CarTypes carType;
 
-    public CarUnavailable(String location, String carType) {
+    public CarUnavailable(String location) {
         this.location = location;
-        this.carType = carType;
+        this.carType = CarTypes.Unavailable;
     }
 
     @Override
@@ -21,13 +21,15 @@ public class CarUnavailable extends RentalComponent {
     }
 
     @Override
-    public String getCarType() {
+    public CarTypes getCarType() {
         return carType;
     }
 
-
     @Override
-    public boolean isRented() {
+    public boolean isReserved() {
         return true;
     }
+
+    @Override
+    public boolean isAvailable() { return false; }
 }

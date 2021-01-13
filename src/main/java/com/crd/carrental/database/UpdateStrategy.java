@@ -8,5 +8,5 @@ package com.crd.carrental.database;
  *********************************************************************************************************************/
 public interface UpdateStrategy {
 
-    void update(String vin);
+    void update(String vin, String reservationStartDateAndTime, String reservationEndDateAndTime);
 }

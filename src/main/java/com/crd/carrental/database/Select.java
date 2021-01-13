@@ -1,21 +1,22 @@
 package com.crd.carrental.database;
 
-import com.crd.carrental.rentalportfolio.Car;
-import com.crd.carrental.rentalportfolio.CarUnavailable;
-import com.crd.carrental.rentalportfolio.RentalComponent;
+import com.crd.carrental.controllers.ReservationResponse;
+import com.crd.carrental.rentalportfolio.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**********************************************************************************************************************
- * Select one car from the database. A reservation will be made against this car.
+ * Select one car from the database. A reservation will be made against this car after the customer enters a
+ * confirmation.
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public class Select implements SelectStrategy{
+public class Select implements SelectStrategy {
     private Connection con;
+    private String location;
+    private CarTypes carType;
+    private Timestamp reservationStartDateAndTime;
+    private Timestamp reservationEndDateAndTime;
     private PreparedStatement pStmt;
     private ResultSet resultSet;
 
@@ -24,51 +25,70 @@ public class Select implements SelectStrategy{
     }
 
     /**
-     * Gets a car from the database if there is one available that matches the requested car type and rental location.
+     * Finds one car that matches the location and car type. If no car is available that matches the customer
+     * requirements, then an CarUnavailable object is created and used to notify the customer that there are no cars
+     * available that match the requirements.
      *
-     * @return A car if one was found. Otherwise
+     * @note If a car is reserved, it can still be available because the existing reservation is in the future. This
+     *         select statement will only find cars that have a reservation start date and time greater than the current
+     *         customer's request. We do not allow reservations to be made against a car if the reservation end date and
+     *         time is equal to the current customer's request because the company will perform routine cleaning services
+     *         before the car can be rented again.
      */
     @Override
-    public RentalComponent select(String location, String carType) {
-        RentalComponent reservedCar = null;
+    public ReservationResponse select(String location, String carType, String reservationStartDateAndTime,
+                                  String reservationEndDateAndTime) {
+
+        this.location = location;
+        this.carType = CarTypes.valueOf(carType);
+        this.reservationStartDateAndTime = Timestamp.valueOf(reservationStartDateAndTime);
+        this.reservationEndDateAndTime = Timestamp.valueOf(reservationEndDateAndTime);
+        ReservationResponse reservationResponse = null;
 
         String selectStatement = "SELECT * FROM cars " +
                 "WHERE location LIKE ? " +
                 "AND carType LIKE ? " +
+                "AND isAvailable LIKE ? " +
+                "AND (reservationStartDateAndTime > ? OR reservationEndDateAndTime < ? )" +
                 "LIMIT 1";
 
         try {
-            createPreparedStatement(selectStatement, location, carType);
+            createPreparedStatement(selectStatement);
             executeQuery();
-            reservedCar = createCarForReservationResponse(location, carType);
+            reservationResponse = getReservationResponse();
         } catch (SQLException e) {
             handleException(e);
         }
 
         ConnectionCloser.closeQuietly(resultSet, pStmt);
 
-        return reservedCar;
+        return reservationResponse;
     }
 
     // Prepared Statements help prevent SQL injection and efficiently execute the statement
-    private void createPreparedStatement(String selectStatement, String location, String carType) throws SQLException {
+    private void createPreparedStatement(String selectStatement) throws SQLException {
         pStmt = con.prepareStatement(selectStatement);
-        pStmt.setString(1, "%" + location + "%");
-        pStmt.setString(2, carType);
+        pStmt.setString(1, location);
+        pStmt.setObject(2, carType, Types.JAVA_OBJECT);
+        pStmt.setBoolean(3, true);
+        pStmt.setTimestamp(4, reservationStartDateAndTime);
+        pStmt.setTimestamp(5, reservationEndDateAndTime);
     }
 
     private void executeQuery() throws SQLException {
         resultSet = pStmt.executeQuery();
     }
 
-    private RentalComponent createCarForReservationResponse(String location, String carType) throws SQLException {
+    private ReservationResponse getReservationResponse() throws SQLException {
+        String vin = "";
 
         if (resultSet.next()) {
-            String vin = resultSet.getString("vin");
-            boolean isRented = resultSet.getBoolean("isRented");
-            return new Car(vin, location, carType, isRented);
+            vin = resultSet.getString("vin");
+            boolean isAvailable = resultSet.getBoolean("isAvailable");
+            return new ReservationResponse(vin, carType, location, isAvailable);
         }
-        return new CarUnavailable(location, carType);
+
+        return new ReservationResponse(vin, carType, location, false);
     }
 
     private void handleException(SQLException e) {

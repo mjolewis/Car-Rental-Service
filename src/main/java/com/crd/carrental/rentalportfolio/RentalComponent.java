@@ -1,6 +1,6 @@
 package com.crd.carrental.rentalportfolio;
 
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.Iterator;
 
 /**********************************************************************************************************************
@@ -27,23 +27,29 @@ public abstract class RentalComponent {
         throw new UnsupportedOperationException();
     }
 
+    public String getStoreName() { throw new UnsupportedOperationException(); }
+
     public String getVin() {
         throw new UnsupportedOperationException();
     }
 
     public String getLocation() { throw new UnsupportedOperationException(); }
 
-    public String getCarType() {
+    public CarTypes getCarType() {
         throw new UnsupportedOperationException();
     }
 
-    public boolean isRented() {
+    public boolean isReserved() {
         throw new UnsupportedOperationException();
     }
 
-    public Date getReservationStartDate() { throw new UnsupportedOperationException(); }
+    public boolean isAvailable() {
+        throw new UnsupportedOperationException();
+    }
 
-    public Date getReservationEndDate() { throw new UnsupportedOperationException(); }
+    public Timestamp getReservationStartDateAndTime() { throw new UnsupportedOperationException(); }
+
+    public Timestamp getReservationEndDateAndTime() { throw new UnsupportedOperationException(); }
 
     public void print() {
         throw new UnsupportedOperationException();
