@@ -10,12 +10,12 @@ import java.util.List;
  * @author Michael Lewis
  *********************************************************************************************************************/
 public class RentalStore extends RentalComponent {
-    private String location;
+    private String storeName;
     private List<RentalComponent> carRentalPortfolio = new ArrayList<>();
     private Iterator<RentalComponent> iterator;
 
-    public RentalStore(String location) {
-        this.location = location;
+    public RentalStore(String storeName) {
+        this.storeName = storeName;
     }
 
     @Override
@@ -37,8 +37,8 @@ public class RentalStore extends RentalComponent {
     }
 
     @Override
-    public String getLocation() {
-        return location;
+    public String getStoreName() {
+        return storeName;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class RentalStore extends RentalComponent {
 
     @Override
     public void print() {
-        System.out.println("\n" + location);
+        System.out.println("\n" + storeName);
         System.out.println("-------------");
 
         Iterator<RentalComponent> iterator = carRentalPortfolio.iterator();

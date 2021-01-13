@@ -8,20 +8,18 @@ package com.crd.carrental.controllers;
 public class ReservationRequest {
     private String location;
     private String carType;
-    private String dayOfRental;
-    private String monthOfRental;
-    private String numOfDaysToRent;
+    private String reservationStartDateAndTime;
+    private String reservationEndDateAndTime;
 
     public ReservationRequest() {
     }
 
-    public ReservationRequest(String location, String carType, String dayOfRental, String monthOfRental,
-                              String numOfDaysToRent) {
+    public ReservationRequest(String location, String carType, String reservationStartDateAndTime,
+                              String reservationEndDateAndTime) {
         this.location = location;
         this.carType = carType;
-        this.dayOfRental = dayOfRental;
-        this.monthOfRental = monthOfRental;
-        this.numOfDaysToRent = numOfDaysToRent;
+        this.reservationStartDateAndTime = reservationStartDateAndTime;
+        this.reservationEndDateAndTime = reservationEndDateAndTime;
     }
 
     public String getLocation() { return location; }
@@ -30,15 +28,11 @@ public class ReservationRequest {
         return carType;
     }
 
-    public String getDayOfRental() {
-        return dayOfRental;
+    public String getReservationStartDateAndTime() {
+        return reservationStartDateAndTime;
     }
 
-    public String getMonthOfRental() {
-        return monthOfRental;
-    }
-
-    public String getNumOfDaysToRent() {
-        return numOfDaysToRent;
+    public String getReservationEndDateAndTime() {
+        return reservationEndDateAndTime;
     }
 }

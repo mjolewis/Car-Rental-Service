@@ -50,8 +50,8 @@
                         </manifest>
                     </archive>
                     <descriptorRefs>
-                        <descriptorRef>war-with-dependencies
-                        </descriptorRef> <!-- Creates a WAR which contains the output of the project and its unpacked dependencies -->
+                        <descriptorRef>jar-with-dependencies
+                        </descriptorRef> <!-- Creates a JAR which contains the output of the project and its unpacked dependencies -->
                     </descriptorRefs>
                 </configuration>
 

@@ -1,5 +1,7 @@
 package com.crd.carrental.database;
 
+import com.crd.carrental.config.ApplicationConfig;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -13,7 +15,7 @@ public class ConnectionCreator {
     private static volatile Connection con;
 
     private ConnectionCreator() throws SQLException {
-        con = DriverManager.getConnection(MySqlConfig.SQL_DB, MySqlConfig.SQL_USER, MySqlConfig.SQL_PWD);
+        con = DriverManager.getConnection(ApplicationConfig.SQL_DB, ApplicationConfig.SQL_USER, ApplicationConfig.SQL_PWD);
     }
 
     public static Connection getInstance() {

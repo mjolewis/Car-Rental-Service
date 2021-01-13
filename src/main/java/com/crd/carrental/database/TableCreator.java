@@ -11,8 +11,8 @@ public class TableCreator implements TableStrategy {
     private Connection con;
     private Statement stmt;                                     // A statement object holds SQL commands
 
-    public TableCreator() {
-        this.con = ConnectionCreator.getInstance();
+    public TableCreator(Connection con) {
+        this.con = con;
     }
 
     @Override
@@ -45,11 +45,13 @@ public class TableCreator implements TableStrategy {
     private void createTable(String tableName) throws SQLException {
         stmt.execute("CREATE TABLE " + tableName +
                 "(vin VARCHAR(17) PRIMARY KEY," +
+                "storeName VARCHAR(20)," +
                 "location VARCHAR(20)," +
                 "carType VARCHAR(20)," +
-                "isRented BOOLEAN, " +
-                "reservationStartDate DATE, " +
-                "reservationEndDate DATE);");
+                "isReserved BOOLEAN, " +
+                "isAvailable BOOLEAN, " +
+                "reservationStartDateAndTime TIMESTAMP, " +
+                "reservationEndDateAndTime TIMESTAMP);");
     }
 
     private void handleException(Exception e) {

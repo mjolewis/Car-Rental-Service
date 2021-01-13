@@ -5,14 +5,15 @@ import com.crd.carrental.rentalportfolio.RentalComponent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.Iterator;
 
 /**********************************************************************************************************************
- *
+ * Inserts individual cars into a MySQL database.
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public class Insert {
+public class Insert implements InsertStrategy {
     private Connection con;
     private String tableName;
 
@@ -37,16 +38,18 @@ public class Insert {
 
     private void insertCarIfRecordDoesntExist(RentalComponent car) throws SQLException {
 
-        String sqlInsert = "INSERT IGNORE INTO " + tableName + " values(?, ?, ?, ?, ?)";
+        String sqlInsert = "INSERT IGNORE INTO " + tableName + " values(?, ?, ?, ?, ?, ?, ?, ?)";
 
         // Prepared Statements prevent SQL injection and efficiently execute the statement multiple times
         PreparedStatement pStmt = con.prepareStatement(sqlInsert);
         pStmt.setString(1, car.getVin());
-        pStmt.setString(2, car.getLocation());
-        pStmt.setString(3, car.getCarType());
-        pStmt.setBoolean(4, car.isRented());
-        pStmt.setDate(5, car.getReservationStartDate());
-        pStmt.setDate(6, car.getReservationEndDate());
+        pStmt.setString(2, car.getStoreName());
+        pStmt.setString(3, car.getLocation());
+        pStmt.setObject(4, car.getCarType(), Types.JAVA_OBJECT);
+        pStmt.setBoolean(5, car.isReserved());
+        pStmt.setBoolean(6, car.isAvailable());
+        pStmt.setTimestamp(7, car.getReservationStartDateAndTime());
+        pStmt.setTimestamp(8, car.getReservationEndDateAndTime());
         pStmt.executeUpdate();
 
         closePreparedStatement(pStmt);

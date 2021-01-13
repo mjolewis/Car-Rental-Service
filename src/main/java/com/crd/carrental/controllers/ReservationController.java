@@ -4,25 +4,22 @@ import com.crd.carrental.database.SelectStrategy;
 import com.crd.carrental.database.Select;
 import com.crd.carrental.database.Update;
 import com.crd.carrental.database.UpdateStrategy;
-import com.crd.carrental.rentalportfolio.RentalComponent;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
 /**********************************************************************************************************************
- * A web request handler
+ * A web request handler.
  *
  * @author Michael Lewis
- * @version November 20, 2020 - Kickoff
 **********************************************************************************************************************/
 @Controller
 public class ReservationController {
     private String location;
     private String carType;
-    private String dayOfRental;
-    private String monthOfRental;
-    private String numOfDaysToRent;
-    private RentalComponent car;
+    private String reservationStartDateAndTime;
+    private String reservationEndDateAndTime;
+    private String vin;
 
     public ReservationController() {}
 
@@ -36,42 +33,34 @@ public class ReservationController {
         this.carType = reservationRequest.getCarType();
     }
 
-    @MessageMapping("/day")
-    public void setDayOfRental(ReservationRequest reservationRequest) {
-        this.dayOfRental = reservationRequest.getDayOfRental();
+    @MessageMapping("/start")
+    public void setReservationStartDateAndTime(ReservationRequest reservationRequest) {
+        this.reservationStartDateAndTime = reservationRequest.getReservationStartDateAndTime();
     }
 
-    @MessageMapping("/month")
-    public void setMonthOfRental(ReservationRequest reservationRequest) {
-        this.monthOfRental = reservationRequest.getMonthOfRental();
+    @MessageMapping("/end")
+    public void setReservationEndDateAndTime(ReservationRequest reservationRequest) {
+        this.reservationEndDateAndTime = reservationRequest.getReservationEndDateAndTime();
     }
 
-    @MessageMapping("/rental/length")
-    public void setNumOfDaysToRent(ReservationRequest reservationRequest) {
-        this.numOfDaysToRent = reservationRequest.getNumOfDaysToRent();
-    }
-
-    @MessageMapping("/reservation/request")
-    @SendTo("/reservation/response")
-    public ReservationResponse requestReservationAndUpdateDatabase() {
-        car = selectCar();
-        boolean isRented = car.isRented();
-
-        return new ReservationResponse(carType, location, isRented);
-    }
-
-    private RentalComponent selectCar() {
+    @MessageMapping("/request")
+    @SendTo("/reservation/request/response")
+    public ReservationResponse requestReservation() {
         SelectStrategy selector = new Select();
-        return selector.select(location, carType);
+        ReservationResponse reservationResponse =
+                selector.select(location, carType, reservationStartDateAndTime, reservationEndDateAndTime);
+
+        vin = reservationResponse.getVin();
+
+        return reservationResponse;
     }
 
     // If the car is available and the customer confirms the request, then reserve the car for the customer
-    @MessageMapping("/reservation/confirmation")
-    @SendTo("/reservation/response")
+    @MessageMapping("/confirmation")
+    @SendTo("/reservation/confirmation/response")
     public void confirmReservation() {
         UpdateStrategy dbUpdator = new Update();
-        String vin = car.getVin();
-        dbUpdator.update(vin);
+        dbUpdator.update(vin, reservationStartDateAndTime, reservationEndDateAndTime);
     }
 }
 
