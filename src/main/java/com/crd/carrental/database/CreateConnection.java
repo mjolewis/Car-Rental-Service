@@ -11,19 +11,19 @@ import java.sql.SQLException;
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public class ConnectionCreator {
+public class CreateConnection {
     private static volatile Connection con;
 
-    private ConnectionCreator() throws SQLException {
+    private CreateConnection() throws SQLException {
         con = DriverManager.getConnection(ApplicationConfig.SQL_DB, ApplicationConfig.SQL_USER, ApplicationConfig.SQL_PWD);
     }
 
     public static Connection getInstance() {
         if (con == null) {
-            synchronized (ConnectionCreator.class) {
+            synchronized (CreateConnection.class) {
                 if (con == null) {
                     try {
-                        new ConnectionCreator();
+                        new CreateConnection();
                     } catch (SQLException e) {
                         handleException(e);
                     }

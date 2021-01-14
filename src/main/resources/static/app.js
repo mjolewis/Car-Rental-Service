@@ -4,15 +4,12 @@ function setConnected(connected) {
     $("#connect").prop("disabled", connected);
     $("#disconnect").prop("disabled", !connected);
     if (connected) {
-        $("#reservationRequestTable").show();
         $("#reservationConfirmationTable").show();
     }
     else {
-        $("#reservationRequestTable").hide();
         $("#reservationConfirmationTable").hide();
     }
-    $("#reservationRequest").html("");
-    $("#reservationConfirmation").html("");
+    $("#confirmation").html("");
 }
 
 /**
@@ -26,23 +23,20 @@ function connect() {
         console.log('Connected: ' + frame);
 
         // Register the reservation request
-        stompClient.subscribe('/reservation/request/response', function (response) {
-            //showGreeting(JSON.parse(greeting.body).content);
+        stompClient.subscribe('/reservation/request', function (response) {
 
             window.reservationResponse = JSON.parse(response.body);
 
             if (window.reservationResponse.available) {
-                carWasFound();
+                confirmReservation();
             } else {
                 carWasNotFound();
             }
         });
 
         // register the reservation confirmation
-        stompClient.subscribe('/reservation/confirmation/response', function (response) {
-            window.reservationConfirmation = JSON.parse(response.body);
-
-            reservationHasBeenMade();
+        stompClient.subscribe('/reservation/confirmation', function (confirmationNumber) {
+            displayReservationNumber(JSON.parse(confirmationNumber.body).confirmationNumber);
         });
     });
 }
@@ -55,53 +49,41 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-function sendLocation() {
-    stompClient.send("/app/location", {}, JSON.stringify({'location': $("#location").val()}));
-}
-
-function sendCarType() {
-    stompClient.send("/app/carType", {}, JSON.stringify({'carType': $("#carType").val()}));
-}
-
-function sendReservationStartDateAndTime() {
-    stompClient.send("/app/start", {}, JSON.stringify({'reservationStartDateAndTime': $("#reservationStartDateAndTime").val()}));
-}
-
-function sendReservationEndDateAndTime() {
-    stompClient.send("/app/end", {}, JSON.stringify({'reservationEndDateAndTime': $("#reservationEndDateAndTime").val()}));
-}
-
-function sendFirstName() {
-    stompClient.send("/app/firstName", {}, JSON.stringify({'firstName': $("#firstName").val()}));
-}
-
-function sendLastName() {
-    stompClient.send("/app/lastName", {}, JSON.stringify({'lastName': $("#lastName").val()}));
-}
-
-function sendEmailAddress() {
-    stompClient.send("/app/emailAddress", {}, JSON.stringify({'emailAddress': $("#emailAddress").val()}));
-}
-
-function sendCreditCardNumber() {
-    stompClient.send("/app/creditCardNumber", {}, JSON.stringify({'creditCardNumber': $("#creditCardNumber").val()}));
-}
-
+/**
+ * Send the customer information to the controller to check if a car is available.
+ */
 function sendReservationRequest() {
-    stompClient.send("/app/request", {}, JSON.stringify({'request': $("#request").val()}));
-}
+    var location = document.getElementById("location").value;
+    var carType = document.getElementById("carType").value;
+    var reservationStartDateAndTime = document.getElementById("reservationStartDateAndTime").value;
+    var reservationEndDateAndTime = document.getElementById("reservationEndDateAndTime").value;
+    var firstName = document.getElementById("firstName").value;
+    var lastName = document.getElementById("lastName").value;
+    var emailAddress = document.getElementById("emailAddress").value;
+    var creditCardNumber = document.getElementById("creditCardNumber").value;
 
-function carWasFound() {
-    $("#reservationRequest").append("<tr><td>" + 'Great news! We have a car for you. Confirm your reservation' + "</td></tr>");
-}
-
-function carWasNotFound() {
-    $("#reservationConfirmation").append("<tr><td>" + 'There are no cars available with your requirements. ' +
-        'Try a different location' + "</td></tr>");
+    stompClient.send("/app/request", {}, JSON.stringify(
+        {'location': location,
+                'carType' : carType,
+                'reservationStartDateAndTime' : reservationStartDateAndTime,
+                'reservationEndDateAndTime' : reservationEndDateAndTime,
+                'firstName' : firstName,
+                'lastName' : lastName,
+                'emailAddress' : emailAddress,
+                'creditCardNumber' : creditCardNumber},));
 }
 
 function confirmReservation() {
-    stompClient.send("/app/confirmation", {}, JSON.stringify({'confirmation': $("#confirmation").val()}));
+    stompClient.send("/app/confirmation", {}, JSON.stringify({'confirmation': $("").val()}));
+}
+
+function displayReservationNumber(confirmationNumber) {
+    $("#confirmation").append("<tr><td>" + "Your confirmation number is: " + confirmationNumber + "</td></tr>");
+}
+
+function carWasNotFound() {
+    $("#confirmation").append("<tr><td>" + 'There are no cars available with your requirements. ' +
+        'Try a different location' + "</td></tr>");
 }
 
 $(function () {
@@ -110,16 +92,7 @@ $(function () {
     });
     $( "#connect" ).click(function() { connect(); });
     $( "#disconnect" ).click(function() { disconnect(); });
-    $( "#sendLocation" ).click(function() { sendLocation(); });
-    $( "#sendCarType" ).click(function() { sendCarType(); });
-    $( "#sendReservationStartDateAndTime" ).click(function() { sendReservationStartDateAndTime(); });
-    $( "#sendReservationEndDateAndTime" ).click(function() { sendReservationEndDateAndTime(); });
-    $( "#sendFirstName" ).click(function() { sendFirstName(); });
-    $( "#sendLastName" ).click(function() { sendLastName(); });
-    $( "#sendEmailAddress" ).click(function() { sendEmailAddress(); });
-    $( "#sendCreditCardNumber" ).click(function() { sendCreditCardNumber(); });
     $( "#sendReservationRequest" ).click(function() { sendReservationRequest(); });
-    $( "#confirmReservation" ).click(function() { confirmReservation(); });
 });
 
 // var substringMatcher = function(strs) {

@@ -72,7 +72,7 @@ public class CarRentalApplication {
         parentCompany.add(dataPlatform);
         parentCompany.add(strategicCloud);
 
-        Connection con = ConnectionCreator.getInstance();
+        Connection con = CreateConnection.getInstance();
 
         CreateTableStrategy inventoryTable = new CreateInventoryTable(con);
         inventoryTable.createTable("cars");

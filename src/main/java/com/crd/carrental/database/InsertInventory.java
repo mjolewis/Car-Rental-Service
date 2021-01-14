@@ -63,6 +63,6 @@ public class InsertInventory implements InsertStrategy {
     }
 
     private void closePreparedStatement(PreparedStatement pStmt) {
-        ConnectionCloser.closeQuietly(pStmt);
+        CloseConnection.closeQuietly(pStmt);
     }
 }
