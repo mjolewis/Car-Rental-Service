@@ -11,16 +11,16 @@ import java.sql.*;
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public class Select implements SelectStrategy {
+public class SelectInventory implements SelectStrategy {
     private Connection con;
-    private String location;
+    private StoreLocations location;
     private CarTypes carType;
     private Timestamp reservationStartDateAndTime;
     private Timestamp reservationEndDateAndTime;
     private PreparedStatement pStmt;
     private ResultSet resultSet;
 
-    public Select() {
+    public SelectInventory() {
         this.con = ConnectionCreator.getInstance();
     }
 
@@ -36,20 +36,21 @@ public class Select implements SelectStrategy {
      *         before the car can be rented again.
      */
     @Override
-    public ReservationResponse select(String location, String carType, String reservationStartDateAndTime,
-                                  String reservationEndDateAndTime) {
+    public ReservationResponse select(StoreLocations location, CarTypes carType, Timestamp reservationStartDateAndTime,
+                                      Timestamp reservationEndDateAndTime) {
 
         this.location = location;
-        this.carType = CarTypes.valueOf(carType);
-        this.reservationStartDateAndTime = Timestamp.valueOf(reservationStartDateAndTime);
-        this.reservationEndDateAndTime = Timestamp.valueOf(reservationEndDateAndTime);
+        this.carType = carType;
+        this.reservationStartDateAndTime = reservationStartDateAndTime;
+        this.reservationEndDateAndTime = reservationEndDateAndTime;
         ReservationResponse reservationResponse = null;
 
         String selectStatement = "SELECT * FROM cars " +
                 "WHERE location LIKE ? " +
-                "AND carType LIKE ? " +
-                "AND isAvailable LIKE ? " +
-                "AND (reservationStartDateAndTime > ? OR reservationEndDateAndTime < ? )" +
+                "AND carType = ? " +
+                "AND isAvailable = ? " +
+                "AND (reservationStartDateAndTime > ? OR reservationEndDateAndTime < ? " +
+                "OR (reservationStartDateAndTime IS NULL AND reservationEndDateAndTime IS NULL))" +
                 "LIMIT 1";
 
         try {
@@ -68,7 +69,7 @@ public class Select implements SelectStrategy {
     // Prepared Statements help prevent SQL injection and efficiently execute the statement
     private void createPreparedStatement(String selectStatement) throws SQLException {
         pStmt = con.prepareStatement(selectStatement);
-        pStmt.setString(1, location);
+        pStmt.setObject(1, location, Types.JAVA_OBJECT);
         pStmt.setObject(2, carType, Types.JAVA_OBJECT);
         pStmt.setBoolean(3, true);
         pStmt.setTimestamp(4, reservationStartDateAndTime);

@@ -1,12 +1,12 @@
-package com.crd.carrental.database;
+package com.crd.carrental.rentalportfolio;
 
 /**********************************************************************************************************************
- * Declares an interface common to all supported database table creation algorithms. Concrete strategies must implement
- * this interface.
+ * A set of location constants used to represent the locations of our stores.
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public interface TableStrategy {
-
-    void createTableIfDoesntExist(String tableName);
+public enum StoreLocations {
+    Boston,
+    Cambridge,
+    Burlington,
 }

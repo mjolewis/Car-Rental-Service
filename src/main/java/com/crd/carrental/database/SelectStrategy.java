@@ -1,6 +1,10 @@
 package com.crd.carrental.database;
 
 import com.crd.carrental.controllers.ReservationResponse;
+import com.crd.carrental.rentalportfolio.CarTypes;
+import com.crd.carrental.rentalportfolio.StoreLocations;
+
+import java.sql.Timestamp;
 
 /**********************************************************************************************************************
  * Declares an interface common to all supported database Select algorithms. Concrete strategies must implement this
@@ -10,6 +14,6 @@ import com.crd.carrental.controllers.ReservationResponse;
  *********************************************************************************************************************/
 public interface SelectStrategy {
 
-    ReservationResponse select(String location, String carType, String reservationStartDateAndTime,
-                               String reservationEndDateAndTime);
+    ReservationResponse select(StoreLocations location, CarTypes carType, Timestamp reservationStartDateAndTime,
+                               Timestamp reservationEndDateAndTime);
 }

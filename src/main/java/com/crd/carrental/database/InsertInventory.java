@@ -13,11 +13,11 @@ import java.util.Iterator;
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public class Insert implements InsertStrategy {
+public class InsertInventory implements InsertStrategy {
     private Connection con;
     private String tableName;
 
-    public Insert(Connection con, String tableName) {
+    public InsertInventory(Connection con, String tableName) {
         this.con = con;
         this.tableName = tableName;
     }
@@ -28,10 +28,13 @@ public class Insert implements InsertStrategy {
 
         while (iterator.hasNext()) {
             RentalComponent car = iterator.next();
-            try {
-                insertCarIfRecordDoesntExist(car);
-            } catch (SQLException e) {
-                handleException(e);
+
+            if (car.isChild()) {                                // Only add cars to the database
+                try {
+                    insertCarIfRecordDoesntExist(car);
+                } catch (SQLException e) {
+                    handleException(e);
+                }
             }
         }
     }
@@ -43,8 +46,8 @@ public class Insert implements InsertStrategy {
         // Prepared Statements prevent SQL injection and efficiently execute the statement multiple times
         PreparedStatement pStmt = con.prepareStatement(sqlInsert);
         pStmt.setString(1, car.getVin());
-        pStmt.setString(2, car.getStoreName());
-        pStmt.setString(3, car.getLocation());
+        pStmt.setObject(2, car.getStoreName(), Types.JAVA_OBJECT);
+        pStmt.setObject(3, car.getLocation(), Types.JAVA_OBJECT);
         pStmt.setObject(4, car.getCarType(), Types.JAVA_OBJECT);
         pStmt.setBoolean(5, car.isReserved());
         pStmt.setBoolean(6, car.isAvailable());

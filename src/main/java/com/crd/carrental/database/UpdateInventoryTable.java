@@ -1,22 +1,20 @@
 package com.crd.carrental.database;
 
+import com.crd.carrental.controllers.ReservationController;
+
 import java.sql.*;
+import java.util.Date;
 
 /**********************************************************************************************************************
  * Update the database record for the car represented by a unique vin number.
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public class Update implements UpdateStrategy {
+public class UpdateInventoryTable implements UpdateStrategy {
     private Connection con;
     private PreparedStatement pStmt;
-    private String vin;
-    private Timestamp currentDateAndTime;
-    private Timestamp reservationStartDateAndTime;
-    private Timestamp reservationEndDateAndTime;
-    private boolean isCarAvailable;
 
-    public Update() {
+    public UpdateInventoryTable() {
         this.con = ConnectionCreator.getInstance();
     }
 
@@ -28,22 +26,17 @@ public class Update implements UpdateStrategy {
      * reservationStartDateAndTime to before updating the database with the correct value.
      */
     @Override
-    public void update(String vin, String reservationStartDateAndTime, String reservationEndDateAndTime) {
-        this.vin = vin;
-        currentDateAndTime = getCurrentDateAndTime();
-        this.reservationStartDateAndTime = Timestamp.valueOf(reservationStartDateAndTime);
-        this.reservationEndDateAndTime = Timestamp.valueOf(reservationEndDateAndTime);
-        isCarAvailable = isCarAvailable();
+    public void update(ReservationController controller) {
 
         String updateStatement = "UPDATE cars " +
                 "SET isReserved = ? " +
                 "SET isAvailable = ? " +
                 "SET reservationStartDateAndTime = ? " +
                 "SET reservationEndDateAndTime = ? " +
-                "WHERE vin LIKE ?";
+                "WHERE vin = ?";
 
         try {
-            createPreparedStatement(updateStatement);
+            createPreparedStatement(updateStatement, controller);
             executeUpdate();
         } catch (SQLException e) {
             handleException(e);
@@ -52,22 +45,27 @@ public class Update implements UpdateStrategy {
         ConnectionCloser.closeQuietly(pStmt);
     }
 
-    private Timestamp getCurrentDateAndTime() {
-        return new Timestamp(System.currentTimeMillis());
+    // Prepared Statements help prevent SQL injection and efficiently execute the statement
+    private void createPreparedStatement(String updateStatement, ReservationController controller) throws SQLException {
+//        Date utilDate = new java.util.Date(String.valueOf(reservationStartDateAndTime));
+//        Timestamp sqlTS = new java.sql.Timestamp(utilDate.getTime());
+
+
+        pStmt = con.prepareStatement(updateStatement);
+        pStmt.setBoolean(1, true);
+        pStmt.setBoolean(2, isCarAvailable());
+        pStmt.setTimestamp(3, controller.getReservationStartDateAndTime());
+        pStmt.setTimestamp(4, controller.getReservationEndDateAndTime());
+        pStmt.setString(5, controller.getVin());
     }
 
     private boolean isCarAvailable() {
-        return currentDateAndTime.getTime() < this.reservationStartDateAndTime.getTime();
-    }
+        Timestamp current = Timestamp.valueOf(new Timestamp(System.currentTimeMillis()).toString());
+        //Timestamp reservationTime = Timestamp.valueOf(reservationStartDateAndTime.toString());
+        //int compare = current.compareTo(reservationTime);
 
-    // Prepared Statements help prevent SQL injection and efficiently execute the statement
-    private void createPreparedStatement(String updateStatement) throws SQLException {
-        pStmt = con.prepareStatement(updateStatement);
-        pStmt.setBoolean(1, true);
-        pStmt.setBoolean(2, isCarAvailable);
-        pStmt.setTimestamp(3, reservationStartDateAndTime);
-        pStmt.setTimestamp(4, reservationEndDateAndTime);
-        pStmt.setString(5, vin);
+        //return compare <= 0;
+        return true;
     }
 
     private void executeUpdate() throws SQLException {

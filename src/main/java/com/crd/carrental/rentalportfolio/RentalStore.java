@@ -10,11 +10,11 @@ import java.util.List;
  * @author Michael Lewis
  *********************************************************************************************************************/
 public class RentalStore extends RentalComponent {
-    private String storeName;
+    private StoreNames storeName;
     private List<RentalComponent> carRentalPortfolio = new ArrayList<>();
     private Iterator<RentalComponent> iterator;
 
-    public RentalStore(String storeName) {
+    public RentalStore(StoreNames storeName) {
         this.storeName = storeName;
     }
 
@@ -37,7 +37,7 @@ public class RentalStore extends RentalComponent {
     }
 
     @Override
-    public String getStoreName() {
+    public StoreNames getStoreName() {
         return storeName;
     }
 

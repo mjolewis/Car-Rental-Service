@@ -21,8 +21,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
      */
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/reservation");
-        config.setApplicationDestinationPrefixes("/app");
+        config.enableSimpleBroker("/reservation");      // prefix to @SendTo
+        config.setApplicationDestinationPrefixes("/app");                 // prefix bound to @MessageMapping
     }
 
     /**
