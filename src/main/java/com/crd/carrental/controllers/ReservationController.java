@@ -1,16 +1,13 @@
 package com.crd.carrental.controllers;
 
-import com.crd.carrental.database.SelectStrategy;
-import com.crd.carrental.database.SelectInventory;
-import com.crd.carrental.database.UpdateInventoryTable;
-import com.crd.carrental.database.UpdateStrategy;
+import com.crd.carrental.database.*;
 import com.crd.carrental.rentalportfolio.CarTypes;
 import com.crd.carrental.rentalportfolio.StoreLocations;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
-import java.sql.Timestamp;
+import java.util.Random;
 
 /**********************************************************************************************************************
  * A web request handler.
@@ -21,54 +18,69 @@ import java.sql.Timestamp;
 public class ReservationController {
     private StoreLocations location;
     private CarTypes carType;
-    private Timestamp reservationStartDateAndTime;
-    private Timestamp reservationEndDateAndTime;
-    private ReservationResponse reservationResponse;
-
+    private String reservationStartDateAndTime;
+    private String reservationEndDateAndTime;
     private String firstName;
     private String lastName;
     private String emailAddress;
-    private String reservationNumber;
     private long creditCardNumber;
+    private String reservationNumber;
+    private ReservationResponse reservationResponse;
 
     public ReservationController() {}
 
-    @MessageMapping("/location")
-    public void setLocation(ReservationRequest reservationRequest) {
-        this.location = reservationRequest.getLocation();
-    }
-
-    @MessageMapping("/carType")
-    public void setCarType(ReservationRequest reservationRequest) {
-        this.carType = reservationRequest.getCarType();
-    }
-
-    @MessageMapping("/start")
-    public void setReservationStartDateAndTime(ReservationRequest reservationRequest) {
-        this.reservationStartDateAndTime = reservationRequest.getReservationStartDateAndTime();
-    }
-
-    @MessageMapping("/end")
-    public void setReservationEndDateAndTime(ReservationRequest reservationRequest) {
-        this.reservationEndDateAndTime = reservationRequest.getReservationEndDateAndTime();
-    }
-
     @MessageMapping("/request")
-    @SendTo("/reservation/request/response")
-    public ReservationResponse requestReservation() {
+    @SendTo("/reservation/request")
+    public ReservationResponse requestReservation(ReservationRequest reservationRequest) {
+        this.location = reservationRequest.getLocation();
+        this.carType = reservationRequest.getCarType();
+        this.reservationStartDateAndTime = reservationRequest.getReservationStartDateAndTime();
+        this.reservationEndDateAndTime = reservationRequest.getReservationEndDateAndTime();
+        this.firstName = reservationRequest.getFirstName();
+        this.lastName = reservationRequest.getLastName();
+        this.emailAddress = reservationRequest.getEmailAddress();
+        this.creditCardNumber = reservationRequest.getCreditCardNumber();
+
+
         SelectStrategy selector = new SelectInventory();
-        reservationResponse = selector.select(location, carType, reservationStartDateAndTime, reservationEndDateAndTime);
+        reservationResponse = selector.select(this);
         return reservationResponse;
     }
 
     // If the car is available and the customer confirms the request, then reserve the car for the customer
     @MessageMapping("/confirmation")
-    @SendTo("/reservation/confirmation/response")
-    public void confirmReservation() {
-        String vin = reservationResponse.getVin();
-        UpdateStrategy dbUpdator = new UpdateInventoryTable();
-        dbUpdator.update(this);
+    @SendTo("/reservation/confirmation")
+    public ReservationConfirmation confirmReservation() {
+
+        updateInventoryTable();
+        updateCustomerTable();
+
+        reservationNumber = getSaltString();
+
+        return new ReservationConfirmation(reservationNumber);
     }
+
+    private String getSaltString() {
+        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 18) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+            salt.append(SALTCHARS.charAt(index));
+        }
+        return salt.toString();
+    }
+
+    private void updateInventoryTable() {
+        UpdateStrategy inventoryTable = new UpdateInventoryTable();
+        inventoryTable.update(this);
+    }
+
+    private void updateCustomerTable() {
+        InsertCustomers customerTable = new InsertCustomers();
+        customerTable.update(this);
+    }
+
 
     public String getVin() {return reservationResponse.getVin(); }
 
@@ -80,18 +92,17 @@ public class ReservationController {
         return carType;
     }
 
-    public Timestamp getReservationStartDateAndTime() {
+    public String getReservationStartDateAndTime() {
         return reservationStartDateAndTime;
     }
 
-    public Timestamp getReservationEndDateAndTime() {
+    public String getReservationEndDateAndTime() {
         return reservationEndDateAndTime;
     }
 
     public ReservationResponse getReservationResponse() {
         return reservationResponse;
     }
-
 
     public String getFirstName() {
         return firstName;

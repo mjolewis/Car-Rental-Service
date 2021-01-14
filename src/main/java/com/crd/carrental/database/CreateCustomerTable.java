@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**********************************************************************************************************************
- * Create a SQL table if it doesn't already exist. This table contains our customer information.
+ * Create a SQL table for our customers if it doesn't already exist.
  *
  * @author Michael Lewis
  *********************************************************************************************************************/

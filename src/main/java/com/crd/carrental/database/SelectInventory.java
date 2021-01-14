@@ -1,5 +1,6 @@
 package com.crd.carrental.database;
 
+import com.crd.carrental.controllers.ReservationController;
 import com.crd.carrental.controllers.ReservationResponse;
 import com.crd.carrental.rentalportfolio.*;
 
@@ -21,7 +22,7 @@ public class SelectInventory implements SelectStrategy {
     private ResultSet resultSet;
 
     public SelectInventory() {
-        this.con = ConnectionCreator.getInstance();
+        this.con = CreateConnection.getInstance();
     }
 
     /**
@@ -36,13 +37,12 @@ public class SelectInventory implements SelectStrategy {
      *         before the car can be rented again.
      */
     @Override
-    public ReservationResponse select(StoreLocations location, CarTypes carType, Timestamp reservationStartDateAndTime,
-                                      Timestamp reservationEndDateAndTime) {
+    public ReservationResponse select(ReservationController controller) {
 
-        this.location = location;
-        this.carType = carType;
-        this.reservationStartDateAndTime = reservationStartDateAndTime;
-        this.reservationEndDateAndTime = reservationEndDateAndTime;
+        this.location = controller.getLocation();
+        this.carType = controller.getCarType();
+        this.reservationStartDateAndTime = convertDateAndTime(controller.getReservationStartDateAndTime());
+        this.reservationEndDateAndTime = convertDateAndTime(controller.getReservationEndDateAndTime());
         ReservationResponse reservationResponse = null;
 
         String selectStatement = "SELECT * FROM cars " +
@@ -61,7 +61,7 @@ public class SelectInventory implements SelectStrategy {
             handleException(e);
         }
 
-        ConnectionCloser.closeQuietly(resultSet, pStmt);
+        CloseConnection.closeQuietly(resultSet, pStmt);
 
         return reservationResponse;
     }
@@ -74,6 +74,10 @@ public class SelectInventory implements SelectStrategy {
         pStmt.setBoolean(3, true);
         pStmt.setTimestamp(4, reservationStartDateAndTime);
         pStmt.setTimestamp(5, reservationEndDateAndTime);
+    }
+
+    private Timestamp convertDateAndTime(String dateAndTime) {
+        return Timestamp.valueOf(dateAndTime.replaceAll("T", " ") + ":00");
     }
 
     private void executeQuery() throws SQLException {

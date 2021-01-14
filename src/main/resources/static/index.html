@@ -28,114 +28,67 @@
                     </form>
                 </div>
 
-
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <form class="form-inline">
-                        <div class="form-group">
+                        <div class="col-md-12">
                             <label for="location">Where do you want to pick up the car?</label>
                             <input type="text" id="location" class="form-control" placeholder="Boston, Burlington, Cambridge">
                         </div>
-                        <button id="sendLocation" class="btn btn-default" type="submit">Send</button>
+
+                        <div class="col-md-12">
+                            <label for="carType">What type of car?</label>
+                            <input type="text" id="carType" class="form-control" placeholder="Sedan, SUV, Van">
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="reservationStartDateAndTime">Reservation start date</label>
+                            <input type="datetime-local" id="reservationStartDateAndTime" class="form-control" placeholder="Date time...">
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="reservationEndDateAndTime">Reservation end date</label>
+                            <input type="datetime-local" id="reservationEndDateAndTime" class="form-control" placeholder="Date time...">
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="firstName">First name</label>
+                            <input type="text" id="firstName" class="form-control" placeholder="First name..">
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="firstName">Last name</label>
+                            <input type="text" id="lastName" class="form-control" placeholder="Last name..">
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="emailAddress">Email address</label>
+                            <input type="email" id="emailAddress" class="form-control" placeholder="Email address..">
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="creditCardNumber">Credit card number</label>
+                            <input type="text" id="creditCardNumber" class="form-control" placeholder="Credit card number..">
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="creditCardNumber">Request a reservation</label>
+                            <button id="sendReservationRequest" class="btn btn-default" type="submit">Send</button>
+                        </div>
+
                     </form>
                 </div>
             </div>
-            <div class="col-md-6">
-                <form class="form-inline">
-                    <div class="form-group">
-                        <label for="carType">What type of car?</label>
-                        <input type="text" id="carType" class="form-control" placeholder="Sedan, SUV, Van">
-                    </div>
-                    <button id="sendCarType" class="btn btn-default" type="submit">Send</button>
-                </form>
-            </div>
-
-            <div class="col-md-6">
-                <form class="form-inline">
-                    <div class="form-group">
-                        <label for="reservationStartDateAndTime">Reservation start date</label>
-                        <input type="datetime-local" id="reservationStartDateAndTime" class="form-control" placeholder="Date time...">
-                    </div>
-                    <button id="sendReservationStartDateAndTime" class="btn btn-default" type="submit">Send</button>
-                </form>
-            </div>
-            <div class="col-md-6">
-                <form class="form-inline">
-                    <div class="form-group">
-                        <label for="reservationEndDateAndTime">Reservation end date</label>
-                        <input type="datetime-local" id="reservationEndDateAndTime" class="form-control" placeholder="Date time...">
-                    </div>
-                    <button id="sendReservationEndDateAndTime" class="btn btn-default" type="submit">Send</button>
-                </form>
-            </div>
-            <div class="col-md-6">
-                <form class="form-inline">
-                    <div class="form-group">
-                        <label for="firstName">First name</label>
-                        <input type="text" id="firstName" class="form-control" placeholder="First name..">
-                    </div>
-                    <button id="sendFirstName" class="btn btn-default" type="submit">Send</button>
-                </form>
-            </div>
-            <div class="col-md-6">
-                <form class="form-inline">
-                    <div class="form-group">
-                        <label for="firstName">Last name</label>
-                        <input type="text" id="lastName" class="form-control" placeholder="Last name..">
-                    </div>
-                    <button id="sendLastName" class="btn btn-default" type="submit">Send</button>
-                </form>
-            </div>
-            <div class="col-md-6">
-                <form class="form-inline">
-                    <div class="form-group">
-                        <label for="emailAddress">Email address</label>
-                        <input type="email" id="emailAddress" class="form-control" placeholder="Email address..">
-                    </div>
-                    <button id="sendEmailAddress" class="btn btn-default" type="submit">Send</button>
-                </form>
-            </div>
-            <div class="col-md-6">
-                <form class="form-inline">
-                    <div class="form-group">
-                        <label for="creditCardNumber">Credit card number</label>
-                        <input type="number" id="creditCardNumber" class="form-control" placeholder="Credit card number..">
-                    </div>
-                    <button id="sendCreditCardNumber" class="btn btn-default" type="submit">Send</button>
-                </form>
-            </div>
-            <div class="col-md-3">
-                <label for="creditCardNumber">Request a reservation</label>
-                <button id="sendReservationRequest" class="btn btn-default" type="submit">Send</button>
-            </div>
         </div>
-
 
         </div>
             <div class="row">
-                <div class="col-md-6">
-                    <table id="reservationRequestTable" class="table table-striped">
-                        <tbody id="reservationRequest">
-                            <button id="confirmReservation" class="btn btn-default" type="submit">Confirm</button>
+                <div class="col-md-12">
+                    <table id="reservationConfirmationTable" class="table table-striped">
+                        <tbody id="confirmation">
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
-
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <table id="reservationConfirmationTable" class="table table-striped">
-                    <thead>
-<!--                    <tr>-->
-<!--                        <th>Reservation number</th>-->
-<!--                    </tr>-->
-                    </thead>
-                    <tbody id="reservationConfirmation">
-                    </tbody>
-                </table>
-            </div>
-        </div>
         </div>
     </body>
 </html>

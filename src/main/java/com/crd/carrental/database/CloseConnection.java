@@ -11,7 +11,7 @@ import java.sql.SQLException;
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public class ConnectionCloser {
+public class CloseConnection {
 
     public static void closeQuietly(ResultSet resultSet, PreparedStatement pStmt) {
         try {
