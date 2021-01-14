@@ -9,13 +9,12 @@ reader (e.g. Accessors and Mutators).
 
 The application uses several object oriented design principles. For example:
 1) The application uses the Spring framework to manage the interaction between the user interface and the backend 
-logic. Spring uses the Inversion of Control principle.
-As a result, the view subscribes to updates within the model. 
+logic. Spring uses the Inversion of Control and allows the view to subscribe to updates within the model. 
 2) The application uses interface based programming techniques to reduce coupling across the system. 
-3) The Abstract Factory pattern is used to provide an interface for create families of related products. The products 
-in this case are car objects.
-4) In addition to the Abstract Factory creational pattern, this system uses the Singleton pattern where appropriate. As 
-an example, database connection objects should only have a single instance throughout the application.
+3) The Abstract Factory pattern declares an interface to create families of related products. The products in this case 
+are car objects.
+4) In addition to the Abstract Factory pattern, this system uses the Singleton pattern where appropriate. As an 
+example, database connection objects should only have a single instance throughout the application.
 5) The system also uses the Composite pattern to compose car and store objects into a tree structure. This is important 
 because the parent company can own several stores and each store must have an inventory of cars to rent out to 
 customers. As a result of the Composite pattern, the system also has a Composite Iterator and NullIterator. The 
@@ -26,9 +25,9 @@ case).
 encapsulate different algorithms for the various database operations and make them interchangeable.
 
 # Usage
-This application comes with an executable WAR file that can be downloaded from the target directory.
-Follow the following instructions to use the application
-1) Download the WAR file and CD into the downloaded directory
+This application comes with an executable WAR file that can be downloaded from the target directory. Please see the 
+instructions below:
+1) Download the WAR file
 2) Run the 'java -jar CarRentals-1.0-SNAPSHOT.war' command
 3) Launch a web browser and navigate to http://localhost:8080/? to interact with the application
 
@@ -38,7 +37,8 @@ The CarFactory declares an interface common to all car creation classes. Concret
 interface.
 
 ***NorthEastCarSupplier***\
-The NorthEastCarSupplier implements the CarFactory interface and creates concrete car objects.
+The NorthEastCarSupplier implements the CarFactory interface and creates concrete car objects. Because the system 
+declares a common CarFactory interface, users can easily extend the application with additional car suppliers.
 
 ***RentalComponent***\
 An interface allowing for the composition of a part-whole tree based hierarchy of rental stores and the cars at each 
@@ -62,8 +62,7 @@ Composite pattern and can contain other stores as well as cars.
 A Composite structure capable of recursively holding individual store locations and the cars managed by each location.
 
 ***CarTypes***\
-A set of predefined car type constants. These car types are used by the concrete leaf nodes within the rental 
-portfolio. These cars are the leaf nodes within the Composite pattern.
+A set of predefined car type constants. These cars are the leaf nodes within the Composite pattern.
 
 ***Sedan***\
 Data model for the Sedan car type. Sedan's are leaf nodes within the car rental portfolio. The concrete factories 
@@ -78,10 +77,12 @@ Data model for the Van car type. Sedan's are leaf nodes within the car rental po
 from the Abstract Factory pattern are responsible for instantiating any number of concrete Vans.
 
 ***CarUnavailable***\
-A simple data model that is in the application when there are no cars available for rent at a given location and time.
+A data model that is used throughout the application to represent cases when an administrator attempts to create a 
+car type that the stores do not own. This protects against instances where an administrator fails to use the CarTypes 
+Enum to create concrete car objects.
 
 ***ApplicationConfig***\
-The ApplicationConfig class provides the application with access to shared resources such as data constants.
+The ApplicationConfig class provides the application with access to MySQL information.
 
 ***WebSocketConfig***\
 The WebSocketConfig class is solely responsible for configuring and enable WebSocket and STOMP messaging. The purpose
