@@ -47,7 +47,7 @@ public class UpdateInventoryTable implements UpdateStrategy {
     private void createPreparedStatement(String updateStatement, ReservationController controller) throws SQLException {
 
         Timestamp convertedStartDateAndTime = convertDateAndTime(controller.getReservationStartDateAndTime());
-        Timestamp convertedEndDateAndTime = convertDateAndTime(controller.getReservationStartDateAndTime());
+        Timestamp convertedEndDateAndTime = convertDateAndTime(controller.getReservationEndDateAndTime());
 
         boolean isValidReservationDateAndTime = isStartAndEndValid(convertedStartDateAndTime, convertedEndDateAndTime);
 
