@@ -11,6 +11,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import java.sql.Connection;
 
 import static com.crd.carrental.rentalportfolio.CarTypes.*;
+import static com.crd.carrental.rentalportfolio.StoreNames.*;
+import static com.crd.carrental.rentalportfolio.StoreLocations.*;
 
 /**********************************************************************************************************************
  * Main entry point. After the initial setup, a customer can make a reservation by going http://localhost:8080/?
@@ -26,50 +28,60 @@ public class CarRentalApplication {
 
         // Use the CarFactory to get our initial inventory of cars
         RentalComponent whiteSedan = northEastCarSupplier.createCar(Sedan,  "11111111111111111",
-                "alphaRentACar","Boston");
+                StateStreetAlpha,Boston);
         RentalComponent blackSedan = northEastCarSupplier.createCar(Sedan, "22222222222222222",
-                "alphaRentACar", "Cambridge");
+                DataPlatform, Burlington);
         RentalComponent greySedan = northEastCarSupplier.createCar(Sedan, "33333333333333333",
-                "alphaRentACar", "Burlington");
+                StrategicCloud, Cambridge);
 
         RentalComponent whiteSUV = northEastCarSupplier.createCar(SUV, "44444444444444444",
-                "alphaRentACar", "Boston");
+                StateStreetAlpha, Boston);
         RentalComponent blackSUV = northEastCarSupplier.createCar(SUV, "55555555555555555",
-                "alphaRentACar", "Cambridge");
+                DataPlatform, Burlington);
         RentalComponent greySUV = northEastCarSupplier.createCar(SUV, "66666666666666666",
-                "alphaRentACar", "Burlington");
+                StrategicCloud, Cambridge);
 
         RentalComponent whiteVan = northEastCarSupplier.createCar(Van, "77777777777777777",
-                "alphaRentACar", "Boston");
+                StateStreetAlpha, Boston);
         RentalComponent blackVan = northEastCarSupplier.createCar(Van, "88888888888888888",
-                "alphaRentACar", "Cambridge");
+                DataPlatform, Burlington);
         RentalComponent greyVan = northEastCarSupplier.createCar(Van, "99999999999999999",
-                "alphaRentACar", "Burlington");
+                StrategicCloud, Cambridge);
 
         // Create a portfolio of stores
-        RentalComponent parentCompany = new RentalStore("parentCompany");
-        RentalComponent alphaRentACar = new RentalStore("alphaRentACar");
+        RentalComponent parentCompany = new RentalStore(ParentCompany);
+        RentalComponent stateStreetAlpha = new RentalStore(StateStreetAlpha);
+        RentalComponent dataPlatform = new RentalStore(DataPlatform);
+        RentalComponent strategicCloud = new RentalStore(StrategicCloud);
 
-        // AlphaRentACar is one store in our portfolio
-        alphaRentACar.add(whiteSedan);
-        alphaRentACar.add(blackSedan);
-        alphaRentACar.add(greySedan);
-        alphaRentACar.add(whiteSUV);
-        alphaRentACar.add(blackSUV);
-        alphaRentACar.add(greySUV);
-        alphaRentACar.add(whiteVan);
-        alphaRentACar.add(blackVan);
-        alphaRentACar.add(greyVan);
+        // Add cars to the appropriate stores
+        stateStreetAlpha.add(whiteSedan);
+        stateStreetAlpha.add(whiteSUV);
+        stateStreetAlpha.add(whiteVan);
 
-        parentCompany.add(alphaRentACar);                       // Add the store to the parent company portfolio
+        dataPlatform.add(blackSedan);
+        dataPlatform.add(blackSUV);
+        dataPlatform.add(blackVan);
 
-        // Create the connection, database, table, and insert the cars
+        strategicCloud.add(greySUV);
+        strategicCloud.add(greySedan);
+        strategicCloud.add(greyVan);
+
+        // Add the stores to the parent company portfolio
+        parentCompany.add(stateStreetAlpha);
+        parentCompany.add(dataPlatform);
+        parentCompany.add(strategicCloud);
+
         Connection con = ConnectionCreator.getInstance();
-        TableStrategy tableCreator = new TableCreator(con);
-        tableCreator.createTableIfDoesntExist("cars");
 
-        InsertStrategy insertStrategy = new Insert(con, "cars");
-        insertStrategy.insert(alphaRentACar);
+        CreateTableStrategy inventoryTable = new CreateInventoryTable(con);
+        inventoryTable.createTable("cars");
+
+        InsertStrategy insertStrategy = new InsertInventory(con, "cars");
+        insertStrategy.insert(parentCompany);
+
+        CreateTableStrategy customerTable = new CreateCustomerTable(con);
+        customerTable.createTable("customers");
 
         SpringApplicationBuilder springBuilder = new SpringApplicationBuilder(CarRentalApplication.class);
         springBuilder.headless(false);

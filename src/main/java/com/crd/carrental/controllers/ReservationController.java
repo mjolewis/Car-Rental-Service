@@ -1,12 +1,16 @@
 package com.crd.carrental.controllers;
 
 import com.crd.carrental.database.SelectStrategy;
-import com.crd.carrental.database.Select;
-import com.crd.carrental.database.Update;
+import com.crd.carrental.database.SelectInventory;
+import com.crd.carrental.database.UpdateInventoryTable;
 import com.crd.carrental.database.UpdateStrategy;
+import com.crd.carrental.rentalportfolio.CarTypes;
+import com.crd.carrental.rentalportfolio.StoreLocations;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+
+import java.sql.Timestamp;
 
 /**********************************************************************************************************************
  * A web request handler.
@@ -15,11 +19,17 @@ import org.springframework.stereotype.Controller;
 **********************************************************************************************************************/
 @Controller
 public class ReservationController {
-    private String location;
-    private String carType;
-    private String reservationStartDateAndTime;
-    private String reservationEndDateAndTime;
-    private String vin;
+    private StoreLocations location;
+    private CarTypes carType;
+    private Timestamp reservationStartDateAndTime;
+    private Timestamp reservationEndDateAndTime;
+    private ReservationResponse reservationResponse;
+
+    private String firstName;
+    private String lastName;
+    private String emailAddress;
+    private String reservationNumber;
+    private long creditCardNumber;
 
     public ReservationController() {}
 
@@ -46,12 +56,8 @@ public class ReservationController {
     @MessageMapping("/request")
     @SendTo("/reservation/request/response")
     public ReservationResponse requestReservation() {
-        SelectStrategy selector = new Select();
-        ReservationResponse reservationResponse =
-                selector.select(location, carType, reservationStartDateAndTime, reservationEndDateAndTime);
-
-        vin = reservationResponse.getVin();
-
+        SelectStrategy selector = new SelectInventory();
+        reservationResponse = selector.select(location, carType, reservationStartDateAndTime, reservationEndDateAndTime);
         return reservationResponse;
     }
 
@@ -59,8 +65,52 @@ public class ReservationController {
     @MessageMapping("/confirmation")
     @SendTo("/reservation/confirmation/response")
     public void confirmReservation() {
-        UpdateStrategy dbUpdator = new Update();
-        dbUpdator.update(vin, reservationStartDateAndTime, reservationEndDateAndTime);
+        String vin = reservationResponse.getVin();
+        UpdateStrategy dbUpdator = new UpdateInventoryTable();
+        dbUpdator.update(this);
+    }
+
+    public String getVin() {return reservationResponse.getVin(); }
+
+    public StoreLocations getLocation() {
+        return location;
+    }
+
+    public CarTypes getCarType() {
+        return carType;
+    }
+
+    public Timestamp getReservationStartDateAndTime() {
+        return reservationStartDateAndTime;
+    }
+
+    public Timestamp getReservationEndDateAndTime() {
+        return reservationEndDateAndTime;
+    }
+
+    public ReservationResponse getReservationResponse() {
+        return reservationResponse;
+    }
+
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public String getReservationNumber() {
+        return reservationNumber;
+    }
+
+    public long getCreditCardNumber() {
+        return creditCardNumber;
     }
 }
 

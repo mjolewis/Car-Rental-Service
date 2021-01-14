@@ -13,7 +13,7 @@ public class NorthEastCarSupplier implements CarFactory {
     }
 
     @Override
-    public RentalComponent createCar(CarTypes carType, String vin, String storeName, String location) {
+    public RentalComponent createCar(CarTypes carType, String vin, StoreNames storeName, StoreLocations location) {
         switch(carType) {
             case Sedan:
                 return new Sedan(vin, storeName, location, false, true);

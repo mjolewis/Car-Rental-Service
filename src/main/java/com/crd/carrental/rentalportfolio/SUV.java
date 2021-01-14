@@ -9,15 +9,15 @@ import java.sql.Timestamp;
  *********************************************************************************************************************/
 public class SUV extends RentalComponent {
     private String vin;
-    private String storeName;
-    private String location;
+    private StoreNames storeName;
+    private StoreLocations location;
     private CarTypes carType;
     private boolean isReserved;
     private boolean isAvailable;
     private Timestamp reservationStartDateAndTime;
     private Timestamp reservationEndDateAndTime;
 
-    public SUV(String vin, String storeName, String location, boolean isReserved, boolean isAvailable) {
+    public SUV(String vin, StoreNames storeName, StoreLocations location, boolean isReserved, boolean isAvailable) {
         this.vin = vin;
         this.storeName = storeName;
         this.location = location;
@@ -32,10 +32,13 @@ public class SUV extends RentalComponent {
     }
 
     @Override
-    public String getStoreName() { return storeName; }
+    public StoreNames getStoreName() { return storeName; }
 
     @Override
-    public String getLocation() {
+    public boolean isChild() { return true; }
+
+    @Override
+    public StoreLocations getLocation() {
         return location;
     }
 

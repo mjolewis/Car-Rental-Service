@@ -1,5 +1,7 @@
 package com.crd.carrental.database;
 
+import com.crd.carrental.controllers.ReservationController;
+
 /**********************************************************************************************************************
  * Declares an interface common to all supported database update operations algorithms. Concrete strategies must
  * implement this interface.
@@ -8,5 +10,5 @@ package com.crd.carrental.database;
  *********************************************************************************************************************/
 public interface UpdateStrategy {
 
-    void update(String vin, String reservationStartDateAndTime, String reservationEndDateAndTime);
+    void update(ReservationController controller);
 }

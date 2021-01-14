@@ -27,13 +27,15 @@ public abstract class RentalComponent {
         throw new UnsupportedOperationException();
     }
 
-    public String getStoreName() { throw new UnsupportedOperationException(); }
+    public boolean isChild() { return false; }
+
+    public StoreNames getStoreName() { throw new UnsupportedOperationException(); }
 
     public String getVin() {
         throw new UnsupportedOperationException();
     }
 
-    public String getLocation() { throw new UnsupportedOperationException(); }
+    public StoreLocations getLocation() { throw new UnsupportedOperationException(); }
 
     public CarTypes getCarType() {
         throw new UnsupportedOperationException();

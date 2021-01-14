@@ -7,16 +7,16 @@ package com.crd.carrental.rentalportfolio;
  * @author Michael Lewis
  *********************************************************************************************************************/
 public class CarUnavailable extends RentalComponent {
-    private String location;
+    private StoreLocations location;
     private CarTypes carType;
 
-    public CarUnavailable(String location) {
+    public CarUnavailable(StoreLocations location) {
         this.location = location;
         this.carType = CarTypes.Unavailable;
     }
 
     @Override
-    public String getLocation() {
+    public StoreLocations getLocation() {
         return location;
     }
 
