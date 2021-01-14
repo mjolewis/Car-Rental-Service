@@ -7,8 +7,7 @@ import com.crd.carrental.rentalportfolio.*;
 import java.sql.*;
 
 /**********************************************************************************************************************
- * Select one car from the database. A reservation will be made against this car after the customer enters a
- * confirmation.
+ * Select one car from the database only if there is a car available.
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
