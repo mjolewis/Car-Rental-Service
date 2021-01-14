@@ -83,7 +83,7 @@ function displayReservationNumber(confirmationNumber) {
 
 function carWasNotFound() {
     $("#confirmation").append("<tr><td>" + 'There are no cars available with your requirements. ' +
-        'Try a different location' + "</td></tr>");
+        'Try a different location or time.' + "</td></tr>");
 }
 
 $(function () {
