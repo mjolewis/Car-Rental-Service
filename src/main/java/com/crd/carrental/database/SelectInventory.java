@@ -65,14 +65,18 @@ public class SelectInventory implements SelectStrategy {
         return reservationResponse;
     }
 
-    // Prepared Statements help prevent SQL injection and efficiently execute the statement
+    /**
+     * The request can be fulfilled when either of the two scenarios below are true:
+     * 1) An existing reservations start date and time is greater than the end date and time currently being requested.
+     * 2) An existing reservations end date and time is less than the start date and time currently being requested.
+     */
     private void createPreparedStatement(String selectStatement) throws SQLException {
         pStmt = con.prepareStatement(selectStatement);
         pStmt.setObject(1, location, Types.JAVA_OBJECT);
         pStmt.setObject(2, carType, Types.JAVA_OBJECT);
         pStmt.setBoolean(3, true);
-        pStmt.setTimestamp(4, reservationStartDateAndTime);
-        pStmt.setTimestamp(5, reservationEndDateAndTime);
+        pStmt.setTimestamp(4, reservationEndDateAndTime);
+        pStmt.setTimestamp(5, reservationStartDateAndTime);
     }
 
     private Timestamp convertDateAndTime(String dateAndTime) {
