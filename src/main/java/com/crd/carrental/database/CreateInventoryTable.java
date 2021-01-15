@@ -21,12 +21,11 @@ public class CreateInventoryTable extends CreateTableStrategy {
 
             if (stmt != null) {
                 stmt.execute("CREATE TABLE " + tableName
-                        + "(vin VARCHAR(17) PRIMARY KEY,"
+                        + "(vin VARCHAR(17),"
                         + "storeName VARCHAR(20),"
                         + "location VARCHAR(20),"
                         + "carType VARCHAR(20),"
-                        + "isReserved BOOLEAN, "
-                        + "isAvailable BOOLEAN, "
+                        + "reservationNumber VARCHAR(20), "
                         + "reservationStartDateAndTime TIMESTAMP, "
                         + "reservationEndDateAndTime TIMESTAMP);");
             }

@@ -28,7 +28,7 @@ public class CarRentalApplication {
 
         // Use the CarFactory to get our initial inventory of cars
         RentalComponent whiteSedan = northEastCarSupplier.createCar(Sedan,  "11111111111111111",
-                StateStreetAlpha,Boston);
+                StateStreetAlpha, Boston);
         RentalComponent blackSedan = northEastCarSupplier.createCar(Sedan, "22222222222222222",
                 DataPlatform, Burlington);
         RentalComponent greySedan = northEastCarSupplier.createCar(Sedan, "33333333333333333",
@@ -77,7 +77,7 @@ public class CarRentalApplication {
         CreateTableStrategy inventoryTable = new CreateInventoryTable(con);
         inventoryTable.createTable("cars");
 
-        InsertStrategy insertStrategy = new InsertInventory(con, "cars");
+        InsertStrategy insertStrategy = new InsertNewInventory(con, "cars");
         insertStrategy.insert(parentCompany);
 
         CreateTableStrategy customerTable = new CreateCustomerTable(con);

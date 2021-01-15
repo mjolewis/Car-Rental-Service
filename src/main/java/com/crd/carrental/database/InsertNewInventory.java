@@ -13,11 +13,12 @@ import java.util.Iterator;
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public class InsertInventory implements InsertStrategy {
+public class InsertNewInventory implements InsertStrategy {
     private Connection con;
     private String tableName;
+    PreparedStatement pStmt;
 
-    public InsertInventory(Connection con, String tableName) {
+    public InsertNewInventory(Connection con, String tableName) {
         this.con = con;
         this.tableName = tableName;
     }
@@ -31,31 +32,34 @@ public class InsertInventory implements InsertStrategy {
 
             if (car.isChild()) {                                // Only add cars to the database
                 try {
-                    insertCarIfRecordDoesntExist(car);
+                    createPreparedStatement(car);
+                    executeUpdate();
                 } catch (SQLException e) {
                     handleException(e);
                 }
             }
         }
+
+        closePreparedStatement(pStmt);
     }
 
-    private void insertCarIfRecordDoesntExist(RentalComponent car) throws SQLException {
+    private void createPreparedStatement(RentalComponent car) throws SQLException {
 
-        String sqlInsert = "INSERT IGNORE INTO " + tableName + " values(?, ?, ?, ?, ?, ?, ?, ?)";
+        String sqlInsert = "INSERT IGNORE INTO " + tableName + " values(?, ?, ?, ?, ?, ?, ?)";
 
         // Prepared Statements prevent SQL injection and efficiently execute the statement multiple times
-        PreparedStatement pStmt = con.prepareStatement(sqlInsert);
+        pStmt = con.prepareStatement(sqlInsert);
         pStmt.setString(1, car.getVin());
         pStmt.setObject(2, car.getStoreName(), Types.JAVA_OBJECT);
         pStmt.setObject(3, car.getLocation(), Types.JAVA_OBJECT);
         pStmt.setObject(4, car.getCarType(), Types.JAVA_OBJECT);
-        pStmt.setBoolean(5, car.isReserved());
-        pStmt.setBoolean(6, car.isAvailable());
-        pStmt.setTimestamp(7, car.getReservationStartDateAndTime());
-        pStmt.setTimestamp(8, car.getReservationEndDateAndTime());
-        pStmt.executeUpdate();
+        pStmt.setString(5, "");
+        pStmt.setTimestamp(6, null);
+        pStmt.setTimestamp(7, null);
+    }
 
-        closePreparedStatement(pStmt);
+    private void executeUpdate() throws SQLException {
+        pStmt.executeUpdate();
     }
 
     private void handleException(SQLException e) {

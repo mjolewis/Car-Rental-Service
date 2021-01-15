@@ -3,10 +3,12 @@ package com.crd.carrental.controllers;
 import com.crd.carrental.database.*;
 import com.crd.carrental.rentalportfolio.CarTypes;
 import com.crd.carrental.rentalportfolio.StoreLocations;
+import com.crd.carrental.rentalportfolio.StoreNames;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
+import java.sql.Timestamp;
 import java.util.Random;
 
 /**********************************************************************************************************************
@@ -18,14 +20,15 @@ import java.util.Random;
 public class ReservationController {
     private StoreLocations location;
     private CarTypes carType;
-    private String reservationStartDateAndTime;
-    private String reservationEndDateAndTime;
+    private Timestamp reservationStartDateAndTime;
+    private Timestamp reservationEndDateAndTime;
     private String firstName;
     private String lastName;
     private String emailAddress;
     private long creditCardNumber;
     private String reservationNumber;
-    private ReservationResponse reservationResponse;
+    private String vin;
+    private StoreNames storeName;
 
     public ReservationController() {}
 
@@ -34,28 +37,47 @@ public class ReservationController {
     public ReservationResponse requestReservation(ReservationRequest reservationRequest) {
         this.location = reservationRequest.getLocation();
         this.carType = reservationRequest.getCarType();
-        this.reservationStartDateAndTime = reservationRequest.getReservationStartDateAndTime();
-        this.reservationEndDateAndTime = reservationRequest.getReservationEndDateAndTime();
+        this.reservationStartDateAndTime = convertDateAndTime(reservationRequest.getReservationStartDateAndTime());
+        this.reservationEndDateAndTime = convertDateAndTime(reservationRequest.getReservationEndDateAndTime());
         this.firstName = reservationRequest.getFirstName();
         this.lastName = reservationRequest.getLastName();
         this.emailAddress = reservationRequest.getEmailAddress();
         this.creditCardNumber = reservationRequest.getCreditCardNumber();
 
+        if (isStartAndEndValid(reservationStartDateAndTime, reservationEndDateAndTime)) {
+            SelectStrategy selector = new SelectInventory();
 
-        SelectStrategy selector = new SelectInventory();
-        reservationResponse = selector.select(this);
-        return reservationResponse;
+            ReservationResponse reservationResponse = selector.select(this);
+
+            vin = reservationResponse.getVin();
+            storeName = reservationResponse.getStoreName();
+
+            return reservationResponse;
+        } else {
+            return new ReservationResponse("", null, false);
+        }
     }
 
-    // If the car is available and the customer confirms the request, then reserve the car for the customer
+    private Timestamp convertDateAndTime(String dateAndTime) {
+        return Timestamp.valueOf(dateAndTime.replaceAll("T", " ") + ":00");
+    }
+
+    // A valid reservation request can only happen if the date and time are in the future and if the end date and time
+    // are greater than the start date and time
+    private boolean isStartAndEndValid(Timestamp startDateAndTime, Timestamp endDateAndTime) {
+        Timestamp current = Timestamp.valueOf(new Timestamp(System.currentTimeMillis()).toString());
+
+        return startDateAndTime.compareTo(endDateAndTime) <= 0 && current.compareTo(startDateAndTime) <= 0;
+    }
+
     @MessageMapping("/confirmation")
     @SendTo("/reservation/confirmation")
     public ReservationConfirmation confirmReservation() {
 
+        reservationNumber = getSaltString();
+
         updateInventoryTable();
         updateCustomerTable();
-
-        reservationNumber = getSaltString();
 
         return new ReservationConfirmation(reservationNumber);
     }
@@ -72,17 +94,14 @@ public class ReservationController {
     }
 
     private void updateInventoryTable() {
-        UpdateStrategy inventoryTable = new UpdateInventoryTable();
-        inventoryTable.update(this);
+        InsertReservationAgainstInventory inventoryTable = new InsertReservationAgainstInventory();
+        inventoryTable.insert(this);
     }
 
     private void updateCustomerTable() {
         InsertCustomers customerTable = new InsertCustomers();
-        customerTable.update(this);
+        customerTable.insert(this);
     }
-
-
-    public String getVin() {return reservationResponse.getVin(); }
 
     public StoreLocations getLocation() {
         return location;
@@ -92,16 +111,12 @@ public class ReservationController {
         return carType;
     }
 
-    public String getReservationStartDateAndTime() {
+    public Timestamp getReservationStartDateAndTime() {
         return reservationStartDateAndTime;
     }
 
-    public String getReservationEndDateAndTime() {
+    public Timestamp getReservationEndDateAndTime() {
         return reservationEndDateAndTime;
-    }
-
-    public ReservationResponse getReservationResponse() {
-        return reservationResponse;
     }
 
     public String getFirstName() {
@@ -116,12 +131,20 @@ public class ReservationController {
         return emailAddress;
     }
 
+    public long getCreditCardNumber() {
+        return creditCardNumber;
+    }
+
     public String getReservationNumber() {
         return reservationNumber;
     }
 
-    public long getCreditCardNumber() {
-        return creditCardNumber;
+    public String getVin() {
+        return vin;
+    }
+
+    public StoreNames getStoreName() {
+        return storeName;
     }
 }
 

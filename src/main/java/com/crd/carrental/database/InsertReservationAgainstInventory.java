@@ -7,24 +7,25 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**********************************************************************************************************************
- * Update the database record for the customers who have made a reservation.
+ * Inserts customer reservations against the existing inventory of cars.
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public class InsertCustomers {
+public class InsertReservationAgainstInventory {
     private Connection con;
     private PreparedStatement pStmt;
 
-    public InsertCustomers() {
+    public InsertReservationAgainstInventory() {
         this.con = CreateConnection.getInstance();
     }
 
     /**
-     * Inserts into the customer table after the reservation has been confirmed by the customer.
+     * Assign the confirmed reservation number to a car that the customer requested. This allows an employee to
+     * match a customers reservation number to a particular car when the customer shows up at the store.
      */
     public void insert(ReservationController controller) {
 
-        String sqlInsert = "INSERT INTO customers values(?, ?, ?, ?, ?)";
+        String sqlInsert = "INSERT INTO cars values(?, ?, ?, ?, ?, ?, ?)";
 
         try {
             createPreparedStatement(sqlInsert, controller);
@@ -33,17 +34,19 @@ public class InsertCustomers {
             handleException(e);
         }
 
-        CloseConnection.closeQuietly(pStmt);
+        closePreparedStatement(pStmt);
     }
 
     private void createPreparedStatement(String updateStatement, ReservationController controller) throws SQLException {
 
         pStmt = con.prepareStatement(updateStatement);
-        pStmt.setString(1, controller.getFirstName());
-        pStmt.setString(2, controller.getLastName());
-        pStmt.setString(3, controller.getEmailAddress());
-        pStmt.setString(4, controller.getReservationNumber());
-        pStmt.setLong(5, controller.getCreditCardNumber());
+        pStmt.setString(1, controller.getVin());
+        pStmt.setString(2, controller.getStoreName().toString());
+        pStmt.setString(3, controller.getLocation().toString());
+        pStmt.setString(4, controller.getCarType().toString());
+        pStmt.setString(5, controller.getReservationNumber());
+        pStmt.setTimestamp(6, controller.getReservationStartDateAndTime());
+        pStmt.setTimestamp(7, controller.getReservationEndDateAndTime());
     }
 
     private void executeUpdate() throws SQLException {
@@ -52,5 +55,9 @@ public class InsertCustomers {
 
     private void handleException(SQLException e) {
         e.printStackTrace();
+    }
+
+    private void closePreparedStatement(PreparedStatement pStmt) {
+        CloseConnection.closeQuietly(pStmt);
     }
 }

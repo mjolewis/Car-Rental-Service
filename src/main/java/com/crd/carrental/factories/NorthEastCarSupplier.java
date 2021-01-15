@@ -16,11 +16,11 @@ public class NorthEastCarSupplier implements CarFactory {
     public RentalComponent createCar(CarTypes carType, String vin, StoreNames storeName, StoreLocations location) {
         switch(carType) {
             case Sedan:
-                return new Sedan(vin, storeName, location, false, true);
+                return new Sedan(vin, storeName, location);
             case SUV:
-                return new SUV(vin, storeName, location, false, true);
+                return new SUV(vin, storeName, location);
             case Van:
-                return new Van(vin, storeName, location, false, true);
+                return new Van(vin, storeName, location);
             default:
                 return new CarUnavailable(location);
         }
