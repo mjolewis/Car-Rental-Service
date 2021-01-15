@@ -1,7 +1,6 @@
 package com.crd.carrental.controllers;
 
-import com.crd.carrental.rentalportfolio.CarTypes;
-import com.crd.carrental.rentalportfolio.StoreLocations;
+import com.crd.carrental.rentalportfolio.StoreNames;
 
 /**********************************************************************************************************************
  * Data model representing the response to the reservation request.
@@ -10,27 +9,21 @@ import com.crd.carrental.rentalportfolio.StoreLocations;
  *********************************************************************************************************************/
 public class ReservationResponse {
     private String vin;
-    private CarTypes carType;
-    private StoreLocations location;
+    private StoreNames storeName;
     private boolean isAvailable;
 
     public ReservationResponse() {}
 
-    public ReservationResponse(String vin, CarTypes carType, StoreLocations location, boolean isAvailable) {
+    public ReservationResponse(String vin, StoreNames storeName, boolean isAvailable) {
         this.vin = vin;
-        this.carType = carType;
-        this.location = location;
+        this.storeName = storeName;
         this.isAvailable = isAvailable;
     }
 
     public String getVin() { return vin; }
 
-    public StoreLocations getLocation() {
-        return location;
-    }
-
-    public CarTypes getCarType() {
-        return carType;
+    public StoreNames getStoreName() {
+        return storeName;
     }
 
     public boolean isAvailable() {

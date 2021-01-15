@@ -24,12 +24,4 @@ public class CarUnavailable extends RentalComponent {
     public CarTypes getCarType() {
         return carType;
     }
-
-    @Override
-    public boolean isReserved() {
-        return true;
-    }
-
-    @Override
-    public boolean isAvailable() { return false; }
 }

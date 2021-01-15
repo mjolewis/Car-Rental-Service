@@ -28,8 +28,7 @@ public class UpdateInventoryTable implements UpdateStrategy {
     public void update(ReservationController controller) {
 
         String updateStatement = "UPDATE cars " +
-                "SET isReserved = ?, " +
-                "isAvailable = ?, " +
+                "SET reservationNumber = ?, " +
                 "reservationStartDateAndTime = ?, " +
                 "reservationEndDateAndTime = ? " +
                 "WHERE vin = ?";
@@ -46,29 +45,13 @@ public class UpdateInventoryTable implements UpdateStrategy {
 
     private void createPreparedStatement(String updateStatement, ReservationController controller) throws SQLException {
 
-        Timestamp convertedStartDateAndTime = convertDateAndTime(controller.getReservationStartDateAndTime());
-        Timestamp convertedEndDateAndTime = convertDateAndTime(controller.getReservationEndDateAndTime());
-
-        boolean isValidReservationDateAndTime = isStartAndEndValid(convertedStartDateAndTime, convertedEndDateAndTime);
+        Timestamp convertedStartDateAndTime = controller.getReservationStartDateAndTime();
+        Timestamp convertedEndDateAndTime = controller.getReservationEndDateAndTime();
 
         pStmt = con.prepareStatement(updateStatement);
-        pStmt.setBoolean(1, true);
-        pStmt.setBoolean(2, isValidReservationDateAndTime);
-        pStmt.setTimestamp(3, convertedStartDateAndTime);
-        pStmt.setTimestamp(4, convertedEndDateAndTime);
-        pStmt.setString(5, controller.getVin());
-    }
-
-    private Timestamp convertDateAndTime(String dateAndTime) {
-        return Timestamp.valueOf(dateAndTime.replaceAll("T", " ") + ":00");
-    }
-
-    // A valid reservation request can only happen if the date and time are in the future and if the end date and time
-    // are greater than the start date and time
-    private boolean isStartAndEndValid(Timestamp startDateAndTime, Timestamp endDateAndTime) {
-        Timestamp current = Timestamp.valueOf(new Timestamp(System.currentTimeMillis()).toString());
-
-        return startDateAndTime.compareTo(endDateAndTime) <= 0 && current.compareTo(startDateAndTime) <= 0;
+        pStmt.setString(1, controller.getReservationNumber());
+        pStmt.setTimestamp(2, convertedStartDateAndTime);
+        pStmt.setTimestamp(3, convertedEndDateAndTime);
     }
 
     private void executeUpdate() throws SQLException {

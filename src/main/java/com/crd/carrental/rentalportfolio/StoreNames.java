@@ -1,5 +1,7 @@
 package com.crd.carrental.rentalportfolio;
 
+import java.io.Serializable;
+
 /**********************************************************************************************************************
  * A set of all store name constants within our portfolio.
  *

@@ -40,14 +40,13 @@ public class SelectInventory implements SelectStrategy {
 
         this.location = controller.getLocation();
         this.carType = controller.getCarType();
-        this.reservationStartDateAndTime = convertDateAndTime(controller.getReservationStartDateAndTime());
-        this.reservationEndDateAndTime = convertDateAndTime(controller.getReservationEndDateAndTime());
+        this.reservationStartDateAndTime = controller.getReservationStartDateAndTime();
+        this.reservationEndDateAndTime = controller.getReservationEndDateAndTime();
         ReservationResponse reservationResponse = null;
 
         String selectStatement = "SELECT * FROM cars " +
                 "WHERE location LIKE ? " +
                 "AND carType = ? " +
-                "AND isAvailable = ? " +
                 "AND (reservationStartDateAndTime > ? OR reservationEndDateAndTime < ? " +
                 "OR (reservationStartDateAndTime IS NULL AND reservationEndDateAndTime IS NULL))" +
                 "LIMIT 1";
@@ -74,13 +73,8 @@ public class SelectInventory implements SelectStrategy {
         pStmt = con.prepareStatement(selectStatement);
         pStmt.setObject(1, location, Types.JAVA_OBJECT);
         pStmt.setObject(2, carType, Types.JAVA_OBJECT);
-        pStmt.setBoolean(3, true);
-        pStmt.setTimestamp(4, reservationEndDateAndTime);
-        pStmt.setTimestamp(5, reservationStartDateAndTime);
-    }
-
-    private Timestamp convertDateAndTime(String dateAndTime) {
-        return Timestamp.valueOf(dateAndTime.replaceAll("T", " ") + ":00");
+        pStmt.setTimestamp(3, reservationEndDateAndTime);
+        pStmt.setTimestamp(4, reservationStartDateAndTime);
     }
 
     private void executeQuery() throws SQLException {
@@ -92,11 +86,10 @@ public class SelectInventory implements SelectStrategy {
 
         if (resultSet.next()) {
             vin = resultSet.getString("vin");
-            boolean isAvailable = resultSet.getBoolean("isAvailable");
-            return new ReservationResponse(vin, carType, location, isAvailable);
+            StoreNames storeName = Enum.valueOf(StoreNames.class, resultSet.getString("storeName"));
+            return new ReservationResponse(vin, storeName, true);
         }
-
-        return new ReservationResponse(vin, carType, location, false);
+        return new ReservationResponse(vin, null, false);
     }
 
     private void handleException(SQLException e) {
