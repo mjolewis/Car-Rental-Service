@@ -11,7 +11,7 @@ import java.sql.SQLException;
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public class InsertCustomers {
+public class InsertCustomers extends InsertStrategy {
     private Connection con;
     private PreparedStatement pStmt;
 
@@ -22,35 +22,28 @@ public class InsertCustomers {
     /**
      * Inserts into the customer table after the reservation has been confirmed by the customer.
      */
+    @Override
     public void insert(ReservationController controller) {
 
         String sqlInsert = "INSERT INTO customers values(?, ?, ?, ?, ?)";
 
         try {
             createPreparedStatement(sqlInsert, controller);
-            executeUpdate();
+            executeUpdate(pStmt);
         } catch (SQLException e) {
             handleException(e);
         }
 
-        CloseConnection.closeQuietly(pStmt);
+        closePreparedStatement(pStmt);
     }
 
-    private void createPreparedStatement(String updateStatement, ReservationController controller) throws SQLException {
+    private void createPreparedStatement(String insertStatement, ReservationController controller) throws SQLException {
 
-        pStmt = con.prepareStatement(updateStatement);
+        pStmt = con.prepareStatement(insertStatement);
         pStmt.setString(1, controller.getFirstName());
         pStmt.setString(2, controller.getLastName());
         pStmt.setString(3, controller.getEmailAddress());
         pStmt.setString(4, controller.getReservationNumber());
         pStmt.setLong(5, controller.getCreditCardNumber());
-    }
-
-    private void executeUpdate() throws SQLException {
-        pStmt.executeUpdate();                                  // Don't need return value so throw it away
-    }
-
-    private void handleException(SQLException e) {
-        e.printStackTrace();
     }
 }

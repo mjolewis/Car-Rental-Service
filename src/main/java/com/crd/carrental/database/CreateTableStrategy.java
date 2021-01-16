@@ -10,7 +10,7 @@ import java.sql.*;
  *********************************************************************************************************************/
 public abstract class CreateTableStrategy {
 
-    abstract public void createTable(String tableName);
+    public abstract void createTable(String tableName);
 
     public Statement getStatementIfTableDoesntExist(Connection con, String tableName) throws SQLException {
         Statement stmt = createStatement(con);

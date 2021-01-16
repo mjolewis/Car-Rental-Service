@@ -94,12 +94,12 @@ public class ReservationController {
     }
 
     private void updateInventoryTable() {
-        InsertReservationAgainstInventory inventoryTable = new InsertReservationAgainstInventory();
+        InsertStrategy inventoryTable = new InsertReservationAgainstInventory();
         inventoryTable.insert(this);
     }
 
     private void updateCustomerTable() {
-        InsertCustomers customerTable = new InsertCustomers();
+        InsertStrategy customerTable = new InsertCustomers();
         customerTable.insert(this);
     }
 

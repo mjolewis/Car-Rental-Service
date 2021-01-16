@@ -77,8 +77,8 @@ public class CarRentalApplication {
         CreateTableStrategy inventoryTable = new CreateInventoryTable(con);
         inventoryTable.createTable("cars");
 
-        InsertStrategy insertStrategy = new InsertNewInventory(con, "cars");
-        insertStrategy.insert(parentCompany);
+        InsertNewInventory insertNewInventory = new InsertNewInventory(con, "cars");
+        insertNewInventory.insert(parentCompany);
 
         CreateTableStrategy customerTable = new CreateCustomerTable(con);
         customerTable.createTable("customers");
