@@ -9,6 +9,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import java.sql.Connection;
+import java.util.Scanner;
 
 import static com.crd.carrental.rentalportfolio.CarTypes.*;
 import static com.crd.carrental.rentalportfolio.StoreNames.*;
@@ -24,6 +25,21 @@ public class CarRentalApplication {
 
     public static void main(String[] args) {
 
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Do you need to add the initial inventory of cars to the database (yes/no)? ");
+        if (scanner.nextLine().equalsIgnoreCase("yes")) {
+            seedCarsTable();
+        }
+
+        CreateTableStrategy customerTable = new CreateCustomerTable(CreateConnection.getInstance());
+        customerTable.createTable("customers");
+
+        SpringApplicationBuilder springBuilder = new SpringApplicationBuilder(CarRentalApplication.class);
+        springBuilder.headless(false);
+        ConfigurableApplicationContext context = springBuilder.run(args);
+    }
+
+    private static void seedCarsTable() {
         CarFactory northEastCarSupplier = new NorthEastCarSupplier();
 
         // Use the CarFactory to get our initial inventory of cars
@@ -79,12 +95,5 @@ public class CarRentalApplication {
 
         InsertNewInventory insertNewInventory = new InsertNewInventory(con, "cars");
         insertNewInventory.insert(parentCompany);
-
-        CreateTableStrategy customerTable = new CreateCustomerTable(con);
-        customerTable.createTable("customers");
-
-        SpringApplicationBuilder springBuilder = new SpringApplicationBuilder(CarRentalApplication.class);
-        springBuilder.headless(false);
-        ConfigurableApplicationContext context = springBuilder.run(args);
     }
 }
