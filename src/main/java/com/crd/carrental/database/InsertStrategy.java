@@ -1,6 +1,9 @@
 package com.crd.carrental.database;
 
-import com.crd.carrental.rentalportfolio.RentalComponent;
+import com.crd.carrental.controllers.ReservationController;
+
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**********************************************************************************************************************
  * Declares an interface common to all supported database insert algorithms. Concrete strategies must implement this
@@ -8,8 +11,19 @@ import com.crd.carrental.rentalportfolio.RentalComponent;
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public interface InsertStrategy {
+public abstract class InsertStrategy {
 
-    void insert(RentalComponent carsAvailableToRent);
+    public abstract void insert(ReservationController controller);
 
+    public void executeUpdate(PreparedStatement pStmt) throws SQLException {
+        pStmt.executeUpdate();
+    }
+
+    public void handleException(SQLException e) {
+        e.printStackTrace();
+    }
+
+    public void closePreparedStatement(PreparedStatement pStmt) {
+        CloseConnection.closeQuietly(pStmt);
+    }
 }

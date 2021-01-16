@@ -11,7 +11,7 @@ import java.sql.SQLException;
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public class InsertReservationAgainstInventory {
+public class InsertReservationAgainstInventory extends InsertStrategy {
     private Connection con;
     private PreparedStatement pStmt;
 
@@ -23,13 +23,14 @@ public class InsertReservationAgainstInventory {
      * Assign the confirmed reservation number to a car that the customer requested. This allows an employee to
      * match a customers reservation number to a particular car when the customer shows up at the store.
      */
+    @Override
     public void insert(ReservationController controller) {
 
         String sqlInsert = "INSERT INTO cars values(?, ?, ?, ?, ?, ?, ?)";
 
         try {
             createPreparedStatement(sqlInsert, controller);
-            executeUpdate();
+            executeUpdate(pStmt);
         } catch (SQLException e) {
             handleException(e);
         }
@@ -37,9 +38,9 @@ public class InsertReservationAgainstInventory {
         closePreparedStatement(pStmt);
     }
 
-    private void createPreparedStatement(String updateStatement, ReservationController controller) throws SQLException {
+    private void createPreparedStatement(String insertStatement, ReservationController controller) throws SQLException {
 
-        pStmt = con.prepareStatement(updateStatement);
+        pStmt = con.prepareStatement(insertStatement);
         pStmt.setString(1, controller.getVin());
         pStmt.setString(2, controller.getStoreName().toString());
         pStmt.setString(3, controller.getLocation().toString());
@@ -47,17 +48,5 @@ public class InsertReservationAgainstInventory {
         pStmt.setString(5, controller.getReservationNumber());
         pStmt.setTimestamp(6, controller.getReservationStartDateAndTime());
         pStmt.setTimestamp(7, controller.getReservationEndDateAndTime());
-    }
-
-    private void executeUpdate() throws SQLException {
-        pStmt.executeUpdate();                                  // Don't need return value so throw it away
-    }
-
-    private void handleException(SQLException e) {
-        e.printStackTrace();
-    }
-
-    private void closePreparedStatement(PreparedStatement pStmt) {
-        CloseConnection.closeQuietly(pStmt);
     }
 }

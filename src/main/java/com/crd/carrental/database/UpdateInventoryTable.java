@@ -9,7 +9,7 @@ import java.sql.*;
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public class UpdateInventoryTable implements UpdateStrategy {
+public class UpdateInventoryTable extends UpdateStrategy {
     private Connection con;
     private PreparedStatement pStmt;
 
@@ -35,12 +35,12 @@ public class UpdateInventoryTable implements UpdateStrategy {
 
         try {
             createPreparedStatement(updateStatement, controller);
-            executeUpdate();
+            executeUpdate(pStmt);
         } catch (SQLException e) {
             handleException(e);
         }
 
-        CloseConnection.closeQuietly(pStmt);
+        closePreparedStatement(pStmt);
     }
 
     private void createPreparedStatement(String updateStatement, ReservationController controller) throws SQLException {
@@ -52,13 +52,5 @@ public class UpdateInventoryTable implements UpdateStrategy {
         pStmt.setString(1, controller.getReservationNumber());
         pStmt.setTimestamp(2, convertedStartDateAndTime);
         pStmt.setTimestamp(3, convertedEndDateAndTime);
-    }
-
-    private void executeUpdate() throws SQLException {
-        pStmt.executeUpdate();                                  // Don't need return value so throw it away
-    }
-
-    private void handleException(SQLException e) {
-        e.printStackTrace();
     }
 }

@@ -11,7 +11,7 @@ import java.sql.*;
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public class SelectInventory implements SelectStrategy {
+public class SelectInventory extends SelectStrategy {
     private Connection con;
     private StoreLocations location;
     private CarTypes carType;
@@ -53,13 +53,13 @@ public class SelectInventory implements SelectStrategy {
 
         try {
             createPreparedStatement(selectStatement);
-            executeQuery();
+            resultSet = executeQuery(pStmt);
             reservationResponse = getReservationResponse();
         } catch (SQLException e) {
             handleException(e);
         }
 
-        CloseConnection.closeQuietly(resultSet, pStmt);
+        closePreparedStatement(resultSet, pStmt);
 
         return reservationResponse;
     }
@@ -77,10 +77,6 @@ public class SelectInventory implements SelectStrategy {
         pStmt.setTimestamp(4, reservationStartDateAndTime);
     }
 
-    private void executeQuery() throws SQLException {
-        resultSet = pStmt.executeQuery();
-    }
-
     private ReservationResponse getReservationResponse() throws SQLException {
         String vin = "";
 
@@ -90,9 +86,5 @@ public class SelectInventory implements SelectStrategy {
             return new ReservationResponse(vin, storeName, true);
         }
         return new ReservationResponse(vin, null, false);
-    }
-
-    private void handleException(SQLException e) {
-        e.printStackTrace();
     }
 }

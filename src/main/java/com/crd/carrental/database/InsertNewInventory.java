@@ -13,7 +13,7 @@ import java.util.Iterator;
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public class InsertNewInventory implements InsertStrategy {
+public class InsertNewInventory {
     private Connection con;
     private String tableName;
     PreparedStatement pStmt;
@@ -23,7 +23,6 @@ public class InsertNewInventory implements InsertStrategy {
         this.tableName = tableName;
     }
 
-    @Override
     public void insert(RentalComponent cars) {
         Iterator<RentalComponent> iterator = cars.createIterator();
 
