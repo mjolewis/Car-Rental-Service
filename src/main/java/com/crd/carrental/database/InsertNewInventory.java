@@ -2,10 +2,7 @@ package com.crd.carrental.database;
 
 import com.crd.carrental.rentalportfolio.RentalComponent;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.Iterator;
 
 /**********************************************************************************************************************
@@ -53,8 +50,8 @@ public class InsertNewInventory {
         pStmt.setObject(3, car.getLocation(), Types.JAVA_OBJECT);
         pStmt.setObject(4, car.getCarType(), Types.JAVA_OBJECT);
         pStmt.setString(5, "");
-        pStmt.setTimestamp(6, null);
-        pStmt.setTimestamp(7, null);
+        pStmt.setTimestamp(6, Timestamp.valueOf("1900-01-01 00:00:00"));
+        pStmt.setTimestamp(7, Timestamp.valueOf("1900-01-01 00:00:00"));
     }
 
     private void executeUpdate() throws SQLException {
