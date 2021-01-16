@@ -42,12 +42,12 @@ public class SelectInventory extends SelectStrategy {
         ReservationResponse reservationResponse = null;
 
         String selectStatement = "SELECT * FROM cars " +
+                "WHERE NOT EXISTS " +
+                "(SELECT * FROM cars " +
                 "WHERE location LIKE ? " +
                 "AND carType = ? " +
-                "AND (reservationStartDateAndTime NOT BETWEEN ? AND ? " +
-                "AND reservationStartDateAndTIme <> ? AND reservationStartDateAndTIme <> ? ) " +
-                "AND (reservationEndDateAndTime NOT BETWEEN ? AND ? " +
-                "AND reservationEndDateAndTime <> ? AND reservationEndDateAndTime ? ) " +
+                "AND (reservationStartDateAndTime BETWEEN ? AND ? ) " +
+                "AND (reservationEndDateAndTime BETWEEN ? AND ? )) " +
                 "LIMIT 1";
 
         try {
@@ -71,10 +71,6 @@ public class SelectInventory extends SelectStrategy {
         pStmt.setTimestamp(4, reservationEndDateAndTime);
         pStmt.setTimestamp(5, reservationStartDateAndTime);
         pStmt.setTimestamp(6, reservationEndDateAndTime);
-        pStmt.setTimestamp(7, reservationStartDateAndTime);
-        pStmt.setTimestamp(8, reservationEndDateAndTime);
-        pStmt.setTimestamp(9, reservationStartDateAndTime);
-        pStmt.setTimestamp(10, reservationEndDateAndTime);
     }
 
     private ReservationResponse getReservationResponse() throws SQLException {
