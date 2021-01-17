@@ -41,14 +41,14 @@ public class SelectInventory extends SelectStrategy {
         this.reservationEndDateAndTime = controller.getReservationEndDateAndTime();
         ReservationResponse reservationResponse = null;
 
-        String selectStatement = "SELECT * FROM cars " +
-                "WHERE NOT EXISTS " +
-                "(SELECT * FROM cars " +
-                "WHERE location LIKE ? " +
-                "AND carType = ? " +
-                "AND (reservationStartDateAndTime BETWEEN ? AND ?  " +
-                "OR (reservationEndDateAndTime BETWEEN ? AND ? ))) " +
-                "LIMIT 1";
+        String selectStatement = "SELECT * FROM cars "
+                + "WHERE NOT EXISTS "
+                + "(SELECT * FROM cars "
+                + "WHERE location LIKE ? "
+                + "AND carType = ? "
+                + "AND (reservationStartDateAndTime < ? "
+                + "AND (reservationEndDateAndTime > ? ))) "
+                + "LIMIT 1";
 
         try {
             createPreparedStatement(selectStatement);
@@ -67,10 +67,8 @@ public class SelectInventory extends SelectStrategy {
         pStmt = con.prepareStatement(selectStatement);
         pStmt.setObject(1, location, Types.JAVA_OBJECT);
         pStmt.setObject(2, carType, Types.JAVA_OBJECT);
-        pStmt.setTimestamp(3, reservationStartDateAndTime);
-        pStmt.setTimestamp(4, reservationEndDateAndTime);
-        pStmt.setTimestamp(5, reservationStartDateAndTime);
-        pStmt.setTimestamp(6, reservationEndDateAndTime);
+        pStmt.setTimestamp(3, reservationEndDateAndTime);
+        pStmt.setTimestamp(4, reservationStartDateAndTime);
     }
 
     private ReservationResponse getReservationResponse() throws SQLException {
