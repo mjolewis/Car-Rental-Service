@@ -25,12 +25,8 @@ public class SelectInventory extends SelectStrategy {
     }
 
     /**
-     * Finds one car that matches the location and car type. If no car is available that matches the customer
-     * requirements, then the customer then the UI will notify the customer and offer a chance to enter a new
-     * reservation request.
-     *
-     * @note New reservation requests can not overlap existing reservations. The query represents an exclusive NOT
-     *         BETWEEN statement.
+     * Finds one car that matches the location and car type only when the reservation request does not overlap with an
+     * existing reservation for a car that matches the requested type and location.
      */
     @Override
     public ReservationResponse select(ReservationController controller) {
@@ -42,9 +38,11 @@ public class SelectInventory extends SelectStrategy {
         ReservationResponse reservationResponse = null;
 
         String selectStatement = "SELECT * FROM cars "
-                + "WHERE NOT EXISTS "
+                + "WHERE location = ? "
+                + "AND carType = ? "
+                + "AND NOT EXISTS "
                 + "(SELECT * FROM cars "
-                + "WHERE location LIKE ? "
+                + "WHERE location = ? "
                 + "AND carType = ? "
                 + "AND (reservationStartDateAndTime < ? "
                 + "AND (reservationEndDateAndTime > ? ))) "
@@ -67,8 +65,10 @@ public class SelectInventory extends SelectStrategy {
         pStmt = con.prepareStatement(selectStatement);
         pStmt.setObject(1, location, Types.JAVA_OBJECT);
         pStmt.setObject(2, carType, Types.JAVA_OBJECT);
-        pStmt.setTimestamp(3, reservationEndDateAndTime);
-        pStmt.setTimestamp(4, reservationStartDateAndTime);
+        pStmt.setObject(3, location, Types.JAVA_OBJECT);
+        pStmt.setObject(4, carType, Types.JAVA_OBJECT);
+        pStmt.setTimestamp(5, reservationEndDateAndTime);
+        pStmt.setTimestamp(6, reservationStartDateAndTime);
     }
 
     private ReservationResponse getReservationResponse() throws SQLException {
