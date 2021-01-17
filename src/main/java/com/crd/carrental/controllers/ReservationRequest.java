@@ -13,26 +13,25 @@ public class ReservationRequest {
     private CarTypes carType;
     private String reservationStartDateAndTime;
     private String reservationEndDateAndTime;
-    private String firstName;
-    private String lastName;
-    private String emailAddress;
-    private long creditCardNumber;
+    private String fName;
+    private String lName;
+    private String email;
+    private long creditCard;
 
     public ReservationRequest() {
     }
 
     public ReservationRequest(StoreLocations location, CarTypes carType, String reservationStartDateAndTime,
-                              String reservationEndDateAndTime, String firstName, String lastName,
-                              String emailAddress, long creditCardNumber) {
+                              String reservationEndDateAndTime, String fName, String lName, String email, long creditCard) {
 
         this.location = location;
         this.carType = carType;
         this.reservationStartDateAndTime = reservationStartDateAndTime;
         this.reservationEndDateAndTime = reservationEndDateAndTime;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.emailAddress = emailAddress;
-        this.creditCardNumber = creditCardNumber;
+        this.fName = fName;
+        this.lName = lName;
+        this.email = email;
+        this.creditCard = creditCard;
     }
 
     public StoreLocations getLocation() { return location; }
@@ -63,35 +62,35 @@ public class ReservationRequest {
         this.reservationEndDateAndTime = reservationEndDateAndTime;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getfName() {
+        return fName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setfName(String fName) {
+        this.fName = fName;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getlName() {
+        return lName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setlName(String lName) {
+        this.lName = lName;
     }
 
-    public String getEmailAddress() {
-        return emailAddress;
+    public String getEmail() {
+        return email;
     }
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public long getCreditCardNumber() {
-        return creditCardNumber;
+    public long getCreditCard() {
+        return creditCard;
     }
 
-    public void setCreditCardNumber(long creditCardNumber) {
-        this.creditCardNumber = creditCardNumber;
+    public void setCreditCard(long creditCard) {
+        this.creditCard = creditCard;
     }
 }

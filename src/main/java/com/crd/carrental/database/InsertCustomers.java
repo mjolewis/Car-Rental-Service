@@ -40,10 +40,10 @@ public class InsertCustomers extends InsertStrategy {
     private void createPreparedStatement(String insertStatement, ReservationController controller) throws SQLException {
 
         pStmt = con.prepareStatement(insertStatement);
-        pStmt.setString(1, controller.getFirstName());
-        pStmt.setString(2, controller.getLastName());
-        pStmt.setString(3, controller.getEmailAddress());
+        pStmt.setString(1, controller.getfName());
+        pStmt.setString(2, controller.getlName());
+        pStmt.setString(3, controller.getEmail());
         pStmt.setString(4, controller.getReservationNumber());
-        pStmt.setLong(5, controller.getCreditCardNumber());
+        pStmt.setLong(5, controller.getCreditCard());
     }
 }

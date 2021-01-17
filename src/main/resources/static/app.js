@@ -57,20 +57,20 @@ function sendReservationRequest() {
     var carType = document.getElementById("carType").value;
     var reservationStartDateAndTime = document.getElementById("reservationStartDateAndTime").value;
     var reservationEndDateAndTime = document.getElementById("reservationEndDateAndTime").value;
-    var firstName = document.getElementById("firstName").value;
-    var lastName = document.getElementById("lastName").value;
-    var emailAddress = document.getElementById("emailAddress").value;
-    var creditCardNumber = document.getElementById("creditCardNumber").value;
+    var fName = document.getElementById("fName").value;
+    var lName = document.getElementById("lName").value;
+    var email = document.getElementById("email").value;
+    var creditCard = document.getElementById("creditCard").value;
 
     stompClient.send("/app/request", {}, JSON.stringify(
         {'location': location,
                 'carType' : carType,
                 'reservationStartDateAndTime' : reservationStartDateAndTime,
                 'reservationEndDateAndTime' : reservationEndDateAndTime,
-                'firstName' : firstName,
-                'lastName' : lastName,
-                'emailAddress' : emailAddress,
-                'creditCardNumber' : creditCardNumber},));
+                'fName' : fName,
+                'lName' : lName,
+                'email' : email,
+                'creditCard' : creditCard},));
 }
 
 function confirmReservation() {

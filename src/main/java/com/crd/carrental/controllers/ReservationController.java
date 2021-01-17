@@ -22,10 +22,10 @@ public class ReservationController {
     private CarTypes carType;
     private Timestamp reservationStartDateAndTime;
     private Timestamp reservationEndDateAndTime;
-    private String firstName;
-    private String lastName;
-    private String emailAddress;
-    private long creditCardNumber;
+    private String fName;
+    private String lName;
+    private String email;
+    private long creditCard;
     private String reservationNumber;
     private String vin;
     private StoreNames storeName;
@@ -39,10 +39,10 @@ public class ReservationController {
         this.carType = reservationRequest.getCarType();
         this.reservationStartDateAndTime = convertDateAndTime(reservationRequest.getReservationStartDateAndTime());
         this.reservationEndDateAndTime = convertDateAndTime(reservationRequest.getReservationEndDateAndTime());
-        this.firstName = reservationRequest.getFirstName();
-        this.lastName = reservationRequest.getLastName();
-        this.emailAddress = reservationRequest.getEmailAddress();
-        this.creditCardNumber = reservationRequest.getCreditCardNumber();
+        this.fName = reservationRequest.getfName();
+        this.lName = reservationRequest.getlName();
+        this.email = reservationRequest.getEmail();
+        this.creditCard = reservationRequest.getCreditCard();
 
         if (isStartAndEndValid(reservationStartDateAndTime, reservationEndDateAndTime)) {
             SelectStrategy selector = new SelectInventory();
@@ -119,20 +119,20 @@ public class ReservationController {
         return reservationEndDateAndTime;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getfName() {
+        return fName;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getlName() {
+        return lName;
     }
 
-    public String getEmailAddress() {
-        return emailAddress;
+    public String getEmail() {
+        return email;
     }
 
-    public long getCreditCardNumber() {
-        return creditCardNumber;
+    public long getCreditCard() {
+        return creditCard;
     }
 
     public String getReservationNumber() {

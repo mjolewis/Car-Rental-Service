@@ -46,8 +46,8 @@ public class SelectInventory extends SelectStrategy {
                 "(SELECT * FROM cars " +
                 "WHERE location LIKE ? " +
                 "AND carType = ? " +
-                "AND (reservationStartDateAndTime BETWEEN ? AND ? ) " +
-                "AND (reservationEndDateAndTime BETWEEN ? AND ? )) " +
+                "AND (reservationStartDateAndTime BETWEEN ? AND ?  " +
+                "OR (reservationEndDateAndTime BETWEEN ? AND ? ))) " +
                 "LIMIT 1";
 
         try {
