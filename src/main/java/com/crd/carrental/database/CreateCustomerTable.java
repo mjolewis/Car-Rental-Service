@@ -23,11 +23,11 @@ public class CreateCustomerTable extends CreateTableStrategy {
 
             if (stmt != null) {
                 stmt.execute("CREATE TABLE " + tableName
-                        + "(firstName VARCHAR(20),"
-                        + "lastName VARCHAR(20),"
-                        + "emailAddress VARCHAR(20),"
+                        + "(fName VARCHAR(20),"
+                        + "lName VARCHAR(20),"
+                        + "email VARCHAR(20),"
                         + "reservationNumber VARCHAR(20), "
-                        + "creditCardNumber long);");
+                        + "creditCard long);");
             }
         } catch (SQLException e) {
             handleException(e);
