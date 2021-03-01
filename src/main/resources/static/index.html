@@ -8,7 +8,7 @@
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 
-        <title>CRD Reservation System</title>
+        <title>Vehicle Reservation System</title>
 
         <link href="/styles.css" rel="stylesheet">
         <script src="/webjars/jquery/jquery.min.js"></script>
@@ -25,10 +25,7 @@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#Navbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <a class="navbar-brand text-center mr-0 mr-sm-3" href="#"> CRD Reservation System</a>
-<!--                <span class="navbar-text">-->
-<!--                    <a class="nav-item nav-link p-0" href="#" role="button" data-toggle="modal" data-target="#signIn"><span class="fa fa-sign-in fa-lg"></span> Login</a>-->
-<!--                </span>-->
+                <a class="navbar-brand text-center mr-0 mr-sm-3" href="#">Vehicle Reservation System</a>
             </div> <!-- container -->
         </nav> <!-- navbar -->
 
@@ -66,7 +63,7 @@
                     <div class="container">
                         <div class="row row-header">
                             <div class="col-12">
-                                <h4 class="body-subTitle">We help you get to the places you need to be</h4>
+                                <h4 class="body-subTitle">How can we help...</h4>
                             </div>
                         </div> <!-- Row -->
                     </div> <!-- Container -->
@@ -76,140 +73,141 @@
                     <div class="row">
                         <div class="col-md-12">
                             <form class="form-inline">
-                                <div class="form-group row">
-                                    <label for="connect" class="col-md-2 col-md-offset-2 ">WebSocket connection</label>
-                                    <div class="col-md-6 col-md-offset-2">
-                                        <button id="connect" class="btn btn-primary" type="submit">Connect</button>
-                                        <button id="disconnect" class="btn btn-danger" type="submit" disabled="disabled">Disconnect</button>
+                                <div class="form-group row index-html-navigation-buttons">
+<!--                                    <label for="connect" class="col-md-2 col-md-offset-2 ">WebSocket connection</label>-->
+                                    <div class="col-md-12 text-center">
+                                        <button id="newReservation" class="btn btn-primary" onclick="location.href='newReservation.html';" type="submit">New Reservation</button>
+                                        <button id="existingReservation" class="btn btn-secondary" onclick="location.href='existingReservation.html';" type="submit">Existing Reservation</button>
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <form class="form-inline">
-                                <div class="form-group row">
-                                    <label for="location" class="col-md-offset-2 col-md-2">Location</label>
-                                    <div class="col-md-6 col-md-offset-2">
-                                        <input type="text" id="location" class="form-control" placeholder="Boston, Burlington, Cambridge">
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-12">-->
+<!--                            <form class="form-inline">-->
+<!--                                <div class="form-group row">-->
+<!--                                    <label for="location" class="col-md-offset-2 col-md-2">Location</label>-->
+<!--                                    <div class="col-md-6 col-md-offset-2">-->
+<!--                                        <input type="text" id="location" class="form-control" placeholder="Boston, Burlington, Cambridge">-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </form>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <form class="form-inline">
-                                <div class="form-group row">
-                                    <label for="carType" class="col-md-offset-2 col-md-2">Type of car</label>
-                                    <div class="col-md-6 col-md-offset-2">
-                                        <input type="text" id="carType" class="form-control" placeholder="Sedan, SUV, Van">
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-12 row-margin">-->
+<!--                            <form class="form-inline">-->
+<!--                                <div class="form-group row">-->
+<!--                                    <label for="carType" class="col-md-offset-2 col-md-2">Type of car</label>-->
+<!--                                    <div class="col-md-6 col-md-offset-2">-->
+<!--                                        <input type="text" id="carType" class="form-control" placeholder="Sedan, SUV, Van">-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </form>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <form class="form-inline">
-                                <div class="form-group row">
-                                    <label for="reservationStartDateAndTime" class="col-md-offset-2 col-md-2">Start date</label>
-                                    <div class="col-md-6 col-md-offset-2">
-                                        <input type="datetime-local" id="reservationStartDateAndTime" class="form-control">
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-12">-->
+<!--                            <form class="form-inline">-->
+<!--                                <div class="form-group row">-->
+<!--                                    <label for="reservationStartDateAndTime" class="col-md-offset-2 col-md-2">Start date</label>-->
+<!--                                    <div class="col-md-6 col-md-offset-2">-->
+<!--                                        <input type="datetime-local" id="reservationStartDateAndTime" class="form-control">-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </form>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <form class="form-inline">
-                                <div class="form-group row">
-                                    <label for="reservationEndDateAndTime" class="col-md-offset-2 col-md-2">End date</label>
-                                    <div class="col-md-6 col-md-offset-2">
-                                        <input type="datetime-local" id="reservationEndDateAndTime" class="form-control">
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-12">-->
+<!--                            <form class="form-inline">-->
+<!--                                <div class="form-group row">-->
+<!--                                    <label for="reservationEndDateAndTime" class="col-md-offset-2 col-md-2">End date</label>-->
+<!--                                    <div class="col-md-6 col-md-offset-2">-->
+<!--                                        <input type="datetime-local" id="reservationEndDateAndTime" class="form-control">-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </form>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <form class="form-inline">
-                                <div class="form-group row">
-                                    <label for="fName" class="col-md-offset-2 col-md-2">First name</label>
-                                    <div class="col-md-6 col-md-offset-2">
-                                        <input type="text" id="fName" class="form-control" placeholder="First name">
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-12">-->
+<!--                            <form class="form-inline">-->
+<!--                                <div class="form-group row">-->
+<!--                                    <label for="fName" class="col-md-offset-2 col-md-2">First name</label>-->
+<!--                                    <div class="col-md-6 col-md-offset-2">-->
+<!--                                        <input type="text" id="fName" class="form-control" placeholder="First name">-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </form>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <form class="form-inline">
-                                <div class="form-group row">
-                                    <label for="lName" class="col-md-offset-2 col-md-2">Last name</label>
-                                    <div class="col-md-6 col-md-offset-2">
-                                        <input type="text" id="lName" class="form-control" placeholder="Last name">
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-12">-->
+<!--                            <form class="form-inline">-->
+<!--                                <div class="form-group row">-->
+<!--                                    <label for="lName" class="col-md-offset-2 col-md-2">Last name</label>-->
+<!--                                    <div class="col-md-6 col-md-offset-2">-->
+<!--                                        <input type="text" id="lName" class="form-control" placeholder="Last name">-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </form>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <form class="form-inline">
-                                <div class="form-group row">
-                                    <label for="email" class="col-md-offset-2 col-md-2">Email address</label>
-                                    <div class="col-md-6 col-md-offset-2">
-                                        <input type="email" id="email" class="form-control" placeholder="Email address">
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-12">-->
+<!--                            <form class="form-inline">-->
+<!--                                <div class="form-group row">-->
+<!--                                    <label for="email" class="col-md-offset-2 col-md-2">Email address</label>-->
+<!--                                    <div class="col-md-6 col-md-offset-2">-->
+<!--                                        <input type="email" id="email" class="form-control" placeholder="Email address">-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </form>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <form class="form-inline">
-                                <div class="form-group row">
-                                    <label for="creditCard" class="col-md-offset-2 col-md-2">Credit card number</label>
-                                    <div class="col-md-6 col-md-offset-2">
-                                        <input type="text" id="creditCard" class="form-control" placeholder="Credit card number">
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-12">-->
+<!--                            <form class="form-inline">-->
+<!--                                <div class="form-group row">-->
+<!--                                    <label for="creditCard" class="col-md-offset-2 col-md-2">Credit card number</label>-->
+<!--                                    <div class="col-md-6 col-md-offset-2">-->
+<!--                                        <input type="text" id="creditCard" class="form-control" placeholder="Credit card number">-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </form>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <form class="form-inline">
-                                <div class="form-group row">
-                                    <div class="col-md-offset-2 col-md-6 col-md-offset-2">
-                                        <button id="sendReservationRequest" class="btn btn-primary" type="submit">Request Reservation</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-12">-->
+<!--                            <form class="form-inline">-->
+<!--                                <div class="form-group row">-->
+<!--                                    <div class="col-md-offset-2 col-md-6 col-md-offset-2">-->
+<!--                                        <button id="sendReservationRequest" class="btn btn-primary" type="submit">Request Reservation</button>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </form>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <table id="reservationConfirmationTable" class="table table-striped">
-                            <tbody id="confirmation"></tbody>
-                        </table>
-                    </div>
+<!--                <div class="row">-->
+<!--                    <div class="col-md-12">-->
+<!--                        <table id="reservationConfirmationTable" class="table table-striped">-->
+<!--                            <tbody id="confirmation"></tbody>-->
+<!--                        </table>-->
+<!--                    </div>-->
+<!--                </div>-->
                 </div>
             </div>
         </div>
