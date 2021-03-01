@@ -1,150 +1,169 @@
 package com.crd.carrental.controllers;
 
-import com.crd.carrental.database.*;
-import com.crd.carrental.rentalportfolio.CarTypes;
-import com.crd.carrental.rentalportfolio.StoreLocations;
-import com.crd.carrental.rentalportfolio.StoreNames;
+import com.crd.carrental.database.insertoperations.InsertCustomer;
+import com.crd.carrental.database.insertoperations.InsertReservation;
+import com.crd.carrental.database.insertoperations.InsertStrategy;
+import com.crd.carrental.database.selectoperations.SelectExistingReservation;
+import com.crd.carrental.database.selectoperations.SelectStrategy;
+import com.crd.carrental.database.selectoperations.SelectAvailableReservation;
+import com.crd.carrental.utils.DateAndTimeUtil;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
 import java.sql.Timestamp;
-import java.util.Random;
 
 /**********************************************************************************************************************
- * A web request handler.
+ * A web request handler. Handles customer requests for new and existing reservation events.
  *
  * @author Michael Lewis
-**********************************************************************************************************************/
+ **********************************************************************************************************************/
 @Controller
 public class ReservationController {
-    private StoreLocations location;
-    private CarTypes carType;
-    private Timestamp reservationStartDateAndTime;
-    private Timestamp reservationEndDateAndTime;
-    private String fName;
-    private String lName;
-    private String email;
-    private long creditCard;
-    private String reservationNumber;
-    private String vin;
-    private StoreNames storeName;
+    private String city;
+    private String classification;
+    private Timestamp start;
+    private Timestamp end;
+    private String firstName;
+    private String lastName;
+    private String customerId;
+    private String creditCardNumber;
+    private String vehicleId;
+    private String reservationId;
 
-    public ReservationController() {}
+    public ReservationController() {
+    }
 
     @MessageMapping("/request")
     @SendTo("/reservation/request")
-    public ReservationResponse requestReservation(ReservationRequest reservationRequest) {
-        this.location = reservationRequest.getLocation();
-        this.carType = reservationRequest.getCarType();
-        this.reservationStartDateAndTime = convertDateAndTime(reservationRequest.getReservationStartDateAndTime());
-        this.reservationEndDateAndTime = convertDateAndTime(reservationRequest.getReservationEndDateAndTime());
-        this.fName = reservationRequest.getfName();
-        this.lName = reservationRequest.getlName();
-        this.email = reservationRequest.getEmail();
-        this.creditCard = reservationRequest.getCreditCard();
+    public Response requestReservation(NewReservationRequest newReservationRequest) {
+        this.city = newReservationRequest.getCity();
+        this.classification = newReservationRequest.getClassification();
+        this.start = DateAndTimeUtil.convertDateAndTime(newReservationRequest.getStart());
+        this.end = DateAndTimeUtil.convertDateAndTime(newReservationRequest.getEnd());
+        this.firstName = newReservationRequest.getFirstName();
+        this.lastName = newReservationRequest.getLastName();
+        this.customerId = newReservationRequest.getCustomerId();
+        this.creditCardNumber = newReservationRequest.getCreditCardNumber();
 
-        if (isStartAndEndValid(reservationStartDateAndTime, reservationEndDateAndTime)) {
-            SelectStrategy selector = new SelectInventory();
+        if (DateAndTimeUtil.isStartAndEndValid(start, end)) {
+            Response newReservationResponse = isVehicleAvailableForReservation();
 
-            ReservationResponse reservationResponse = selector.select(this);
+            if (newReservationResponse.isAvailable()) {
+                // Extract attributes needed by insertReservation operation
+                vehicleId = newReservationResponse.getVehicleId();
+                reservationId = newReservationResponse.getReservationId();
 
-            vin = reservationResponse.getVin();
-            storeName = reservationResponse.getStoreName();
+                insertIntoReservationTable();
+                insertIntoCustomerTable();
 
-            return reservationResponse;
-        } else {
-            return new ReservationResponse("", null, false);
+                return newReservationResponse;
+            }
         }
+
+        // This occurs if the start and end are invalid or if a reservation cannot be made
+        return new NewReservationResponse(null, null, null,
+                null, null, null, null, false);
     }
 
-    private Timestamp convertDateAndTime(String dateAndTime) {
-        return Timestamp.valueOf(dateAndTime.replaceAll("T", " ") + ":00");
+    private Response isVehicleAvailableForReservation() {
+        SelectStrategy selector = new SelectAvailableReservation();
+        return selector.select(this);
     }
 
-    // A valid reservation request can only happen if the date and time are in the future and if the end date and time
-    // are greater than the start date and time
-    private boolean isStartAndEndValid(Timestamp startDateAndTime, Timestamp endDateAndTime) {
-        Timestamp current = Timestamp.valueOf(new Timestamp(System.currentTimeMillis()).toString());
-
-        return startDateAndTime.compareTo(endDateAndTime) <= 0 && current.compareTo(startDateAndTime) <= 0;
+    /**
+     * Getter used by the SelectVehicle Strategy that checks for any conflicting reservations in the database.
+     */
+    public String getCity() {
+        return city;
     }
 
-    @MessageMapping("/confirmation")
-    @SendTo("/reservation/confirmation")
-    public ReservationConfirmation confirmReservation() {
-
-        reservationNumber = getSaltString();
-
-        updateInventoryTable();
-        updateCustomerTable();
-
-        return new ReservationConfirmation(reservationNumber);
+    /**
+     * Getter used by the SelectVehicle and InsertReservation Strategies. The SelectVehicle Strategy uses this getter
+     * to ensure that the new reservation request does not conflict with an existing reservation in the database. The
+     * InsertReservation Strategy uses this getter to persist relevant reservation details into the reservation table.
+     */
+    public Timestamp getStart() {
+        return start;
     }
 
-    private String getSaltString() {
-        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        StringBuilder salt = new StringBuilder();
-        Random rnd = new Random();
-        while (salt.length() < 18) { // length of the random string.
-            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
-            salt.append(SALTCHARS.charAt(index));
-        }
-        return salt.toString();
+    /**
+     * Getter used by the SelectVehicle and InsertReservation Strategies. The SelectVehicle Strategy uses this getter
+     * to ensure that the new reservation request does not conflict with an existing reservation in the database. The
+     * InsertReservation Strategy uses this getter to persist relevant reservation details into the reservation table.
+     */
+    public Timestamp getEnd() {
+        return end;
     }
 
-    private void updateInventoryTable() {
-        InsertStrategy inventoryTable = new InsertReservationAgainstInventory();
-        inventoryTable.insert(this);
+    /**
+     * Getter used by the SelectVehicle Strategy that checks for any conflicting reservations in the database.
+     */
+    public String getClassification() {
+        return classification;
     }
 
-    private void updateCustomerTable() {
-        InsertStrategy customerTable = new InsertCustomers();
+    private void insertIntoReservationTable() {
+        InsertStrategy reservationTable = new InsertReservation();
+        reservationTable.insert(this);
+    }
+
+    /**
+     * Getter used by the InsertReservation Strategy to ALTER the reservation table.
+     */
+    public String getReservationId() {
+        return reservationId;
+    }
+
+    /**
+     * Getter used by the InsertReservation Strategy to ALTER the reservation table.
+     */
+    public String getVehicleId() {
+        return vehicleId;
+    }
+
+    /**
+     * Helper method used to insert this customer into the customer table.
+     */
+    private void insertIntoCustomerTable() {
+        InsertStrategy customerTable = new InsertCustomer();
         customerTable.insert(this);
     }
 
-    public StoreLocations getLocation() {
-        return location;
+    /**
+     * Getter used by the InsertCustomer Strategy to ALTER the customer table.
+     */
+    public String getFirstName() {
+        return firstName;
     }
 
-    public CarTypes getCarType() {
-        return carType;
+    /**
+     * Getter used by the InsertCustomer Strategy to ALTER the customer table.
+     */
+    public String getLastName() {
+        return lastName;
     }
 
-    public Timestamp getReservationStartDateAndTime() {
-        return reservationStartDateAndTime;
+    /**
+     * Getter used by the InsertCustomer Strategy to ALTER the customer table.
+     */
+    public String getCustomerId() {
+        return customerId;
     }
 
-    public Timestamp getReservationEndDateAndTime() {
-        return reservationEndDateAndTime;
+    /**
+     * Getter used by the InsertCustomer Strategy to ALTER the customer table.
+     */
+    public String getCreditCardNumber() {
+        return creditCardNumber;
     }
 
-    public String getfName() {
-        return fName;
-    }
-
-    public String getlName() {
-        return lName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public long getCreditCard() {
-        return creditCard;
-    }
-
-    public String getReservationNumber() {
-        return reservationNumber;
-    }
-
-    public String getVin() {
-        return vin;
-    }
-
-    public StoreNames getStoreName() {
-        return storeName;
+    @MessageMapping("/lookup")
+    @SendTo("/reservation/lookup")
+    public Response lookupReservationDetails(ExistingReservationRequest request) {
+        this.reservationId = request.getReservationId();
+        SelectStrategy selector = new SelectExistingReservation();
+        return selector.select(this);
     }
 }
 

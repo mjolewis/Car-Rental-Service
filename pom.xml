@@ -44,7 +44,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.crd.carrental.CarRentalApplication</mainClass>
+                            <mainClass>com.crd.carrental.VehicleReservationApplication</mainClass>
                         </manifest>
                     </archive>
 <!--                    <descriptorRefs>-->
