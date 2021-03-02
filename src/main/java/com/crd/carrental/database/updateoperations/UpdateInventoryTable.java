@@ -1,6 +1,6 @@
 package com.crd.carrental.database.updateoperations;
 
-import com.crd.carrental.controllers.ReservationController;
+import com.crd.carrental.controllers.NewReservationController;
 import com.crd.carrental.database.connectionoperations.OpenConnection;
 
 import java.sql.*;
@@ -26,7 +26,7 @@ public class UpdateInventoryTable extends UpdateStrategy {
      * reservationStartDateAndTime to before updating the database with the correct value.
      */
     @Override
-    public void update(ReservationController controller) {
+    public void update(NewReservationController controller) {
 
         String updateStatement = "UPDATE cars " +
                 "SET reservationNumber = ?, " +
@@ -44,7 +44,7 @@ public class UpdateInventoryTable extends UpdateStrategy {
         closePreparedStatement(pStmt);
     }
 
-    private void createPreparedStatement(String updateStatement, ReservationController controller) throws SQLException {
+    private void createPreparedStatement(String updateStatement, NewReservationController controller) throws SQLException {
 
         Timestamp convertedStartDateAndTime = controller.getStart();
         Timestamp convertedEndDateAndTime = controller.getEnd();

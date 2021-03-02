@@ -1,10 +1,10 @@
 package com.crd.carrental.database.selectoperations;
 
+import com.crd.carrental.controllers.ExistingReservationController;
 import com.crd.carrental.controllers.ExistingReservationResponse;
-import com.crd.carrental.controllers.ReservationController;
+import com.crd.carrental.controllers.NewReservationController;
 import com.crd.carrental.controllers.Response;
 import com.crd.carrental.database.connectionoperations.OpenConnection;
-import com.crd.carrental.rentalportfolio.storedata.Location;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -24,7 +24,7 @@ public class SelectExistingReservation extends SelectStrategy {
     }
 
     @Override
-    public Response select(ReservationController controller) {
+    public Response select(ExistingReservationController controller) {
         this.reservationId = controller.getReservationId();
         Response existingReservationResponse = null;
 

@@ -3,7 +3,6 @@ package com.crd.carrental.controllers;
 import com.crd.carrental.database.insertoperations.InsertCustomer;
 import com.crd.carrental.database.insertoperations.InsertReservation;
 import com.crd.carrental.database.insertoperations.InsertStrategy;
-import com.crd.carrental.database.selectoperations.SelectExistingReservation;
 import com.crd.carrental.database.selectoperations.SelectStrategy;
 import com.crd.carrental.database.selectoperations.SelectAvailableReservation;
 import com.crd.carrental.utils.DateAndTimeUtil;
@@ -14,12 +13,12 @@ import org.springframework.stereotype.Controller;
 import java.sql.Timestamp;
 
 /**********************************************************************************************************************
- * A web request handler. Handles customer requests for new and existing reservation events.
+ * A web request handler for new reservation events.
  *
  * @author Michael Lewis
  **********************************************************************************************************************/
 @Controller
-public class ReservationController {
+public class NewReservationController {
     private String city;
     private String classification;
     private Timestamp start;
@@ -31,20 +30,20 @@ public class ReservationController {
     private String vehicleId;
     private String reservationId;
 
-    public ReservationController() {
+    public NewReservationController() {
     }
 
     @MessageMapping("/request")
     @SendTo("/reservation/request")
-    public Response requestReservation(NewReservationRequest newReservationRequest) {
-        this.city = newReservationRequest.getCity();
-        this.classification = newReservationRequest.getClassification();
-        this.start = DateAndTimeUtil.convertDateAndTime(newReservationRequest.getStart());
-        this.end = DateAndTimeUtil.convertDateAndTime(newReservationRequest.getEnd());
-        this.firstName = newReservationRequest.getFirstName();
-        this.lastName = newReservationRequest.getLastName();
-        this.customerId = newReservationRequest.getCustomerId();
-        this.creditCardNumber = newReservationRequest.getCreditCardNumber();
+    public Response requestReservation(NewReservationRequest request) {
+        this.city = request.getCity();
+        this.classification = request.getClassification();
+        this.start = DateAndTimeUtil.convertDateAndTime(request.getStart());
+        this.end = DateAndTimeUtil.convertDateAndTime(request.getEnd());
+        this.firstName = request.getFirstName();
+        this.lastName = request.getLastName();
+        this.customerId = request.getCustomerId();
+        this.creditCardNumber = request.getCreditCardNumber();
 
         if (DateAndTimeUtil.isStartAndEndValid(start, end)) {
             Response newReservationResponse = isVehicleAvailableForReservation();
@@ -79,6 +78,13 @@ public class ReservationController {
     }
 
     /**
+     * Getter used by the SelectVehicle Strategy that checks for any conflicting reservations in the database.
+     */
+    public String getClassification() {
+        return classification;
+    }
+
+    /**
      * Getter used by the SelectVehicle and InsertReservation Strategies. The SelectVehicle Strategy uses this getter
      * to ensure that the new reservation request does not conflict with an existing reservation in the database. The
      * InsertReservation Strategy uses this getter to persist relevant reservation details into the reservation table.
@@ -88,19 +94,13 @@ public class ReservationController {
     }
 
     /**
-     * Getter used by the SelectVehicle and InsertReservation Strategies. The SelectVehicle Strategy uses this getter
-     * to ensure that the new reservation request does not conflict with an existing reservation in the database. The
-     * InsertReservation Strategy uses this getter to persist relevant reservation details into the reservation table.
+     * Getter used by the SelectAvailableReservation and InsertReservation Strategies. The SelectAvailableReservation
+     * Strategy uses this getter to ensure that the new reservation request does not conflict with an existing
+     * reservation in the database. The InsertReservation Strategy uses this getter to persist relevant reservation
+     * details into the reservation table.
      */
     public Timestamp getEnd() {
         return end;
-    }
-
-    /**
-     * Getter used by the SelectVehicle Strategy that checks for any conflicting reservations in the database.
-     */
-    public String getClassification() {
-        return classification;
     }
 
     private void insertIntoReservationTable() {
@@ -113,6 +113,15 @@ public class ReservationController {
      */
     public String getReservationId() {
         return reservationId;
+    }
+
+    /**
+     * Getter used by the InsertReservation and InsertCustomer Strategies. The InsertReservation Strategy uses this
+     * getter to establish a the relation between the Customer table and the Reservation table. The InsertCustomer
+     * Strategy uses this getter to ensure that a reservation is attached to the customer who requested it.
+     */
+    public String getCustomerId() {
+        return customerId;
     }
 
     /**
@@ -147,23 +156,8 @@ public class ReservationController {
     /**
      * Getter used by the InsertCustomer Strategy to ALTER the customer table.
      */
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    /**
-     * Getter used by the InsertCustomer Strategy to ALTER the customer table.
-     */
     public String getCreditCardNumber() {
         return creditCardNumber;
-    }
-
-    @MessageMapping("/lookup")
-    @SendTo("/reservation/lookup")
-    public Response lookupReservationDetails(ExistingReservationRequest request) {
-        this.reservationId = request.getReservationId();
-        SelectStrategy selector = new SelectExistingReservation();
-        return selector.select(this);
     }
 }
 

@@ -1,6 +1,6 @@
 package com.crd.carrental.database.selectoperations;
 
-import com.crd.carrental.controllers.ReservationController;
+import com.crd.carrental.controllers.NewReservationController;
 import com.crd.carrental.controllers.NewReservationResponse;
 import com.crd.carrental.controllers.Response;
 import com.crd.carrental.database.connectionoperations.OpenConnection;
@@ -25,7 +25,7 @@ public class SelectAvailableReservation extends SelectStrategy {
      * does not conflict with an existing reservation in the database.
      */
     @Override
-    public Response select(ReservationController controller) {
+    public Response select(NewReservationController controller) {
         this.city = controller.getCity();
         this.classification = controller.getClassification();
         this.start = controller.getStart();

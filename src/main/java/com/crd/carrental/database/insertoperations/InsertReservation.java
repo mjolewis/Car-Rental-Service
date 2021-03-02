@@ -1,6 +1,6 @@
 package com.crd.carrental.database.insertoperations;
 
-import com.crd.carrental.controllers.ReservationController;
+import com.crd.carrental.controllers.NewReservationController;
 import com.crd.carrental.database.connectionoperations.OpenConnection;
 
 import java.sql.Connection;
@@ -26,7 +26,7 @@ public class InsertReservation extends InsertStrategy {
      * match a customers reservation number to a particular car when the customer shows up at the store.
      */
     @Override
-    public void insert(ReservationController controller) {
+    public void insert(NewReservationController controller) {
         String sqlInsert = "INSERT INTO reservation VALUES(?, ?, ?, ?, ?)";
 
         try {
@@ -39,7 +39,7 @@ public class InsertReservation extends InsertStrategy {
         closePreparedStatement(pStmt);
     }
 
-    private void createPreparedStatement(String insertStatement, ReservationController controller) throws SQLException {
+    private void createPreparedStatement(String insertStatement, NewReservationController controller) throws SQLException {
         pStmt = con.prepareStatement(insertStatement);
         pStmt.setString(1, controller.getReservationId());
         pStmt.setString(2, controller.getCustomerId());

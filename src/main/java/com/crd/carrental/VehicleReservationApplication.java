@@ -3,7 +3,7 @@ package com.crd.carrental;
 import com.crd.carrental.database.connectionoperations.OpenConnection;
 import com.crd.carrental.database.createoperations.CreateSystemTables;
 import com.crd.carrental.database.createoperations.CreateTableStrategy;
-import com.crd.carrental.database.insertoperations.InsertSeedData;
+import com.crd.carrental.database.insertoperations.DbLoader;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -42,9 +42,9 @@ public class VehicleReservationApplication {
     }
 
     private static void seedDatabase() {
-        InsertSeedData.insertStoreRecords();
-        InsertSeedData.insertVehicleRecords();
-        InsertSeedData.insertCustomerRecords();
-        InsertSeedData.insertReservationRecords();
+        DbLoader.insertStoreRecords();
+        DbLoader.insertVehicleRecords();
+        DbLoader.insertCustomerRecords();
+        DbLoader.insertReservationRecords();
     }
 }

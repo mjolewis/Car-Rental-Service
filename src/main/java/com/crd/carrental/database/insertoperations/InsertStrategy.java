@@ -1,6 +1,6 @@
 package com.crd.carrental.database.insertoperations;
 
-import com.crd.carrental.controllers.ReservationController;
+import com.crd.carrental.controllers.NewReservationController;
 import com.crd.carrental.database.connectionoperations.CloseConnection;
 
 import java.sql.PreparedStatement;
@@ -14,7 +14,7 @@ import java.sql.SQLException;
  *********************************************************************************************************************/
 public abstract class InsertStrategy {
 
-    public abstract void insert(ReservationController controller);
+    public abstract void insert(NewReservationController controller);
 
     public void executeUpdate(PreparedStatement pStmt) throws SQLException {
         pStmt.executeUpdate();

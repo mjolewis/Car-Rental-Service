@@ -13,7 +13,7 @@ import java.sql.SQLException;
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public class InsertSeedData {
+public class DbLoader {
 
     public static void insertStoreRecords() {
         String dmlCommand = "INSERT IGNORE INTO "
