@@ -1,6 +1,7 @@
 package com.crd.carrental.database.selectoperations;
 
-import com.crd.carrental.controllers.ReservationController;
+import com.crd.carrental.controllers.ExistingReservationController;
+import com.crd.carrental.controllers.NewReservationController;
 import com.crd.carrental.controllers.Response;
 import com.crd.carrental.database.connectionoperations.CloseConnection;
 import java.sql.*;
@@ -15,15 +16,19 @@ public abstract class SelectStrategy {
     Connection con;
     String city;
     String classification;
-    String manufacturer;
-    String model;
     Timestamp start;
     Timestamp end;
     String reservationId;
     PreparedStatement pStmt;
     ResultSet resultSet;
 
-    public abstract Response select(ReservationController controller);
+    public Response select(NewReservationController controller) {
+        throw new UnsupportedOperationException();
+    }
+
+    public Response select(ExistingReservationController controller) {
+        throw new UnsupportedOperationException();
+    }
 
     public abstract void createPreparedStatement(String selectStatement) throws SQLException;
 

@@ -1,6 +1,6 @@
 package com.crd.carrental.database.insertoperations;
 
-import com.crd.carrental.controllers.ReservationController;
+import com.crd.carrental.controllers.NewReservationController;
 import com.crd.carrental.database.connectionoperations.OpenConnection;
 
 import java.sql.Connection;
@@ -24,7 +24,7 @@ public class InsertCustomer extends InsertStrategy {
      * Inserts into the customer table after the reservation has been confirmed by the customer.
      */
     @Override
-    public void insert(ReservationController controller) {
+    public void insert(NewReservationController controller) {
 
         String sqlInsert = "INSERT INTO customer values(?, ?, ?, ?)";
 
@@ -38,7 +38,7 @@ public class InsertCustomer extends InsertStrategy {
         closePreparedStatement(pStmt);
     }
 
-    private void createPreparedStatement(String insertStatement, ReservationController controller) throws SQLException {
+    private void createPreparedStatement(String insertStatement, NewReservationController controller) throws SQLException {
 
         pStmt = con.prepareStatement(insertStatement);
         pStmt.setString(1, controller.getCustomerId());
