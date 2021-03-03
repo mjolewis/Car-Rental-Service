@@ -2,8 +2,9 @@ package com.crd.carrental.database.insertoperations;
 
 import com.crd.carrental.database.connectionoperations.CloseConnection;
 import com.crd.carrental.rentalportfolio.components.RentalComponent;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Iterator;
 
 /**********************************************************************************************************************
@@ -14,7 +15,7 @@ import java.util.Iterator;
 public class InsertVehicles {
     private Connection con;
     private String tableName;
-    PreparedStatement pStmt;
+    private PreparedStatement pstmt;
 
     public InsertVehicles(Connection con, String tableName) {
         this.con = con;
@@ -37,7 +38,7 @@ public class InsertVehicles {
             }
         }
 
-        closePreparedStatement(pStmt);
+        closePreparedStatement(pstmt);
     }
 
     private void createPreparedStatement(RentalComponent vehicle) throws SQLException {
@@ -45,25 +46,25 @@ public class InsertVehicles {
         String sqlInsert = "INSERT IGNORE INTO " + tableName + " values(?, ?, ?, ?, ?, ?, ?)";
 
         // Prepared Statements prevent SQL injection and efficiently execute the statement multiple times
-        pStmt = con.prepareStatement(sqlInsert);
-        pStmt.setString(1, vehicle.getVehicleId());
-        pStmt.setString(2, vehicle.getStoreId());
-        pStmt.setBigDecimal(3, vehicle.getDailyPrice());
-        pStmt.setString(4, vehicle.getClassification());
-        pStmt.setString(5, vehicle.getManufacturer());
-        pStmt.setString(6, vehicle.getModel());
-        pStmt.setInt(7, vehicle.getNumberOfPassengers());
+        pstmt = con.prepareStatement(sqlInsert);
+        pstmt.setString(1, vehicle.getVehicleId());
+        pstmt.setString(2, vehicle.getStoreId());
+        pstmt.setBigDecimal(3, vehicle.getDailyPrice());
+        pstmt.setString(4, vehicle.getClassification());
+        pstmt.setString(5, vehicle.getManufacturer());
+        pstmt.setString(6, vehicle.getModel());
+        pstmt.setInt(7, vehicle.getNumberOfPassengers());
     }
 
     private void executeUpdate() throws SQLException {
-        pStmt.executeUpdate();
+        pstmt.executeUpdate();
     }
 
     private void handleException(SQLException e) {
         e.printStackTrace();
     }
 
-    private void closePreparedStatement(PreparedStatement pStmt) {
-        CloseConnection.closeQuietly(pStmt);
+    private void closePreparedStatement(PreparedStatement pstmt) {
+        CloseConnection.closeQuietly(pstmt);
     }
 }

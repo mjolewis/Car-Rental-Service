@@ -1,9 +1,5 @@
 package com.crd.carrental.rentalportfolio.components;
 
-import com.crd.carrental.rentalportfolio.vehicledata.VehicleClassification;
-import com.crd.carrental.rentalportfolio.vehicledata.VehicleManufacturer;
-import com.crd.carrental.rentalportfolio.vehicledata.Vehicles;
-
 import java.math.BigDecimal;
 import java.util.Iterator;
 
@@ -31,23 +27,37 @@ public abstract class RentalComponent {
         throw new UnsupportedOperationException();
     }
 
-    public boolean isChild() { return false; }
+    public boolean isChild() {
+        return false;
+    }
 
     public String getVehicleId() {
         throw new UnsupportedOperationException();
     }
 
-    public String getStoreId() { throw new UnsupportedOperationException(); }
+    public String getStoreId() {
+        throw new UnsupportedOperationException();
+    }
 
-    public BigDecimal getDailyPrice() { throw new UnsupportedOperationException(); }
+    public BigDecimal getDailyPrice() {
+        throw new UnsupportedOperationException();
+    }
 
-    public String getClassification() { throw new UnsupportedOperationException(); }
+    public String getClassification() {
+        throw new UnsupportedOperationException();
+    }
 
-    public String getManufacturer() { throw new UnsupportedOperationException() ;}
+    public String getManufacturer() {
+        throw new UnsupportedOperationException();
+    }
 
-    public String getModel() { throw new UnsupportedOperationException(); }
+    public String getModel() {
+        throw new UnsupportedOperationException();
+    }
 
-    public int getNumberOfPassengers() { throw new UnsupportedOperationException(); }
+    public int getNumberOfPassengers() {
+        throw new UnsupportedOperationException();
+    }
 
     public void print() {
         throw new UnsupportedOperationException();

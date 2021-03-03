@@ -5,8 +5,9 @@ import com.crd.carrental.controllers.NewReservationResponse;
 import com.crd.carrental.controllers.Response;
 import com.crd.carrental.database.connectionoperations.OpenConnection;
 import com.crd.carrental.utils.Hasher;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-import java.sql.*;
 
 /**********************************************************************************************************************
  * Select one vehicle from the database while ensuring that the reservation request does not conflict with an existing
@@ -44,8 +45,8 @@ public class SelectAvailableReservation extends SelectStrategy {
                     + "vehicle "
                         + "JOIN "
                     + "store ON vehicle.store_id = store.store_id "
-                + "WHERE " +
-                        "store.city = ? "
+                + "WHERE "
+                        + "store.city = ? "
                             + "AND vehicle.classification = ? "
                             + "AND NOT EXISTS (SELECT "
                                 + "reservation.reservation_id "
@@ -64,26 +65,26 @@ public class SelectAvailableReservation extends SelectStrategy {
 
         try {
             createPreparedStatement(selectStatement);
-            resultSet = executeQuery(pStmt);
+            resultSet = executeQuery(pstmt);
             newReservationResponse = isRecordFound();
         } catch (SQLException e) {
             handleException(e);
         }
 
-        closePreparedStatement(resultSet, pStmt);
+        closePreparedStatement(resultSet, pstmt);
 
         return newReservationResponse;
     }
 
     @Override
     public void createPreparedStatement(String selectStatement) throws SQLException {
-        pStmt = con.prepareStatement(selectStatement);
-        pStmt.setString(1, city);
-        pStmt.setString(2, classification);
-        pStmt.setString(3, city);
-        pStmt.setString(4, classification);
-        pStmt.setTimestamp(5, end);
-        pStmt.setTimestamp(6, start);
+        pstmt = con.prepareStatement(selectStatement);
+        pstmt.setString(1, city);
+        pstmt.setString(2, classification);
+        pstmt.setString(3, city);
+        pstmt.setString(4, classification);
+        pstmt.setTimestamp(5, end);
+        pstmt.setTimestamp(6, start);
     }
 
     @Override

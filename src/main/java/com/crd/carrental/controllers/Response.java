@@ -1,7 +1,5 @@
 package com.crd.carrental.controllers;
 
-import com.crd.carrental.rentalportfolio.storedata.StoreNames;
-
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
@@ -15,11 +13,8 @@ public abstract class Response {
     // Customer information
     String firstName;
     String lastName;
-    String customerId;
-    String creditCard;
 
     // Vehicle information
-    String classification;
     String manufacturer;
     String model;
     String vehicleId;
@@ -32,7 +27,6 @@ public abstract class Response {
     Timestamp end;
 
     // Store information
-    StoreNames storeName;
     String streetNumber;
     String streetName;
     String city;
@@ -45,18 +39,6 @@ public abstract class Response {
 
     public String getLastName() {
         return lastName;
-    }
-
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    public String getCreditCard() {
-        return creditCard;
-    }
-
-    public String getClassification() {
-        return classification;
     }
 
     public String getManufacturer() {
@@ -84,15 +66,11 @@ public abstract class Response {
     }
 
     public Timestamp getStart() {
-        return start;
+        return (Timestamp) start.clone();
     }
 
     public Timestamp getEnd() {
-        return end;
-    }
-
-    public StoreNames getStoreName() {
-        return storeName;
+        return (Timestamp) end.clone();
     }
 
     public String getStreetNumber() {

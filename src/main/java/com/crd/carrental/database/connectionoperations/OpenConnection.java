@@ -1,7 +1,6 @@
 package com.crd.carrental.database.connectionoperations;
 
 import com.crd.carrental.config.ApplicationConfig;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -15,7 +14,10 @@ public class OpenConnection {
     private static volatile Connection con;
 
     private OpenConnection() throws SQLException {
-        con = DriverManager.getConnection(ApplicationConfig.SQL_DB, ApplicationConfig.SQL_USER, ApplicationConfig.SQL_PWD);
+        con = DriverManager.getConnection(
+                ApplicationConfig.SQL_DB,
+                ApplicationConfig.SQL_USER,
+                ApplicationConfig.SQL_PWD);
     }
 
     public static Connection getInstance() {

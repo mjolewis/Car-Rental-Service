@@ -2,10 +2,8 @@ package com.crd.carrental.database.selectoperations;
 
 import com.crd.carrental.controllers.ExistingReservationController;
 import com.crd.carrental.controllers.ExistingReservationResponse;
-import com.crd.carrental.controllers.NewReservationController;
 import com.crd.carrental.controllers.Response;
 import com.crd.carrental.database.connectionoperations.OpenConnection;
-
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,7 +37,7 @@ public class SelectExistingReservation extends SelectStrategy {
                     + "vehicle.daily_price, "
                     + "store.street_number, "
                     + "store.street_name, "
-                    +"store.city, "
+                    + "store.city, "
                     + "store.state, "
                     + "store.zip_code "
                 + "FROM "
@@ -54,13 +52,13 @@ public class SelectExistingReservation extends SelectStrategy {
 
         try {
             createPreparedStatement(selectStatement);
-            resultSet = executeQuery(pStmt);
+            resultSet = executeQuery(pstmt);
             existingReservationResponse = isRecordFound();
         } catch (SQLException e) {
             handleException(e);
         }
 
-        closePreparedStatement(resultSet, pStmt);
+        closePreparedStatement(resultSet, pstmt);
 
         return existingReservationResponse;
 
@@ -68,8 +66,8 @@ public class SelectExistingReservation extends SelectStrategy {
 
     @Override
     public void createPreparedStatement(String selectStatement) throws SQLException {
-        pStmt = con.prepareStatement(selectStatement);
-        pStmt.setString(1, reservationId);
+        pstmt = con.prepareStatement(selectStatement);
+        pstmt.setString(1, reservationId);
     }
 
     @Override

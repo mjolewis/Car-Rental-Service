@@ -1,6 +1,7 @@
 package com.crd.carrental.rentalportfolio.components;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**********************************************************************************************************************
  * Used by the leaf nodes in the Composite pattern to ensure that clients can avoid implementing null checks.
@@ -10,6 +11,9 @@ import java.util.Iterator;
 public class NullIterator implements Iterator<RentalComponent> {
 
     public RentalComponent next() {
+        if (!hasNext()) {
+            throw new NoSuchElementException();
+        }
         return null;
     }
 

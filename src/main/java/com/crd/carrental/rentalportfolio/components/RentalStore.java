@@ -1,7 +1,5 @@
 package com.crd.carrental.rentalportfolio.components;
 
-import com.crd.carrental.rentalportfolio.storedata.StoreNames;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

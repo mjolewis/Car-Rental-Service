@@ -3,20 +3,19 @@ package com.crd.carrental.controllers;
 import com.crd.carrental.database.insertoperations.InsertCustomer;
 import com.crd.carrental.database.insertoperations.InsertReservation;
 import com.crd.carrental.database.insertoperations.InsertStrategy;
-import com.crd.carrental.database.selectoperations.SelectStrategy;
 import com.crd.carrental.database.selectoperations.SelectAvailableReservation;
+import com.crd.carrental.database.selectoperations.SelectStrategy;
 import com.crd.carrental.utils.DateAndTimeUtil;
+import java.sql.Timestamp;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-
-import java.sql.Timestamp;
 
 /**********************************************************************************************************************
  * A web request handler for new reservation events.
  *
  * @author Michael Lewis
- **********************************************************************************************************************/
+ *********************************************************************************************************************/
 @Controller
 public class NewReservationController {
     private String city;
@@ -90,7 +89,7 @@ public class NewReservationController {
      * InsertReservation Strategy uses this getter to persist relevant reservation details into the reservation table.
      */
     public Timestamp getStart() {
-        return start;
+        return (Timestamp) start.clone();
     }
 
     /**
@@ -100,7 +99,7 @@ public class NewReservationController {
      * details into the reservation table.
      */
     public Timestamp getEnd() {
-        return end;
+        return (Timestamp) end.clone();
     }
 
     private void insertIntoReservationTable() {

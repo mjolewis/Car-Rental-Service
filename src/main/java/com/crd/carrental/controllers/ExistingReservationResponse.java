@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 /**********************************************************************************************************************
- * Data model representing reservation confirmation details
+ * Data model representing reservation confirmation details.
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
@@ -17,8 +17,8 @@ public class ExistingReservationResponse extends Response {
                                        String streetName, String city, String state, String zipCode) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.start = start;
-        this.end = end;
+        this.start = (start == null) ? null : (Timestamp) start.clone();
+        this.end = (end == null) ? null : (Timestamp) end.clone();
         this.manufacturer = manufacturer;
         this.model = model;
         this.dailyPrice = dailyPrice;

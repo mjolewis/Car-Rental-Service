@@ -4,7 +4,11 @@ import com.crd.carrental.controllers.ExistingReservationController;
 import com.crd.carrental.controllers.NewReservationController;
 import com.crd.carrental.controllers.Response;
 import com.crd.carrental.database.connectionoperations.CloseConnection;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 
 /**********************************************************************************************************************
  * Declares an interface common to all supported database Select algorithms. Concrete strategies must implement this
@@ -19,7 +23,7 @@ public abstract class SelectStrategy {
     Timestamp start;
     Timestamp end;
     String reservationId;
-    PreparedStatement pStmt;
+    PreparedStatement pstmt;
     ResultSet resultSet;
 
     public Response select(NewReservationController controller) {
@@ -32,8 +36,8 @@ public abstract class SelectStrategy {
 
     public abstract void createPreparedStatement(String selectStatement) throws SQLException;
 
-    public ResultSet executeQuery(PreparedStatement pStmt) throws SQLException {
-        return pStmt.executeQuery();
+    public ResultSet executeQuery(PreparedStatement pstmt) throws SQLException {
+        return pstmt.executeQuery();
     }
 
     public Response isRecordFound() throws SQLException {
@@ -52,7 +56,7 @@ public abstract class SelectStrategy {
         e.printStackTrace();
     }
 
-    public void closePreparedStatement(ResultSet resultSet, PreparedStatement pStmt) {
-        CloseConnection.closeQuietly(resultSet, pStmt);
+    public void closePreparedStatement(ResultSet resultSet, PreparedStatement pstmt) {
+        CloseConnection.closeQuietly(resultSet, pstmt);
     }
 }
