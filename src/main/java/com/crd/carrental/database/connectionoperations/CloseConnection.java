@@ -13,11 +13,11 @@ import java.sql.SQLException;
  *********************************************************************************************************************/
 public class CloseConnection {
 
-    public static void closeQuietly(ResultSet resultSet, PreparedStatement pStmt) {
+    public static void closeQuietly(ResultSet resultSet, PreparedStatement pstmt) {
         try {
             closeQuietly(resultSet);
         } finally {
-            closeQuietly(pStmt);
+            closeQuietly(pstmt);
         }
     }
 
@@ -29,23 +29,11 @@ public class CloseConnection {
         }
     }
 
-    private static void close(ResultSet resultSet) throws SQLException {
-        if (resultSet != null) {
-            resultSet.close();
-        }
-    }
-
-    public static void closeQuietly(PreparedStatement pStmt) {
+    public static void closeQuietly(PreparedStatement pstmt) {
         try {
-            close(pStmt);
+            close(pstmt);
         } catch (SQLException e) {
             // quiet
-        }
-    }
-
-    private static void close(PreparedStatement pStmt) throws SQLException {
-        if (pStmt != null) {
-            pStmt.close();
         }
     }
 
@@ -54,6 +42,18 @@ public class CloseConnection {
             close(con);
         } catch (SQLException e) {
             // quiet
+        }
+    }
+
+    private static void close(ResultSet resultSet) throws SQLException {
+        if (resultSet != null) {
+            resultSet.close();
+        }
+    }
+
+    private static void close(PreparedStatement pstmt) throws SQLException {
+        if (pstmt != null) {
+            pstmt.close();
         }
     }
 

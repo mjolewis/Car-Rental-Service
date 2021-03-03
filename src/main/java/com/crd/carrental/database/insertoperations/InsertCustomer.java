@@ -2,7 +2,6 @@ package com.crd.carrental.database.insertoperations;
 
 import com.crd.carrental.controllers.NewReservationController;
 import com.crd.carrental.database.connectionoperations.OpenConnection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -14,7 +13,7 @@ import java.sql.SQLException;
  *********************************************************************************************************************/
 public class InsertCustomer extends InsertStrategy {
     private Connection con;
-    private PreparedStatement pStmt;
+    private PreparedStatement pstmt;
 
     public InsertCustomer() {
         this.con = OpenConnection.getInstance();
@@ -30,20 +29,21 @@ public class InsertCustomer extends InsertStrategy {
 
         try {
             createPreparedStatement(sqlInsert, controller);
-            executeUpdate(pStmt);
+            executeUpdate(pstmt);
         } catch (SQLException e) {
             handleException(e);
         }
 
-        closePreparedStatement(pStmt);
+        closePreparedStatement(pstmt);
     }
 
-    private void createPreparedStatement(String insertStatement, NewReservationController controller) throws SQLException {
+    private void createPreparedStatement(String insertStatement, NewReservationController controller)
+            throws SQLException {
 
-        pStmt = con.prepareStatement(insertStatement);
-        pStmt.setString(1, controller.getCustomerId());
-        pStmt.setString(2, controller.getFirstName());
-        pStmt.setString(3, controller.getLastName());
-        pStmt.setString(4, controller.getCreditCardNumber());
+        pstmt = con.prepareStatement(insertStatement);
+        pstmt.setString(1, controller.getCustomerId());
+        pstmt.setString(2, controller.getFirstName());
+        pstmt.setString(3, controller.getLastName());
+        pstmt.setString(4, controller.getCreditCardNumber());
     }
 }

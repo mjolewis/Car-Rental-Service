@@ -4,11 +4,10 @@ import com.crd.carrental.database.connectionoperations.OpenConnection;
 import com.crd.carrental.database.createoperations.CreateSystemTables;
 import com.crd.carrental.database.createoperations.CreateTableStrategy;
 import com.crd.carrental.database.insertoperations.DbLoader;
+import java.util.Scanner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
-
-import java.util.Scanner;
 
 /**********************************************************************************************************************
  * Main entry point. After the initial setup, a customer can make a reservation by going http://localhost:8080/?
@@ -16,11 +15,11 @@ import java.util.Scanner;
  * @author Michael Lewis
  *********************************************************************************************************************/
 @SpringBootApplication
-public class VehicleReservationApplication {
+public class Main {
 
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in, "UTF-8");
         System.out.print("Create database tables (y/n)? ");
         if (scanner.nextLine().equalsIgnoreCase("y")) {
             createTables();
@@ -31,9 +30,9 @@ public class VehicleReservationApplication {
             seedDatabase();
         }
 
-        SpringApplicationBuilder springBuilder = new SpringApplicationBuilder(VehicleReservationApplication.class);
+        SpringApplicationBuilder springBuilder = new SpringApplicationBuilder(Main.class);
         springBuilder.headless(false);
-        ConfigurableApplicationContext context = springBuilder.run(args);
+        springBuilder.run(args);
     }
 
     private static void createTables() {

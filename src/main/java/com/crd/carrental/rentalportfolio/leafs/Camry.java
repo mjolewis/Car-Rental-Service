@@ -1,10 +1,7 @@
 package com.crd.carrental.rentalportfolio.leafs;
 
 import com.crd.carrental.rentalportfolio.components.RentalComponent;
-import com.crd.carrental.rentalportfolio.vehicledata.VehicleClassification;
-import com.crd.carrental.rentalportfolio.vehicledata.VehicleManufacturer;
 import com.crd.carrental.rentalportfolio.vehicledata.Vehicles;
-
 import java.math.BigDecimal;
 
 /**********************************************************************************************************************
@@ -37,10 +34,14 @@ public class Camry extends RentalComponent {
     }
 
     @Override
-    public String getStoreId() { return storeId; }
+    public String getStoreId() {
+        return storeId;
+    }
 
     @Override
-    public BigDecimal getDailyPrice() { return dailyPrice; }
+    public BigDecimal getDailyPrice() {
+        return dailyPrice;
+    }
 
     @Override
     public String getClassification() {
@@ -48,16 +49,24 @@ public class Camry extends RentalComponent {
     }
 
     @Override
-    public String getManufacturer() { return manufacturer; }
+    public String getManufacturer() {
+        return manufacturer;
+    }
 
     @Override
-    public String getModel() { return model; }
+    public String getModel() {
+        return model;
+    }
 
     @Override
-    public int getNumberOfPassengers() { return numberOfPassengers; }
+    public int getNumberOfPassengers() {
+        return numberOfPassengers;
+    }
 
     @Override
-    public boolean isChild() { return true; }
+    public boolean isChild() {
+        return true;
+    }
 
     @Override
     public void print() {

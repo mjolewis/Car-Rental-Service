@@ -1,8 +1,8 @@
 package com.crd.carrental.factories;
 
 import com.crd.carrental.rentalportfolio.components.RentalComponent;
-import com.crd.carrental.rentalportfolio.leafs.Escape;
 import com.crd.carrental.rentalportfolio.leafs.Camry;
+import com.crd.carrental.rentalportfolio.leafs.Escape;
 import com.crd.carrental.rentalportfolio.leafs.Sienna;
 import com.crd.carrental.rentalportfolio.vehicledata.Vehicles;
 
@@ -13,12 +13,11 @@ import com.crd.carrental.rentalportfolio.vehicledata.Vehicles;
  *********************************************************************************************************************/
 public class NorthEastCarSupplier implements CarFactory {
 
-    public NorthEastCarSupplier() {
-    }
+    public NorthEastCarSupplier() {}
 
     @Override
     public RentalComponent createCar(Vehicles model, String vehicleId, String storeId) {
-        switch(model) {
+        switch (model) {
             case CAMRY:
                 return new Camry(vehicleId, storeId);
             case ESCAPE:

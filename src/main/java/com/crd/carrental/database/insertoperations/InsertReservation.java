@@ -2,7 +2,6 @@ package com.crd.carrental.database.insertoperations;
 
 import com.crd.carrental.controllers.NewReservationController;
 import com.crd.carrental.database.connectionoperations.OpenConnection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -15,7 +14,7 @@ import java.sql.SQLException;
  *********************************************************************************************************************/
 public class InsertReservation extends InsertStrategy {
     private Connection con;
-    private PreparedStatement pStmt;
+    private PreparedStatement pstmt;
 
     public InsertReservation() {
         this.con = OpenConnection.getInstance();
@@ -31,20 +30,21 @@ public class InsertReservation extends InsertStrategy {
 
         try {
             createPreparedStatement(sqlInsert, controller);
-            executeUpdate(pStmt);
+            executeUpdate(pstmt);
         } catch (SQLException e) {
             handleException(e);
         }
 
-        closePreparedStatement(pStmt);
+        closePreparedStatement(pstmt);
     }
 
-    private void createPreparedStatement(String insertStatement, NewReservationController controller) throws SQLException {
-        pStmt = con.prepareStatement(insertStatement);
-        pStmt.setString(1, controller.getReservationId());
-        pStmt.setString(2, controller.getCustomerId());
-        pStmt.setString(3, controller.getVehicleId());
-        pStmt.setTimestamp(4, controller.getStart());
-        pStmt.setTimestamp(5, controller.getEnd());
+    private void createPreparedStatement(String insertStatement, NewReservationController controller)
+            throws SQLException {
+        pstmt = con.prepareStatement(insertStatement);
+        pstmt.setString(1, controller.getReservationId());
+        pstmt.setString(2, controller.getCustomerId());
+        pstmt.setString(3, controller.getVehicleId());
+        pstmt.setTimestamp(4, controller.getStart());
+        pstmt.setTimestamp(5, controller.getEnd());
     }
 }
