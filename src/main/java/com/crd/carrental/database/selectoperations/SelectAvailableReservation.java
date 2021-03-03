@@ -18,7 +18,8 @@ import java.sql.SQLException;
 public class SelectAvailableReservation extends SelectStrategy {
 
     public SelectAvailableReservation() {
-        this.con = OpenConnection.getInstance();
+        OpenConnection db = new OpenConnection();
+        this.con = db.getDataSourceConnection();
     }
 
     /**
