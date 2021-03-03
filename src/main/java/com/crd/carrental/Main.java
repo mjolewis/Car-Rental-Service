@@ -7,7 +7,6 @@ import com.crd.carrental.database.insertoperations.DbLoader;
 import java.util.Scanner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.ConfigurableApplicationContext;
 
 /**********************************************************************************************************************
  * Main entry point. After the initial setup, a customer can make a reservation by going http://localhost:8080/?
@@ -36,7 +35,8 @@ public class Main {
     }
 
     private static void createTables() {
-        CreateTableStrategy create = new CreateSystemTables(OpenConnection.getInstance());
+        OpenConnection db = new OpenConnection();
+        CreateTableStrategy create = new CreateSystemTables(db.getDataSourceConnection());
         create.createTable();
     }
 

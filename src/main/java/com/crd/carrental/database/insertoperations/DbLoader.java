@@ -64,7 +64,8 @@ public class DbLoader {
      * match a customers reservation number to a particular car when the customer shows up at the store.
      */
     private static void executeUpdate(String dmlCommand) {
-        Connection con = OpenConnection.getInstance();
+        OpenConnection db = new OpenConnection();
+        Connection con = db.getDataSourceConnection();
         PreparedStatement pstmt = null;
         try {
             pstmt = con.prepareStatement(dmlCommand);

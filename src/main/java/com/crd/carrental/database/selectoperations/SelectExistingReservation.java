@@ -18,7 +18,8 @@ import java.sql.Timestamp;
 public class SelectExistingReservation extends SelectStrategy {
 
     public SelectExistingReservation() {
-        this.con = OpenConnection.getInstance();
+        OpenConnection db = new OpenConnection();
+        this.con = db.getDataSourceConnection();
     }
 
     @Override

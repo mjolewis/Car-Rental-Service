@@ -16,7 +16,8 @@ public class InsertCustomer extends InsertStrategy {
     private PreparedStatement pstmt;
 
     public InsertCustomer() {
-        this.con = OpenConnection.getInstance();
+        OpenConnection db = new OpenConnection();
+        this.con = db.getDataSourceConnection();
     }
 
     /**
@@ -25,7 +26,7 @@ public class InsertCustomer extends InsertStrategy {
     @Override
     public void insert(NewReservationController controller) {
 
-        String sqlInsert = "INSERT INTO customer values(?, ?, ?, ?)";
+        String sqlInsert = "INSERT IGNORE INTO customer values(?, ?, ?, ?)";
 
         try {
             createPreparedStatement(sqlInsert, controller);

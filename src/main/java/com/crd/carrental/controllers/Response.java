@@ -23,8 +23,8 @@ public abstract class Response {
     // Reservation information
     boolean isAvailable;
     String reservationId;
-    Timestamp start;
-    Timestamp end;
+    Timestamp start;              // Timestamps are cloned to avoid returning immutable objects and exposing internals
+    Timestamp end;                // Timestamps are cloned to avoid returning immutable objects and exposing internals
 
     // Store information
     String streetNumber;
@@ -66,11 +66,11 @@ public abstract class Response {
     }
 
     public Timestamp getStart() {
-        return (Timestamp) start.clone();
+        return start == null ? null : (Timestamp) start.clone();
     }
 
     public Timestamp getEnd() {
-        return (Timestamp) end.clone();
+        return end == null ? null : (Timestamp) end.clone();
     }
 
     public String getStreetNumber() {
