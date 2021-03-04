@@ -15,20 +15,20 @@ stompClient.connect({}, function (frame) {
     console.log('Connected: ' + frame);
 
     // Listens for a new reservation event
-    stompClient.subscribe('/reservation/request', function (response) {
-        let reservation = JSON.parse(response.body);
-        if (reservation.available) {
-            displayReservationConfirmation(reservation);
+    stompClient.subscribe('/reservation/request', function (newReservationDTO) {
+        let newReservationJson = JSON.parse(newReservationDTO.body);
+        if (newReservationJson.available) {
+            displayReservationConfirmation(newReservationJson);
         } else {
             carWasNotFound();
         }
     });
 
     // Listens for a lookup reservation event
-    stompClient.subscribe('/reservation/lookup', function (reservation) {
-        const reservationWasFound = JSON.parse(reservation.body).start;
-        if (reservationWasFound != null) {
-            displayReservationDetails(JSON.parse(reservation.body));
+    stompClient.subscribe('/reservation/lookup', function (existingReservationDTO) {
+        const existingReservationStart = JSON.parse(existingReservationDTO.body).start;
+        if (existingReservationStart != null) {
+            displayReservationDetails(JSON.parse(existingReservationDTO.body));
         } else {
             displayInvalidReservationId();
         }
@@ -97,30 +97,30 @@ function lookupReservationDetails() {
 }
 
 /**
- * Echos reservation confirmation details to the customer.
- * @param reservation JSON object containing reservation details.
+ * Echos reservationDTO confirmation details to the customer.
+ * @param reservationDTO JSON object containing reservationDTO details.
  */
-function displayReservationDetails(reservation) {
+function displayReservationDetails(reservationDTO) {
     $("#reservationDetails").empty().append(
         "<tr><td>"
         + 'Reservation Owner:'
-        + ' ' + reservation.firstName
-        + ' ' + reservation.lastName
+        + ' ' + reservationDTO.firstName
+        + ' ' + reservationDTO.lastName
         + '</br>From:'
-        + ' ' + reservation.start
+        + ' ' + reservationDTO.start
         + '</br>To:'
-        + ' ' +reservation.end
+        + ' ' +reservationDTO.end
         + '</br>Vehicle: '
-        + ' ' + reservation.manufacturer
-        + ' ' + reservation.model
+        + ' ' + reservationDTO.manufacturer
+        + ' ' + reservationDTO.model
         + '</br>Daily price: $'
-        + reservation.dailyPrice
+        + reservationDTO.dailyPrice
         + '</br>Vehicle address:'
-        + ' ' + reservation.streetNumber
-        + ' ' + reservation.streetName
-        + ', ' + reservation.city
-        + ' ' + reservation.state
-        + ', ' + reservation.zipCode
+        + ' ' + reservationDTO.streetNumber
+        + ' ' + reservationDTO.streetName
+        + ', ' + reservationDTO.city
+        + ' ' + reservationDTO.state
+        + ', ' + reservationDTO.zipCode
         + "</td></tr>");
 }
 
@@ -203,9 +203,8 @@ $(function () {
         }
     });
 
+    // Enable submit button only after all input fields are populated.
     function enableSubmit() {
-        console.log("City: " + city + " Classification: " + classification + " Start: " + start + " End: " + end
-            + " First name" + firstName + " Last name: " + lastName + " CustomerID: " + customerId + " CCN: " + creditCardNumber);
         if (city && classification && start && end  && firstName && lastName && customerId && creditCardNumber) {
             $("#sendReservationRequest").prop('disabled',false);
         } else {
@@ -213,7 +212,7 @@ $(function () {
         }
     }
 
-    // Enforce proper formatting for credit card numbers
+    // Enforce proper formatting for credit card numbers.
     $('#creditCardNumber').on("keyup", function() {
         let foo = $(this).val().split("-").join(""); // remove hyphens
         if (foo.length > 0) {
@@ -222,7 +221,7 @@ $(function () {
         $(this).val(foo);
     });
 
-    // All input fields have been filled in, so send reservation request to backend
+    // All input fields have been filled in, so send reservation request to backend.
     $("#sendReservationRequest").on("click", function () {
         sendReservationRequest();
     });

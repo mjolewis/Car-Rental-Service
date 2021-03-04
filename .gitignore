@@ -4,6 +4,7 @@ target/
 
 # Application secrets
 src/main/resources/application.properties
+src/main/resources/secrets.JSON
 
 # Hashing algos
 src/main/java/com/crd/carrental/utils/Hasher.java

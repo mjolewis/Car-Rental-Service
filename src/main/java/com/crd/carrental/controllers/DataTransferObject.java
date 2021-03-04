@@ -8,7 +8,7 @@ import java.sql.Timestamp;
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public abstract class Response {
+public abstract class DataTransferObject {
 
     // Customer information
     String firstName;

@@ -19,7 +19,7 @@ public class ExistingReservationController {
 
     @MessageMapping("/lookup")
     @SendTo("/reservation/lookup")
-    public Response lookupReservationId(ExistingReservationRequest request) {
+    public DataTransferObject lookupReservationId(ExistingReservationRequest request) {
         this.reservationId = request.getReservationId();
         SelectStrategy selector = new SelectExistingReservation();
         return selector.select(this);
