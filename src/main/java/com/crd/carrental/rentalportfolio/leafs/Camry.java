@@ -17,6 +17,7 @@ public class Camry extends RentalComponent {
     private String manufacturer;
     private String model;
     private int numberOfPassengers;
+    private long version;
 
     public Camry(String vehicleId, String storeId) {
         this.vehicleId = vehicleId;
@@ -26,6 +27,7 @@ public class Camry extends RentalComponent {
         this.manufacturer = Vehicles.CAMRY.getManufacturer();
         this.model = Vehicles.CAMRY.getModel();
         this.numberOfPassengers = Vehicles.CAMRY.getNumberOfPassengers();
+        this.version = Vehicles.CAMRY.getVersion();
     }
 
     @Override
@@ -61,6 +63,11 @@ public class Camry extends RentalComponent {
     @Override
     public int getNumberOfPassengers() {
         return numberOfPassengers;
+    }
+
+    @Override
+    public long getVersion() {
+        return version;
     }
 
     @Override

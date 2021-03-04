@@ -133,6 +133,86 @@ $(function () {
         e.preventDefault();
     });
 
+    // Disable submit button when form loads.
+    $("#sendReservationRequest").prop('disabled',true);
+
+    // Enable submit button only after each input field contains data
+    let city, classification, start, end, firstName, lastName, customerId, creditCardNumber;
+    $("#city").on("keyup", function() {
+        city = document.getElementById("city").value;
+        if (city.length !== "") {
+            city = true;
+            enableSubmit();
+        }
+    });
+
+    $("#classification").on("keyup", function() {
+        classification = document.getElementById("classification").value;
+        if (classification.length !== "") {
+            classification = true;
+            enableSubmit();
+        }
+    });
+
+    $("#start").on("change", function() {
+        start = document.getElementById("start").value;
+        console.log("Start is " + start);
+        if (start.toString() !== "") {
+            start = true;
+            enableSubmit();
+        }
+    });
+
+    $("#end").on("change", function() {
+        end = document.getElementById("end").value;
+        if (end.toString() !== "") {
+            end = true;
+            enableSubmit();
+        }
+    });
+
+    $("#firstName").on("keyup", function() {
+        firstName = document.getElementById("firstName").value;
+        if (firstName.length !== "") {
+            firstName = true;
+            enableSubmit();
+        }
+    });
+
+    $("#lastName").on("keyup", function() {
+        lastName = document.getElementById("lastName").value;
+        if (lastName.length !== "") {
+            lastName = true;
+            enableSubmit();
+        }
+    });
+
+    $("#customerId").on("keyup", function() {
+        customerId = document.getElementById("customerId").value;
+        if (customerId.length !== "") {
+            customerId = true;
+            enableSubmit();
+        }
+    });
+
+    $("#creditCardNumber").on("keyup", function() {
+        creditCardNumber = document.getElementById("creditCardNumber").value;
+        if (creditCardNumber.length !== "") {
+            creditCardNumber = true;
+            enableSubmit();
+        }
+    });
+
+    function enableSubmit() {
+        console.log("City: " + city + " Classification: " + classification + " Start: " + start + " End: " + end
+            + " First name" + firstName + " Last name: " + lastName + " CustomerID: " + customerId + " CCN: " + creditCardNumber);
+        if (city && classification && start && end  && firstName && lastName && customerId && creditCardNumber) {
+            $("#sendReservationRequest").prop('disabled',false);
+        } else {
+            $("#sendReservationRequest").prop('disabled', true);
+        }
+    }
+
     // Enforce proper formatting for credit card numbers
     $('#creditCardNumber').on("keyup", function() {
         let foo = $(this).val().split("-").join(""); // remove hyphens
@@ -142,6 +222,7 @@ $(function () {
         $(this).val(foo);
     });
 
+    // All input fields have been filled in, so send reservation request to backend
     $("#sendReservationRequest").on("click", function () {
         sendReservationRequest();
     });

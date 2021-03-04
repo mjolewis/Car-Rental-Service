@@ -43,7 +43,7 @@ public class InsertVehicles {
 
     private void createPreparedStatement(RentalComponent vehicle) throws SQLException {
 
-        String sqlInsert = "INSERT IGNORE INTO " + tableName + " values(?, ?, ?, ?, ?, ?, ?)";
+        String sqlInsert = "INSERT IGNORE INTO " + tableName + " values(?, ?, ?, ?, ?, ?, ?, ?)";
 
         // Prepared Statements prevent SQL injection and efficiently execute the statement multiple times
         pstmt = con.prepareStatement(sqlInsert);
@@ -54,6 +54,7 @@ public class InsertVehicles {
         pstmt.setString(5, vehicle.getManufacturer());
         pstmt.setString(6, vehicle.getModel());
         pstmt.setInt(7, vehicle.getNumberOfPassengers());
+        pstmt.setLong(8, vehicle.getVersion());
     }
 
     private void executeUpdate() throws SQLException {

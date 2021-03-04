@@ -17,6 +17,7 @@ public class Escape extends RentalComponent {
     private String manufacturer;
     private String model;
     private int numberOfPassengers;
+    private long version;
 
     public Escape(String vehicleId, String storeId) {
         this.vehicleId = vehicleId;
@@ -26,6 +27,7 @@ public class Escape extends RentalComponent {
         this.manufacturer = Vehicles.ESCAPE.getManufacturer();
         this.model = Vehicles.ESCAPE.getModel();
         this.numberOfPassengers = Vehicles.ESCAPE.getNumberOfPassengers();
+        this.version = Vehicles.ESCAPE.getVersion();
     }
 
     @Override
@@ -61,6 +63,11 @@ public class Escape extends RentalComponent {
     @Override
     public int getNumberOfPassengers() {
         return numberOfPassengers;
+    }
+
+    @Override
+    public long getVersion() {
+        return version;
     }
 
     @Override

@@ -15,9 +15,10 @@ public abstract class Response {
     String lastName;
 
     // Vehicle information
+    String vehicleId;
+    long version;                 // Optimistic locking mechanism
     String manufacturer;
     String model;
-    String vehicleId;
     BigDecimal dailyPrice;
 
     // Reservation information
@@ -41,16 +42,20 @@ public abstract class Response {
         return lastName;
     }
 
+    public String getVehicleId() {
+        return vehicleId;
+    }
+
+    public long getVersion() {
+        return version;
+    }
+
     public String getManufacturer() {
         return manufacturer;
     }
 
     public String getModel() {
         return model;
-    }
-
-    public String getVehicleId() {
-        return vehicleId;
     }
 
     public BigDecimal getDailyPrice() {

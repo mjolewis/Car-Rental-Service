@@ -17,6 +17,7 @@ public class Sienna extends RentalComponent {
     private String manufacturer;
     private String model;
     private int numberOfPassengers;
+    private long version;
 
     public Sienna(String vehicleId, String storeId) {
         this.vehicleId = vehicleId;
@@ -26,6 +27,7 @@ public class Sienna extends RentalComponent {
         this.manufacturer = Vehicles.SIENNA.getManufacturer();
         this.model = Vehicles.SIENNA.getModel();
         this.numberOfPassengers = Vehicles.SIENNA.getNumberOfPassengers();
+        this.version = Vehicles.SIENNA.getVersion();
     }
 
     @Override
@@ -61,6 +63,11 @@ public class Sienna extends RentalComponent {
     @Override
     public int getNumberOfPassengers() {
         return numberOfPassengers;
+    }
+
+    @Override
+    public long getVersion() {
+        return version;
     }
 
     @Override

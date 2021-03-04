@@ -40,14 +40,6 @@ public abstract class SelectStrategy {
         return pstmt.executeQuery();
     }
 
-    public Response isRecordFound() throws SQLException {
-        if (resultSet.next()) {
-            return createValidResponse(resultSet);
-        }
-
-        return createInvalidResponse();
-    }
-
     public abstract Response createValidResponse(ResultSet resultSet) throws SQLException;
 
     public abstract Response createInvalidResponse();
