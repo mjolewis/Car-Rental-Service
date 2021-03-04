@@ -17,8 +17,7 @@ public class InsertReservation extends InsertStrategy {
     private PreparedStatement pstmt;
 
     public InsertReservation() {
-        OpenConnection db = new OpenConnection();
-        this.con = db.getDataSourceConnection();
+        this.con = OpenConnection.getDataSourceConnection();
     }
 
     /**

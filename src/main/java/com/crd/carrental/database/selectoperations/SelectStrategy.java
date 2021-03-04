@@ -1,8 +1,8 @@
 package com.crd.carrental.database.selectoperations;
 
+import com.crd.carrental.controllers.DataTransferObject;
 import com.crd.carrental.controllers.ExistingReservationController;
 import com.crd.carrental.controllers.NewReservationController;
-import com.crd.carrental.controllers.Response;
 import com.crd.carrental.database.connectionoperations.CloseConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,11 +26,11 @@ public abstract class SelectStrategy {
     PreparedStatement pstmt;
     ResultSet resultSet;
 
-    public Response select(NewReservationController controller) {
+    public DataTransferObject select(NewReservationController controller) {
         throw new UnsupportedOperationException();
     }
 
-    public Response select(ExistingReservationController controller) {
+    public DataTransferObject select(ExistingReservationController controller) {
         throw new UnsupportedOperationException();
     }
 
@@ -40,9 +40,9 @@ public abstract class SelectStrategy {
         return pstmt.executeQuery();
     }
 
-    public abstract Response createValidResponse(ResultSet resultSet) throws SQLException;
+    public abstract DataTransferObject createValidResponse(ResultSet resultSet) throws SQLException;
 
-    public abstract Response createInvalidResponse();
+    public abstract DataTransferObject createInvalidResponse();
 
     public void handleException(SQLException e) {
         e.printStackTrace();

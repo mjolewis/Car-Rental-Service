@@ -5,13 +5,14 @@ package com.crd.carrental.controllers;
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public class NewReservationResponse extends Response {
+public class NewReservationDataTransferObject extends DataTransferObject {
 
-    public NewReservationResponse() {
+    public NewReservationDataTransferObject() {
     }
 
-    public NewReservationResponse(String reservationId, String vehicleId, String streetNumber, String streetName,
-                                  String city, String state, String zipCode, boolean isAvailable) {
+    public NewReservationDataTransferObject(String reservationId, String vehicleId, String streetNumber,
+                                            String streetName, String city, String state,
+                                            String zipCode, boolean isAvailable) {
         this.reservationId = reservationId;
         this.vehicleId = vehicleId;
         this.streetNumber = streetNumber;

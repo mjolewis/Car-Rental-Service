@@ -16,8 +16,7 @@ public class InsertCustomer extends InsertStrategy {
     private PreparedStatement pstmt;
 
     public InsertCustomer() {
-        OpenConnection db = new OpenConnection();
-        this.con = db.getDataSourceConnection();
+        this.con = OpenConnection.getDataSourceConnection();
     }
 
     /**

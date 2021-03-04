@@ -35,8 +35,7 @@ public class Main {
     }
 
     private static void createTables() {
-        OpenConnection db = new OpenConnection();
-        CreateTableStrategy create = new CreateSystemTables(db.getDataSourceConnection());
+        CreateTableStrategy create = new CreateSystemTables(OpenConnection.getDataSourceConnection());
         create.createTable();
     }
 
