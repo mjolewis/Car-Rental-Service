@@ -9,25 +9,27 @@ import java.math.BigDecimal;
  *********************************************************************************************************************/
 public enum Vehicles {
     CAMRY("Toyota", "Camry", VehicleClassification.SEDAN.getClassification(),
-            new BigDecimal("75.00"), 3),
+            new BigDecimal("75.00"), 3, 0),
     ESCAPE("Ford", "Escape", VehicleClassification.SUV.getClassification(),
-            new BigDecimal("125.00"), 4),
+            new BigDecimal("125.00"), 4, 0),
     SIENNA("Toyota", "Sienna", VehicleClassification.VAN.getClassification(),
-            new BigDecimal("100.00"), 4);
+            new BigDecimal("100.00"), 4, 0);
 
     private final String manufacturer;
     private final String model;
     private final String classification;
     private final BigDecimal dailyPrice;
     private final int numberOfPassengers;
+    private final long version;
 
     Vehicles(final String manufacturer, final String model, final String classification,
-             BigDecimal dailyPrice, int numberOfPassengers) {
+             BigDecimal dailyPrice, int numberOfPassengers, long version) {
         this.manufacturer = manufacturer;
         this.model = model;
         this.classification = classification;
         this.dailyPrice = dailyPrice;
         this.numberOfPassengers = numberOfPassengers;
+        this.version = version;
     }
 
     public String getManufacturer() {
@@ -48,5 +50,9 @@ public enum Vehicles {
 
     public int getNumberOfPassengers() {
         return numberOfPassengers;
+    }
+
+    public long getVersion() {
+        return version;
     }
 }

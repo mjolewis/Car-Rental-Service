@@ -59,6 +59,10 @@ public abstract class RentalComponent {
         throw new UnsupportedOperationException();
     }
 
+    public long getVersion() {
+        throw new UnsupportedOperationException();
+    }
+
     public void print() {
         throw new UnsupportedOperationException();
     }

@@ -67,7 +67,7 @@ public class SelectAvailableReservation extends SelectStrategy {
         try {
             createPreparedStatement(selectStatement);
             resultSet = executeQuery(pstmt);
-            newReservationResponse = isRecordFound();
+            newReservationResponse = (resultSet.next()) ? createValidResponse(resultSet) : createInvalidResponse();
         } catch (SQLException e) {
             handleException(e);
         }

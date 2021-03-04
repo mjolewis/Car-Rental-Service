@@ -59,7 +59,7 @@ public class NewReservationController {
             }
         }
 
-        // This occurs if the start and end are invalid or if a reservation cannot be made
+        // This occurs if the start and end are invalid or if a reservation isn't available
         return new NewReservationResponse(null, null, null,
                 null, null, null, null, false);
     }

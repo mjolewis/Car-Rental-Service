@@ -54,7 +54,7 @@ public class SelectExistingReservation extends SelectStrategy {
         try {
             createPreparedStatement(selectStatement);
             resultSet = executeQuery(pstmt);
-            existingReservationResponse = isRecordFound();
+            existingReservationResponse = (resultSet.next()) ? createValidResponse(resultSet) : createInvalidResponse();
         } catch (SQLException e) {
             handleException(e);
         }
