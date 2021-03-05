@@ -11,9 +11,9 @@ import com.crd.carrental.rentalportfolio.vehicledata.Vehicles;
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public class NorthEastCarSupplier implements CarFactory {
+public class VehicleFactoryImpl implements VehicleFactory {
 
-    public NorthEastCarSupplier() {}
+    public VehicleFactoryImpl() {}
 
     @Override
     public RentalComponent createCar(Vehicles model, String vehicleId, String storeId) {

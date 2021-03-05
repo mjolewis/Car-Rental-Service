@@ -89,7 +89,7 @@ public class SelectAvailableReservation extends SelectStrategy {
 
     @Override
     public DataTransferObject createValidResponse(ResultSet resultSet) throws SQLException {
-        String reservationId = Hasher.getSaltString();
+        String reservationId = Hasher.getTwentyCharacterSaltString();
         String vehicleId = resultSet.getString("vehicle_id");
         String streetNumber = resultSet.getString("street_number");
         String streetName = resultSet.getString("street_name");
