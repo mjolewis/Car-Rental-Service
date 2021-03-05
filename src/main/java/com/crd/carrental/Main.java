@@ -11,10 +11,11 @@ import com.crd.carrental.rentalportfolio.components.RentalComponent;
 import com.crd.carrental.rentalportfolio.components.RentalStore;
 import com.crd.carrental.rentalportfolio.vehicledata.Vehicles;
 import com.crd.carrental.utils.Hasher;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 
-import javax.swing.*;
 
 /**********************************************************************************************************************
  * Main entry point. After the initial setup, a customer can make a reservation by going http://localhost:8080/?.
