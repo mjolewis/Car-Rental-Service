@@ -8,12 +8,12 @@ import java.math.BigDecimal;
  * @author Michael Lewis
  *********************************************************************************************************************/
 public enum Vehicles {
-    CAMRY("Toyota", "Camry", VehicleClassification.SEDAN.getClassification(),
-            new BigDecimal("75.00"), 3, 0),
-    ESCAPE("Ford", "Escape", VehicleClassification.SUV.getClassification(),
-            new BigDecimal("125.00"), 4, 0),
-    SIENNA("Toyota", "Sienna", VehicleClassification.VAN.getClassification(),
-            new BigDecimal("100.00"), 4, 0);
+    CAMRY(VehicleManufacturer.TOYOTA.getManufacturer(), "Camry", VehicleClassification.SEDAN.getClassification(),
+            PriceSheet.LOW_END.getPrice(), 3, 0),
+    ESCAPE(VehicleManufacturer.FORD.getManufacturer(), "Escape", VehicleClassification.SUV.getClassification(),
+            PriceSheet.HIGH_END.getPrice(), 4, 0),
+    SIENNA(VehicleManufacturer.TOYOTA.getManufacturer(), "Sienna", VehicleClassification.VAN.getClassification(),
+            PriceSheet.MID_TIER.getPrice(), 4, 0);
 
     private final String manufacturer;
     private final String model;

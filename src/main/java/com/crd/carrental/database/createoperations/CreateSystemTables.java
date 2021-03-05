@@ -40,10 +40,10 @@ public class CreateSystemTables extends CreateTableStrategy {
 
         if (stmt != null) {
             stmt.execute("CREATE TABLE " + CUSTOMER
-                    + "(customer_id varchar(20) PRIMARY KEY, "        // Email address
-                    + "fName VARCHAR(20) NOT NULL, "
-                    + "lName VARCHAR(20) NOT NULL, "
-                    + "creditCard char(17) NOT NULL);");
+                    + "(customer_id VARCHAR(100) PRIMARY KEY, "        // Email address
+                    + "first_name VARCHAR(50) NOT NULL, "
+                    + "last_name VARCHAR(50) NOT NULL, "
+                    + "credit_card_number CHAR(19) NOT NULL);");
         }
     }
 
@@ -70,9 +70,10 @@ public class CreateSystemTables extends CreateTableStrategy {
                     + "store_id VARCHAR(20) NOT NULL REFERENCES " + STORE + "(" + STORE_ID + "), "
                     + "daily_price DECIMAL(5 , 2 ) NOT NULL, "
                     + "classification VARCHAR(20) NOT NULL, "
-                    + "make VARCHAR(20) NOT NULL, "
+                    + "manufacturer VARCHAR(20) NOT NULL, "
                     + "model VARCHAR(20) NOT NULL, "
-                    + "number_of_passengers INT NOT NULL);");
+                    + "number_of_passengers INT NOT NULL, "
+                    + "version INT NOT NULL);");
         }
     }
 
@@ -82,7 +83,7 @@ public class CreateSystemTables extends CreateTableStrategy {
         if (stmt != null) {
             stmt.executeUpdate("CREATE TABLE " + RESERVATION
                     + "(reservation_id VARCHAR(20) PRIMARY KEY, "
-                    + "customer_id VARCHAR(20) NOT NULL REFERENCES " + CUSTOMER + "(" + CUSTOMER_ID + "), "
+                    + "customer_id VARCHAR(100) NOT NULL REFERENCES " + CUSTOMER + "(" + CUSTOMER_ID + "), "
                     + "vehicle_id CHAR(17) NOT NULL REFERENCES " + VEHICLE + "(" + VEHICLE_ID + "), "
                     + "start TIMESTAMP NOT NULL, "
                     + "end TIMESTAMP NOT NULL);");

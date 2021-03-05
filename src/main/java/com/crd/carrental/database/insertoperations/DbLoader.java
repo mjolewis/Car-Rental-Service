@@ -26,16 +26,17 @@ public class DbLoader {
 
     public static void insertVehicleRecords() {
         String dmlCommand = "INSERT IGNORE INTO "
-            + "vehicle(vehicle_id, store_id, daily_price, classification, make, model, number_of_passengers) VALUES"
-            + "('d8bUie2IPBnsJ6Tm8', 1, 75.00, 'Sedan', 'Toyota', 'Camry', 3), "
-            + "('Uy9pA01zCKIsGCgiN', 1, 125.00, 'SUV', 'Ford', 'Escape', 1), "
-            + "('sv1BMLg2mzs29juWX', 1, 100.00, 'Van', 'Ford', 'Sienna', 4), "
-            + "('zESmC4Ux31cb7ExTs', 2, 75.00, 'Sedan', 'Toyota', 'Camry', 3), "
-            + "('CBgQOOEvzcWB9jlYQ', 2, 125.00, 'SUV', 'Ford', 'Escape', 1), "
-            + "('cFhPV601NuiFf2HyJ', 2, 100.00, 'Van', 'Ford', 'Sienna', 4), "
-            + "('jnUM0PDy83wWEzjz3', 3, 75.00, 'Sedan', 'Toyota', 'Camry', 3), "
-            + "('Yy2CIT3eUuX9I4XZV', 3, 125.00, 'SUV', 'Ford', 'Escape', 1), "
-            + "('RigIwIQgOWZVXI6Cv', 3, 100.00, 'Van', 'Ford', 'Sienna', 4);";
+            + "vehicle(vehicle_id, store_id, daily_price, classification, manufacturer, "
+            + "model, number_of_passengers, version) VALUES"
+            + "('d8bUie2IPBnsJ6Tm8', 1, 75.00, 'Sedan', 'Toyota', 'Camry', 3, 0), "
+            + "('Uy9pA01zCKIsGCgiN', 1, 125.00, 'SUV', 'Ford', 'Escape', 1, 0), "
+            + "('sv1BMLg2mzs29juWX', 1, 100.00, 'Van', 'Ford', 'Sienna', 4, 0), "
+            + "('zESmC4Ux31cb7ExTs', 2, 75.00, 'Sedan', 'Toyota', 'Camry', 3, 0), "
+            + "('CBgQOOEvzcWB9jlYQ', 2, 125.00, 'SUV', 'Ford', 'Escape', 1, 0), "
+            + "('cFhPV601NuiFf2HyJ', 2, 100.00, 'Van', 'Ford', 'Sienna', 4, 0), "
+            + "('jnUM0PDy83wWEzjz3', 3, 75.00, 'Sedan', 'Toyota', 'Camry', 3, 0), "
+            + "('Yy2CIT3eUuX9I4XZV', 3, 125.00, 'SUV', 'Ford', 'Escape', 1, 0), "
+            + "('RigIwIQgOWZVXI6Cv', 3, 100.00, 'Van', 'Ford', 'Sienna', 4, 0);";
 
         executeUpdate(dmlCommand);
     }
@@ -43,7 +44,7 @@ public class DbLoader {
     public static void insertCustomerRecords() {
         String dmlCommand = "INSERT IGNORE INTO "
             + "customer(customer_id, first_name, last_name, credit_card_number) VALUES"
-            + "('mjolewis@gmail.com', 'Michael', Lewis', '94383422234098234');";
+            + "('mjolewis@gmail.com', 'Michael', 'Lewis', '9438-3422-2340-9824');";
 
         executeUpdate(dmlCommand);
     }
@@ -52,9 +53,9 @@ public class DbLoader {
         String dmlCommand = "INSERT IGNORE INTO "
             + "reservation(reservation_id, customer_id, vehicle_id, start, end) VALUES"
             + "('7ZoRqJ5IcpZHMJgNo0Fm', 'mjolewis@gmail.com', 'sv1BMLg2mzs29juWX', "
-                + "'2021-03-01 12:00:00', '2021-03-10 14:00:00'), "
+            + "'2021-03-01 12:00:00', '2021-03-10 14:00:00'), "
             + "('JC92qJ5IcpZHMJgNo0Fm', 'mjolewis@bu.edu', 'sv1BMLg2mzs29juWX', "
-                + "'2021-03-11 12:00:00', '2021-03-15 14:00:00');";
+            + "'2021-03-11 12:00:00', '2021-03-15 14:00:00');";
 
         executeUpdate(dmlCommand);
     }

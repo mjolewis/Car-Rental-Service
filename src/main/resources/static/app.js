@@ -66,25 +66,20 @@ function sendReservationRequest() {
  * @param reservation JSON object containing reservation details.
  */
 function displayReservationConfirmation(reservation) {
-    $("#confirmation").empty().append("<tr><td>"
-        + "Confirmation Number:"
-        + ' ' + reservation.reservationId
-        + '<br/>Vehicle address:'
-        + ' ' + reservation.streetNumber
-        + ' ' + reservation.streetName
-        + ', ' + reservation.city
-        + ' ' + reservation.state
-        + ', ' + reservation.zipCode
-        + "</td></tr>");
+    $("#confirmation")
+        .empty()
+        .append(`<tr><td>Confirmation Number: ${reservation.reservationId} <br/>Vehicle address: 
+                ${reservation.streetNumber} ${reservation.streetName}, ${reservation.city} ${reservation.state},
+                ${reservation.zipCode}</td></tr>`);
 }
 
 /**
  * Echos message letting the customer know that the requested reservation cannot be made.
  */
 function carWasNotFound() {
-    $("#confirmation").empty().append("<tr><td>"
-        + 'There are no cars available with your requirements. Please search again.'
-        + "</td></tr>");
+    $("#confirmation")
+        .empty()
+        .append(`<tr><td>There are no cars available with your requirements. Please search again.</td></tr>`);
 }
 
 /**
@@ -101,31 +96,17 @@ function lookupReservationDetails() {
  * @param reservationDTO JSON object containing reservationDTO details.
  */
 function displayReservationDetails(reservationDTO) {
-    $("#reservationDetails").empty().append(
-        "<tr><td>"
-        + 'Reservation Owner:'
-        + ' ' + reservationDTO.firstName
-        + ' ' + reservationDTO.lastName
-        + '</br>From:'
-        + ' ' + reservationDTO.start
-        + '</br>To:'
-        + ' ' +reservationDTO.end
-        + '</br>Vehicle: '
-        + ' ' + reservationDTO.manufacturer
-        + ' ' + reservationDTO.model
-        + '</br>Daily price: $'
-        + reservationDTO.dailyPrice
-        + '</br>Vehicle address:'
-        + ' ' + reservationDTO.streetNumber
-        + ' ' + reservationDTO.streetName
-        + ', ' + reservationDTO.city
-        + ' ' + reservationDTO.state
-        + ', ' + reservationDTO.zipCode
-        + "</td></tr>");
+    $("#reservationDetails")
+        .empty()
+        .append(`<tr><td> Reservation Owner: ${reservationDTO.firstName} ${reservationDTO.lastName} </br> From: 
+            ${reservationDTO.start} </br>To: ${reservationDTO.end} </br>Vehicle: ${reservationDTO.manufacturer} 
+            ${reservationDTO.model} </br>Daily price: $${reservationDTO.dailyPrice} </br>Vehicle address: 
+            ${reservationDTO.streetNumber} ${reservationDTO.streetName} ${reservationDTO.city} ${reservationDTO.state} 
+            ${reservationDTO.zipCode}</td></tr>`);
 }
 
 function displayInvalidReservationId() {
-    $("#reservationDetails").empty().append("<tr><td>Invalid reservation number</td></tr>");
+    $("#reservationDetails").empty().append(`<tr><td>Invalid reservation number</td></tr>`);
 }
 
 $(function () {

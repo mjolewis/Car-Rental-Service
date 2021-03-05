@@ -1,8 +1,10 @@
 import com.crd.carrental.controllers.*;
-import com.crd.carrental.rentalportfolio.vehicledata.Vehicles;
 import org.junit.Test;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -12,57 +14,50 @@ import static org.junit.Assert.assertTrue;
  * @author Michael Lewis
  *********************************************************************************************************************/
 public class VehicleReservation {
-    private static final String CITY = "Cambridge";
-    private static final String CLASSIFICATION = Vehicles.CAMRY.getClassification();
-    private static final String FIRST_NAME = "Michael";
-    private static final String LAST_NAME = "Lewis";
-    private static final String START = new Timestamp(System.currentTimeMillis()).toString();
-    private static final String END = new Timestamp(System.currentTimeMillis()).toString();
-    private static final String CUSTOMER_ID = "mjolewis@bu.edu";
-    private static final String CREDIT_CARD_NUMBER = "2837-9237-4293-7423";
-    private static final String MANUFACTURER = Vehicles.CAMRY.getManufacturer();
-    private static final String MODEL = Vehicles.CAMRY.getModel();
-    private static final BigDecimal DAILY_PRICE = Vehicles.CAMRY.getDailyPrice();
-    private static final String STREET_NUMBER = "456";
-    private static final String STREET_NAME = "Alan Turing Drive";
-    private static final String STATE = "MA";
-    private static final String ZIP_CODE = "02210";
 
     @Test
     public void testNewReservation() {
-        NewReservationRequest reservationRequest = new NewReservationRequest(CITY, CLASSIFICATION, START, END,
-                FIRST_NAME, LAST_NAME, CUSTOMER_ID, CREDIT_CARD_NUMBER);
+        String start = createDateTimeLocal(System.currentTimeMillis() + 100000);
+        String end = createDateTimeLocal(System.currentTimeMillis() + 100000);
+
+        NewReservationRequest reservationRequest =
+                new NewReservationRequest("Cambridge", "Sedan", start, end, "Michael",
+                        "Lewis", "mjolewis@bu.edu", "2837-9237-4293-7423");
         NewReservationController controller = new NewReservationController();
         DataTransferObject dto = controller.requestReservation(reservationRequest);
 
-        assertEquals(FIRST_NAME, dto.getReservationId());
-        assertEquals(FIRST_NAME, dto.getVehicleId());
-        assertEquals(STREET_NUMBER, dto.getStreetNumber());
-        assertEquals(STREET_NAME, dto.getStreetName());
-        assertEquals(CITY, dto.getCity());
-        assertEquals(STATE, dto.getState());
-        assertEquals(ZIP_CODE, dto.getZipCode());
+        assertEquals("456", dto.getStreetNumber());
+        assertEquals("Alan Turing Drive", dto.getStreetName());
+        assertEquals("Cambridge", dto.getCity());
+        assertEquals("MA", dto.getState());
+        assertEquals("02210", dto.getZipCode());
         assertTrue(dto.isAvailable());
+    }
+
+    private String createDateTimeLocal(long currentTimeMillis) {
+        Date startDate = new Date(currentTimeMillis);
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+        return df.format(startDate);
     }
 
     @Test
     public void testExistingReservation() {
-        ExistingReservationRequest reservationRequest =
-                new ExistingReservationRequest("2AI2Z2OME4J0CBVT59WE");
+        String reservationId = "LZI9FPURU491IMIIZG15";
+        ExistingReservationRequest reservationRequest = new ExistingReservationRequest(reservationId);
         ExistingReservationController controller = new ExistingReservationController();
         DataTransferObject dto = controller.lookupReservationId(reservationRequest);
 
-        assertEquals(FIRST_NAME, dto.getFirstName());
-        assertEquals(LAST_NAME, dto.getLastName());
-        assertEquals(START, dto.getStart().toString());
-        assertEquals(END, dto.getEnd().toString());
-        assertEquals(MANUFACTURER, dto.getManufacturer());
-        assertEquals(MODEL, dto.getModel());
-        assertEquals(DAILY_PRICE, dto.getDailyPrice());
-        assertEquals(STREET_NUMBER, dto.getStreetNumber());
-        assertEquals(STREET_NAME, dto.getStreetName());
-        assertEquals(CITY, dto.getCity());
-        assertEquals(START, dto.getState());
-        assertEquals(ZIP_CODE, dto.getZipCode());
+        assertEquals("Michael", dto.getFirstName());
+        assertEquals("Lewis", dto.getLastName());
+        assertEquals("2021-03-05 10:50:00.0", dto.getStart().toString());
+        assertEquals("2021-03-05 11:05:00.0", dto.getEnd().toString());
+        assertEquals("Toyota", dto.getManufacturer());
+        assertEquals("Camry", dto.getModel());
+        assertEquals(new BigDecimal("75.00"), dto.getDailyPrice());
+        assertEquals("456", dto.getStreetNumber());
+        assertEquals("Alan Turing Drive", dto.getStreetName());
+        assertEquals("Cambridge", dto.getCity());
+        assertEquals("MA", dto.getState());
+        assertEquals("02210", dto.getZipCode());
     }
 }

@@ -1,6 +1,7 @@
 package com.crd.carrental.database.insertoperations;
 
 import com.crd.carrental.database.connectionoperations.CloseConnection;
+import com.crd.carrental.database.connectionoperations.OpenConnection;
 import com.crd.carrental.rentalportfolio.components.RentalComponent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,13 +14,12 @@ import java.util.Iterator;
  * @author Michael Lewis
  *********************************************************************************************************************/
 public class InsertVehicles {
+    private static final String TABLE_NAME = "vehicle";
     private Connection con;
-    private String tableName;
     private PreparedStatement pstmt;
 
-    public InsertVehicles(Connection con, String tableName) {
-        this.con = con;
-        this.tableName = tableName;
+    public InsertVehicles() {
+        this.con = OpenConnection.getDataSourceConnection();
     }
 
     public void insert(RentalComponent cars) {
@@ -43,7 +43,7 @@ public class InsertVehicles {
 
     private void createPreparedStatement(RentalComponent vehicle) throws SQLException {
 
-        String sqlInsert = "INSERT IGNORE INTO " + tableName + " values(?, ?, ?, ?, ?, ?, ?, ?)";
+        String sqlInsert = "INSERT IGNORE INTO " + TABLE_NAME + " values(?, ?, ?, ?, ?, ?, ?, ?)";
 
         // Prepared Statements prevent SQL injection and efficiently execute the statement multiple times
         pstmt = con.prepareStatement(sqlInsert);
