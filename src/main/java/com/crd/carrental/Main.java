@@ -52,7 +52,7 @@ public class Main {
         // Create dialog box to create more Sedans
         int numberOfSedansToAdd = createOptionPaneForAddingAdditionalSedan();
         for (int i = 0; i < numberOfSedansToAdd; ++i) {
-            VehicleFactory factory = new VehicleFactoryImpl();
+            VehicleFactory factory = VehicleFactoryImpl.getInstance();
             store.add(
                     factory.createCar(
                             Vehicles.CAMRY,
@@ -63,7 +63,7 @@ public class Main {
         // Create dialog box to create more SUVs
         int numberOfSuvsToAdd = createOptionPaneForAddingAdditionalSuv();
         for (int i = 0; i < numberOfSuvsToAdd; ++i) {
-            VehicleFactory factory = new VehicleFactoryImpl();
+            VehicleFactory factory = VehicleFactoryImpl.getInstance();
             store.add(
                     factory.createCar(
                             Vehicles.ESCAPE,
@@ -74,7 +74,7 @@ public class Main {
         // Create dialog box to create more Vans
         int numberOfVansToAdd = createOptionPaneForAddingAdditionalVan();
         for (int i = 0; i < numberOfVansToAdd; ++i) {
-            VehicleFactory factory = new VehicleFactoryImpl();
+            VehicleFactory factory = VehicleFactoryImpl.getInstance();
             store.add(
                     factory.createCar(Vehicles.SIENNA,
                             Hasher.getSeventeenCharacterSaltString(),

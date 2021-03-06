@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
  * @author Michael Lewis
  *********************************************************************************************************************/
 public class CreateVehicles {
-    VehicleFactory northEastCarSupplier = new VehicleFactoryImpl();
+    VehicleFactory northEastCarSupplier = VehicleFactoryImpl.getInstance();
 
     @Test
     public void createCamry() {

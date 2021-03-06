@@ -101,8 +101,8 @@ function displayReservationDetails(reservationDTO) {
         .append(`<tr><td> Reservation Owner: ${reservationDTO.firstName} ${reservationDTO.lastName} </br> From: 
             ${reservationDTO.start} </br>To: ${reservationDTO.end} </br>Vehicle: ${reservationDTO.manufacturer} 
             ${reservationDTO.model} </br>Daily price: $${reservationDTO.dailyPrice} </br>Vehicle address: 
-            ${reservationDTO.streetNumber} ${reservationDTO.streetName} ${reservationDTO.city} ${reservationDTO.state} 
-            ${reservationDTO.zipCode}</td></tr>`);
+            ${reservationDTO.streetNumber} ${reservationDTO.streetName}, ${reservationDTO.city} ${reservationDTO.state} 
+            , ${reservationDTO.zipCode}</td></tr>`);
 }
 
 function displayInvalidReservationId() {
