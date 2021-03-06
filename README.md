@@ -1,170 +1,206 @@
-# Car Rental Application
+# Vehicle Reservation System
 
 # Description
-The CarRentals application provides a simple user interface that allows customers to reserve rental cars from any 
-existing stores within the parent company portfolio. The application uses MySQL to store information about the 
-car inventory and the customer base. Please note that the classes attempt to use techniques outlined by the seminal 
-book "Clean Code" by Robert Martin. As a result, the system avoids the type of documentation that does not add to the 
-reader (e.g. Accessors and Mutators).
+The Vehicle Reservation System provides a simple user interface to allow customers to reserve vehicles and check the 
+details of existing reservations. The system is built around the Model-View-Controller design pattern. The front-end 
+uses HTML, CSS, Javascript, and JQuery while the backend and model are built with Java and MySQL, respectively. This 
+application also takes advantages of certain features within the Spring framework such as establishing routes between 
+the frontend and backend. However, for illustrative purposes, the application does manually performs certain tasks that 
+Spring would otherwise handle. For example, the system manually creates database connections and entities. In a 
+production application, the system should be refactored to take full advantage of the Spring framework.
 
-The application uses several object oriented design principles. For example:
-1) The application uses the Spring framework to manage the interaction between the user interface and the backend 
-logic. Spring uses the Inversion of Control and allows the view to subscribe to updates within the model. 
-2) The application uses interface based programming techniques to reduce coupling across the system. 
-3) The Abstract Factory pattern declares an interface to create families of related products. The products in this case 
-are car objects.
-4) In addition to the Abstract Factory pattern, this system uses the Singleton pattern where appropriate. As an 
-example, database connection objects should only have a single instance throughout the application.
-5) The system also uses the Composite pattern to compose car and store objects into a tree structure. This is important 
-because the parent company can own several stores and each store must have an inventory of cars to rent out to 
-customers. As a result of the Composite pattern, the system also has a Composite Iterator and NullIterator. The 
-Composite Iterator is responsible for iterating over the entire portfolio of stores and cars. The NullIterator is used 
-to prevent clients from having to implement Null checks when iterating over the leaf nodes (which are cars in this 
-case).
-6) The database operations have been extracted into interfaces where possible. This technique allows us to easily 
-encapsulate different algorithms for the various database operations and make them interchangeable.
+Please also note that the classes attempt to use techniques outlined by the seminal book "Clean Code" by Robert Martin. 
+As a result, the system avoids the type of documentation that does not add to the reader (e.g. Accessors and Mutators).
 
-# Usage
-This application comes with an executable WAR file that can be downloaded from the target directory. Please see the 
-instructions below:
-1) Download the WAR file
-2) Run the 'java -jar CarRentals-1.0-SNAPSHOT.war' command
-3) Launch a web browser and navigate to http://localhost:8080/? to interact with the application
+Finally, the application uses several object oriented design principles including: 
+1) The application uses interface based programming techniques to reduce coupling across the system. 
+2) The Abstract Factory pattern declares an interface to create families of related products. As is typical, the 
+Abstract Factory is a Singleton and also uses the Factory Method pattern to instantiate products. The products in this 
+case are Vehicles.
+3) The Singleton pattern is used throughout the application. In particular, establishing database connections is 
+expensive, so the system manages this overhead by ensuring that only a single connection instance is created. 
+Additionally, the Abstract Factory is stateless and therefore takes advantage of the Singleton pattern.
+4) The Composite pattern is used to compose vehicle and store objects into a tree structure. This is an important 
+feature of the application as it simplifies many challenges associated with scaling business operations. For example, 
+the company may expand into multiple locations or become a holding company for many other rental services. When this 
+happens, the system can easily scale to add the associated stores and vehicles. Additionally, the system also has a 
+Composite Iterator and NullIterator. The Composite Iterator is responsible for iterating over the entire portfolio of 
+stores and vehicles. The NullIterator is used to prevent clients from having to implement Null checks when iterating 
+over the leaf nodes (which are vehicles in this case).
+5) The Strategy pattern is used to make database operations interchangeable. This technique allows us to easily 
+encapsulate different algorithms for the various database operations in the event the system grows more complex and
+needs to implement different CRUD operations.
+6) The Data Transfer Object pattern is used to reduce the number of expensive method calls between the frontend and 
+backend. The Data Transfer Object can hold all the data necessary to resolve a request from the customer, which is a 
+more efficient technique than transferring one unit of data at a time.
+
+# How To Compile The Project
+The system uses Apache Maven. As a result, you need to install Apache Maven (https://maven.apache.org) on your system.
+
+Type on the command line:\
+```mvn clean compile```
+
+# How To Create A Binary Runnable Package
+```mvn clean compile assembly:single```
+
+# How To Run
+```mvn -q clean compile exec:java -Dexec.executable="com.crd.carrental.Main"```
+
+# Run All Unit Tests
+```mvn clean compile test checkstyle:check spotbugs:check```
 
 # System Components
-***CarFactory***\
-The CarFactory declares an interface common to all car creation classes. Concrete factories must implement this 
-interface.
-
-***NorthEastCarSupplier***\
-The NorthEastCarSupplier implements the CarFactory interface and creates concrete car objects. Because the system 
-declares a common CarFactory interface, users can easily extend the application with additional car suppliers.
-
-***RentalComponent***\
-An interface allowing for the composition of a part-whole tree based hierarchy of rental stores and the cars at each 
-store.
-
-***CompositeIterator***\
-A CompositeIterator is capable of iterating over an entire rental portfolio (e.g. stores and individual cars).
-
-***NullIterator***\
-Used by the leaf nodes within the composite of stores and cars to ensure that clients can avoid implementing null 
-checks.
-
-***StoreNames***\
-A set of all store name constants within our portfolio.
-
-***StoreLocations***\
-A set of location constants used to represent the locations of stores. These stores are also used within the 
-Composite pattern and can contain other stores as well as cars.
-
-***RentalStore***\
-A Composite structure capable of recursively holding individual store locations and the cars managed by each location.
-
-***CarTypes***\
-A set of predefined car type constants. These cars are the leaf nodes within the Composite pattern.
-
-***Sedan***\
-Data model for the Sedan car type. Sedan's are leaf nodes within the car rental portfolio. The concrete factories 
-from the Abstract Factory pattern are responsible for instantiating any number of concrete Sedans.
-
-***SUV***\
-Data model for the SUV car type. Sedan's are leaf nodes within the car rental portfolio. The concrete factories 
-from the Abstract Factory pattern are responsible for instantiating any number of concrete SUVs.
-
-***Van***\
-Data model for the Van car type. Sedan's are leaf nodes within the car rental portfolio. The concrete factories 
-from the Abstract Factory pattern are responsible for instantiating any number of concrete Vans.
-
-***CarUnavailable***\
-A data model that is used throughout the application to represent cases when an administrator attempts to create a 
-car type that the stores do not own. This protects against instances where an administrator fails to use the CarTypes 
-Enum to create concrete car objects.
-
-***ApplicationConfig***\
-The ApplicationConfig class provides the application with access to MySQL information.
-
 ***WebSocketConfig***\
-The WebSocketConfig class is solely responsible for configuring and enable WebSocket and STOMP messaging. The purpose
+The WebSocketConfig class is solely responsible for configuring and enabling WebSocket and STOMP messaging. The purpose
 of this class is to create the foundation for an interactive web application that uses message brokers and STOMP 
 (simple text oriented messaging protocol that sits on top of a lower level WebSocket)
 
-***ReservationRequest***\
-The ReservationRequest class provides a data model representing the customers request to rent a car. The customer 
-enters information on a website and submits a request to reserve a car. On the submit, the app.js file appropriately 
-routes the details to the ReservationController over a mapping defined with Spring.
+***VehicleFactory***\
+The VehicleFactory declares an interface common to all vehicle factories. Concrete factories must implement this 
+interface.
 
-***ReservationResponse***\
-The ReservationResponse class provides a data model representing the response to the reservation request. The object 
-is converted into JSON and sent back to the view. The registered observer extracts necessary information and updates 
-the view. In particular, the response tells the view whether or not a car is available to rent given the constraint 
-specified by the customer. If a car is available, the observer initiates a call to confirm the reservation.
+***VehicleFactoryImpl***\
+The VehicleFactoryImpl implements the VehicleFactory interface and creates concrete vehicle objects. The 
+VehicleFactoryImpl is also a Singleton and uses Factory Methods to instantiate the vehicles.
 
-***ReservationConfirmation***\
-The ReservationConfirmation class provides a data model representing reservation confirmation details. The confirmation 
-is initiated whenever the ReservationResponse object notifies its observer that a car is available. This class then 
-creates a random sequence of characters to represent a confirmation number. The object is then converted into JSON and 
-sent back to the view. The registered observer extracts necessary information and updates the view.
+***RentalComponent***\
+An interface allowing for the composition of a part-whole tree based hierarchy of rental stores and vehicles.
 
-***ReservationController***\
-The ReservationController class is an annotated class that works with Spring to route STOMP messages. It handles a web 
-request and uses the @MessageMapping annotation to route that request to the appropriate destination. In particular, 
-it handles the /request and /confirmation routes and subsequently works the the database to perform select and update 
-operations. Finally, it use the @SendTo annotation to respond to the client with a message that updates the view.
+***CompositeIterator***\
+A CompositeIterator is capable of iterating over an entire rental portfolio (e.g. stores and individual vehicles).
 
-***CreateConnection***\
+***NullIterator***\
+Used by the leaf nodes within the composite of stores and vehicles to ensure that clients can avoid implementing null 
+checks.
+
+***RentalStore***\
+A Composite structure capable of recursively holding individual stores and the vehicles. As the business expands and 
+adds new branches, the system must be updated to include these branches and their associated vehicles.
+
+***PriceSheet***\
+An enum containing the standard price offerings allowed by the business.
+
+***VehicleClassification***\
+An enum containing the standard vehicle classifications allowed by the business (e.g., Sedan, SUV, Van). The system 
+allows users to specify the classification of the car that he or she wants to reserve.
+
+***VehicleManufacturer***\
+An enum containing a list of vehicle manufacturers that have built the cars owned by the company. For example, the 
+current business has purchased cars from Toyota and Ford.
+
+***Vehicles***\
+An enum containing vehicle metadata. The data includes the model, classification, price, and number of passengers that 
+is associated with each concrete vehicle type.
+
+***Camry***\
+A POJO for Camry's. An Camry is a type of vehicle that this business has purchased and has available for rent.
+
+***Escape***\
+A POJO for Escape's. An Escape is a type of vehicle that this business has purchased and has available for rent.
+
+***Sienna***\
+A POJO for Sienna's. An Sienna is a type of vehicle that this business has purchased and has available for rent.
+
+***DataTransferObject***\
+An interface for concrete Data Transfer Objects. The Data Transfer Object can hold all the data necessary to resolve a 
+request from the customer, which is a more efficient technique than transferring one unit of data at a time. The Data 
+Transfer Object is a useful design pattern when working with a remote interface.
+
+***ExistingReservationRequest***\
+The ExistingReservationRequest class provides a data model representing a customer request to check details about an 
+existing reservation. The customer provides the reservation id and the system queries the database to see if the 
+reservation exists. If it does, the system uses the ExistingReservationDataTransferObject to respond with useful 
+reservation details.
+
+***ExistingReservationController***\
+The ExistingReservationController class is an annotated class that works with Spring to route STOMP messages. It 
+handles a web request and uses the @MessageMapping annotation to route that request to the appropriate destination. In 
+particular, it handles the ```/reservation/lookup``` route and subsequently works the the database to perform select  
+and update operations. Finally, it use the @SendTo annotation to respond to the client with the 
+ExistingReservationDataTransferObject and updates the view.
+
+***ExistingReservationDataTransferObject***\
+The ExistingReservationDataTransferObject class provides a data model representing the response to the customers 
+request. The object is converted into JSON and sent back to the view. The registered observer extracts necessary 
+information and updates the view.
+
+***NewReservationRequest***\
+The NewReservationRequest class provides a data model representing the customers request to rent a vehicle. The 
+customer enters information on a website and submits a request to reserve a vehicle. Importantly, the system only 
+allows a customer to submit the request if all input fields are populated. This protection is handled by logic included
+in the existingReservation.html file. 
+
+***NewReservationController***\
+The NewReservationController class is an annotated class that works with Spring to route STOMP messages. It handles a 
+web request and uses the @MessageMapping annotation to route that request to the appropriate destination. In 
+particular, it handles the ```/reservation/request``` route and subsequently works the the database to perform select 
+and update operations. Finally, it use the @SendTo annotation to respond to the client with the 
+NewReservationDataTransferObject and updates the view.
+
+***NewReservationDataTransferObject***\
+The NewReservationDataTransferObject class provides a data model representing the response to the customers request
+The object is converted into JSON and sent back to the view. The registered observer extracts necessary information and 
+updates the view.
+
+***DateAndTimeUtil***\
+The DateAndTimeUtil is a useful utility class capable of converting strings into Timestamps as well as performing 
+checks to ensure the customer has submitted a valid reservation (e.g., the end date must be greater than the start 
+date).
+
+***OpenConnection***\
 Creates a thread safe connection to a SQL database using the Singleton pattern.
 
 ***CreateTableStrategy***\
 Declares an interface common to all supported database table creation algorithms. Concrete strategies must implement 
 this interface.
 
-***CreateInventoryTable***\
-Create a SQL table for the inventory of cars if it doesn't already exist. The system checks whether or not this table 
-exists at startup because the application depends on a table existing.
+***CreateSystemTables***\
+Create a SQL table for the inventory of vehicles if it doesn't already exist. The system checks whether or not this 
+table exists at startup because the application depends on a table existing. When the application launches, the user
+will be presented with several JOptionPane dialogs. One of these dialogs will ask the admin if he or she needs to 
+create the initial tables. If so, the system uses DDL commands to create four different tables (e.g. Store, Vehicle, 
+Customer, Reservation).
 
-***CreateCustomerTable***\
-Create a SQL table for our customers if it doesn't already exist. The system checks whether or not this table exists at 
-startup because the application depends on a table existing.
+***DbLoader***\
+The DbLoader can be used to seed the database with an initial set of records. When the application launches, the user
+will be presented with several JOptionPane dialogs. One of these dialogs will ask the admin if he or she wants to seed 
+the database with these initial records.
 
 ***InsertStrategy***\
 Declares an interface common to all supported database insert algorithms. Concrete strategies must implement this 
 interface.
 
-***InsertInventory***\
-Inserts individual cars into a MySQL database. Because the application lets customers request reservations against an 
-existing product, the product must first exist. Therefore, ensure that the inventory table within the database has 
-a set of cars.
+***InsertCustomer***\
+Insert customer information into the database. The customer table uses the customerId (e.g., the customers email) as 
+the primary key, so a customer is only inserted if the provided email address doesn't already exist. This allows the 
+system to maintain a unique record of customer information.
 
-***InsertCustomers***\
-Update the database record for the customers who have made a reservation. Customers make reservations after the system 
-is running, therefore it is not required to insert until a reservation has been made.
+***InsertReservation***\
+Insert reservation details whenever a new reservation is made. This insert operation includes the reservation id, 
+customer id, start date, and end date. An ExistingReservationRequest also uses this table to check if a particular 
+vehicle is available for reservation or not. For example, a vehicle cannot be reserved if the new request overlaps with 
+the start and end date of an existing reservation.
+
+***InsertVehicles***\
+Inserts individual vehicles into a MySQL database. Because the application lets customers request reservations against 
+an existing product, the product must first exist. Therefore, ensure that the inventory table within the database has a 
+set of vehicles.
 
 ***SelectStrategy***\
 Declares an interface common to all supported database Select algorithms. Concrete strategies must implement this 
 interface.
 
-***SelectInventory***\
-Selects one car that matches the location and car type. If no car is available that matches the customer requirements, 
-then an CarUnavailable object is created and used to notify the customer that there are no cars available that match 
-the requirements.
+***SelectAvailableReservation***\
+The SelectAvailableReservation queries the reservation table to confirm whether or not a reservation can be made for  
+a customers request. For example, a vehicle cannot be reserved if the new request overlaps with the start and end date 
+of an existing reservation. If there is a conflict, the system responds with an null Data Transfer Object that is used 
+to inform the customer that their request cannot be fulfilled.
 
-If a car is reserved, it can still be available because the existing reservation is in the future. This select 
-statement will only find cars that have a reservation start date and time greater than the current customer's request. 
-This statement should not allow reservations to be made against a car if the reservation end date and time is equal to 
-the current customer's request because the company will perform routine cleaning services before the car can be rented 
-again.
-
-***UpdateStrategy***\
-Declares an interface common to all supported database update operations algorithms. Concrete strategies must implement 
-this interface.
-
-***UpdateInventoryTable***\
-Updates the database after the reservation has been confirmed by the customer. Importantly, the database maintains the 
-isReserved and isAvailable fields. If a reservation is confirmed by the customer, then the isReserved field will be set 
-to true. However, this car can still be available for rent if the reservation date and time are in the future. As a 
-result, the system will perform an operation against the reservationStartDateAndTime to before updating the database 
-with the correct value.
+***SelectExistingReservation***\
+The SelectExistingReservation queries the reservation table for the reservation id provided by the customer. This query 
+is initiated by the customer, routed to the ExistingReservationController, and then returns an 
+ExistingReservationDataTransferObject that is used to update the view with either the reservation details or a message 
+indicating that the reservation id is not in the system.
 
 ***CloseConnection***\
 A collection of JDBC helper methods to close connections. Utility classes should not have a public or default 
@@ -175,18 +211,16 @@ The system architecture is based on SOLID principles and core Object Oriented de
 application has a well-defined single-responsibility, which has been highlighted in the System Components section. 
 Additionally, the application uses the following patterns:
 
-1) Singleton pattern
-2) Abstract Factory pattern
-3) Factory methods
-4) Composite pattern
-5) Iterator pattern
-6) Observer pattern
-7) Strategy pattern
+1) Singleton Pattern
+2) Abstract Factory Pattern
+3) Factory Method Pattern
+4) Composite Pattern
+5) Iterator Pattern
+6) Observer Pattern
+7) Strategy Pattern
+8) Data Transfer Object Pattern
 
 UML Diagram:
 
-# Extreme Scenarios and Limitations
-
-# Output Analysis
 
 

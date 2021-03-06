@@ -12,8 +12,21 @@ import com.crd.carrental.rentalportfolio.vehicledata.Vehicles;
  * @author Michael Lewis
  *********************************************************************************************************************/
 public class VehicleFactoryImpl implements VehicleFactory {
+    private static volatile VehicleFactoryImpl instance;
 
-    public VehicleFactoryImpl() {}
+    private VehicleFactoryImpl() {}
+
+    public static VehicleFactoryImpl getInstance() {
+        if (instance == null) {
+            synchronized (VehicleFactoryImpl.class) {
+                if (instance == null) {
+                    instance = new VehicleFactoryImpl();
+                }
+            }
+        }
+
+        return instance;
+    }
 
     @Override
     public RentalComponent createCar(Vehicles model, String vehicleId, String storeId) {
