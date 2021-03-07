@@ -11,16 +11,16 @@ import com.crd.carrental.rentalportfolio.vehicledata.Vehicles;
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public class VehicleFactoryImpl implements VehicleFactory {
-    private static volatile VehicleFactoryImpl instance;
+public class VehicleCreatorImpl implements VehicleCreator {
+    private static volatile VehicleCreatorImpl instance;
 
-    private VehicleFactoryImpl() {}
+    private VehicleCreatorImpl() {}
 
-    public static VehicleFactoryImpl getInstance() {
+    public static VehicleCreatorImpl getInstance() {
         if (instance == null) {
-            synchronized (VehicleFactoryImpl.class) {
+            synchronized (VehicleCreatorImpl.class) {
                 if (instance == null) {
-                    instance = new VehicleFactoryImpl();
+                    instance = new VehicleCreatorImpl();
                 }
             }
         }

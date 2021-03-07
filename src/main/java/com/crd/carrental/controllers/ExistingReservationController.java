@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class ExistingReservationController {
     private String reservationId;
+    private SelectStrategy selector = new SelectExistingReservation();
 
     public ExistingReservationController() {}
 
@@ -21,7 +22,6 @@ public class ExistingReservationController {
     @SendTo("/reservation/lookup")
     public DataTransferObject lookupReservationId(ExistingReservationRequest request) {
         this.reservationId = request.getReservationId();
-        SelectStrategy selector = new SelectExistingReservation();
         return selector.select(this);
     }
 

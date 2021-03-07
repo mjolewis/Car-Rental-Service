@@ -1,5 +1,5 @@
-import com.crd.carrental.factories.VehicleFactory;
-import com.crd.carrental.factories.VehicleFactoryImpl;
+import com.crd.carrental.factories.VehicleCreator;
+import com.crd.carrental.factories.VehicleCreatorImpl;
 import com.crd.carrental.rentalportfolio.components.RentalComponent;
 import com.crd.carrental.rentalportfolio.vehicledata.Vehicles;
 import java.math.BigDecimal;
@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
  * @author Michael Lewis
  *********************************************************************************************************************/
 public class CreateVehicles {
-    VehicleFactory northEastCarSupplier = VehicleFactoryImpl.getInstance();
+    VehicleCreator northEastCarSupplier = VehicleCreatorImpl.getInstance();
 
     @Test
     public void createCamry() {

@@ -1,7 +1,7 @@
 package com.crd.carrental.controllers;
 
-import com.crd.carrental.database.insertoperations.InsertCustomer;
-import com.crd.carrental.database.insertoperations.InsertReservation;
+import com.crd.carrental.database.insertoperations.InsertCustomerStrategy;
+import com.crd.carrental.database.insertoperations.InsertReservationStrategy;
 import com.crd.carrental.database.insertoperations.InsertStrategy;
 import com.crd.carrental.database.selectoperations.SelectAvailableReservation;
 import com.crd.carrental.database.selectoperations.SelectStrategy;
@@ -28,6 +28,9 @@ public class NewReservationController {
     private String creditCardNumber;
     private String vehicleId;
     private String reservationId;
+    private SelectStrategy selector = new SelectAvailableReservation();
+    private InsertStrategy reservationStrategy = new InsertReservationStrategy();
+    private InsertStrategy customerStrategy = new InsertCustomerStrategy();
 
     public NewReservationController() {
     }
@@ -65,7 +68,6 @@ public class NewReservationController {
     }
 
     private DataTransferObject isVehicleAvailableForReservation() {
-        SelectStrategy selector = new SelectAvailableReservation();
         return selector.select(this);
     }
 
@@ -103,8 +105,7 @@ public class NewReservationController {
     }
 
     private void insertIntoReservationTable() {
-        InsertStrategy reservationTable = new InsertReservation();
-        reservationTable.insert(this);
+        reservationStrategy.insert(this);
     }
 
     /**
@@ -134,8 +135,7 @@ public class NewReservationController {
      * Helper method used to insert this customer into the customer table.
      */
     private void insertIntoCustomerTable() {
-        InsertStrategy customerTable = new InsertCustomer();
-        customerTable.insert(this);
+        customerStrategy.insert(this);
     }
 
     /**

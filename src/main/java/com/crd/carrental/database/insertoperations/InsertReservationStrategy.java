@@ -7,25 +7,26 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**********************************************************************************************************************
- * Update the database record for the customers who have made a reservation.
+ * Inserts customer reservations into a MySQL database. These reservations are only inserted if there is no conflicting
+ * reservation for the vehicle, start, end, and location attributes.
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public class InsertCustomer extends InsertStrategy {
+public class InsertReservationStrategy extends InsertStrategy {
     private Connection con;
     private PreparedStatement pstmt;
 
-    public InsertCustomer() {
+    public InsertReservationStrategy() {
         this.con = OpenConnection.getDataSourceConnection();
     }
 
     /**
-     * Inserts into the customer table after the reservation has been confirmed by the customer.
+     * Assign the confirmed reservation number to a car that the customer requested. This allows an employee to
+     * match a customers reservation number to a particular car when the customer shows up at the store.
      */
     @Override
     public void insert(NewReservationController controller) {
-
-        String sqlInsert = "INSERT IGNORE INTO customer values(?, ?, ?, ?)";
+        String sqlInsert = "INSERT IGNORE INTO reservation VALUES(?, ?, ?, ?, ?)";
 
         try {
             createPreparedStatement(sqlInsert, controller);
@@ -39,11 +40,11 @@ public class InsertCustomer extends InsertStrategy {
 
     private void createPreparedStatement(String insertStatement, NewReservationController controller)
             throws SQLException {
-
         pstmt = con.prepareStatement(insertStatement);
-        pstmt.setString(1, controller.getCustomerId());
-        pstmt.setString(2, controller.getFirstName());
-        pstmt.setString(3, controller.getLastName());
-        pstmt.setString(4, controller.getCreditCardNumber());
+        pstmt.setString(1, controller.getReservationId());
+        pstmt.setString(2, controller.getCustomerId());
+        pstmt.setString(3, controller.getVehicleId());
+        pstmt.setTimestamp(4, controller.getStart());
+        pstmt.setTimestamp(5, controller.getEnd());
     }
 }

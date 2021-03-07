@@ -14,12 +14,11 @@ As a result, the system avoids the type of documentation that does not add to th
 
 Finally, the application uses several object oriented design principles including: 
 1) The application uses interface based programming techniques to reduce coupling across the system. 
-2) The Abstract Factory pattern declares an interface to create families of related products. As is typical, the 
-Abstract Factory is a Singleton and also uses the Factory Method pattern to instantiate products. The products in this 
-case are Vehicles.
+2) The Factory Method pattern is used to declare an interface for creating Vehicles. As is typical, the 
+VehicleFactoryImpl implements this interface as a Singleton.
 3) The Singleton pattern is used throughout the application. In particular, establishing database connections is 
 expensive, so the system manages this overhead by ensuring that only a single connection instance is created. 
-Additionally, the Abstract Factory is stateless and therefore takes advantage of the Singleton pattern.
+Additionally, the VehicleFactory is stateless and therefore takes advantage of the Singleton pattern.
 4) The Composite pattern is used to compose vehicle and store objects into a tree structure. This is an important 
 feature of the application as it simplifies many challenges associated with scaling business operations. For example, 
 the company may expand into multiple locations or become a holding company for many other rental services. When this 
@@ -37,17 +36,25 @@ more efficient technique than transferring one unit of data at a time.
 # How To Compile The Project
 The system uses Apache Maven. As a result, you need to install Apache Maven (https://maven.apache.org) on your system.
 
-Type on the command line:\
-```mvn clean compile```
+Type on the command line:
+```bash
+mvn clean compile
+```
 
 # How To Create A Binary Runnable Package
-```mvn clean compile assembly:single```
+```bash
+mvn clean compile assembly:single
+```
 
 # How To Run
-```mvn -q clean compile exec:java -Dexec.executable="com.crd.carrental.Main"```
+```bash
+mvn -q clean compile exec:java -Dexec.executable="com.crd.carrental.Main"
+```
 
 # Run All Unit Tests
-```mvn clean compile test checkstyle:check spotbugs:check```
+```bash
+mvn clean compile test checkstyle:check spotbugs:check
+```
 
 # System Components
 ***WebSocketConfig***\
@@ -55,13 +62,13 @@ The WebSocketConfig class is solely responsible for configuring and enabling Web
 of this class is to create the foundation for an interactive web application that uses message brokers and STOMP 
 (simple text oriented messaging protocol that sits on top of a lower level WebSocket)
 
-***VehicleFactory***\
-The VehicleFactory declares an interface common to all vehicle factories. Concrete factories must implement this 
+***VehicleCreator***\
+The VehicleCreator declares an interface common to all vehicle factories. Concrete factories must implement this 
 interface.
 
-***VehicleFactoryImpl***\
-The VehicleFactoryImpl implements the VehicleFactory interface and creates concrete vehicle objects. The 
-VehicleFactoryImpl is also a Singleton and uses Factory Methods to instantiate the vehicles.
+***VehicleCreatorImpl***\
+The VehicleCreatorImpl implements the VehicleFactory interface and creates concrete vehicle objects. The 
+VehicleCreatorImpl is also a Singleton and uses Factory Methods to instantiate the vehicles.
 
 ***RentalComponent***\
 An interface allowing for the composition of a part-whole tree based hierarchy of rental stores and vehicles.
@@ -115,7 +122,7 @@ reservation details.
 ***ExistingReservationController***\
 The ExistingReservationController class is an annotated class that works with Spring to route STOMP messages. It 
 handles a web request and uses the @MessageMapping annotation to route that request to the appropriate destination. In 
-particular, it handles the ```/reservation/lookup``` route and subsequently works the the database to perform select  
+particular, it handles the ```/reservation/lookup``` route and subsequently works the the database to perform select 
 and update operations. Finally, it use the @SendTo annotation to respond to the client with the 
 ExistingReservationDataTransferObject and updates the view.
 
@@ -212,15 +219,15 @@ application has a well-defined single-responsibility, which has been highlighted
 Additionally, the application uses the following patterns:
 
 1) Singleton Pattern
-2) Abstract Factory Pattern
-3) Factory Method Pattern
-4) Composite Pattern
-5) Iterator Pattern
-6) Observer Pattern
-7) Strategy Pattern
-8) Data Transfer Object Pattern
+2) Factory Method Pattern
+3) Composite Pattern
+4) Iterator Pattern
+5) Observer Pattern
+6) Strategy Pattern
+7) Data Transfer Object Pattern
 
 UML Diagram:
+![Vehicle Reservation System Class Diagram](https://user-images.githubusercontent.com/12025538/110245866-14906880-7f33-11eb-9bd7-554926ae78ee.png)
 
 
 
