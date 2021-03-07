@@ -47,6 +47,11 @@ mvn clean compile assembly:single
 ```
 
 # How To Run
+The system uses JOptionPane to show option dialogs during system start. These option dialogs allow an administrator to, 
+if necessary, create system tables, seed database tables, and add more vehicles to stores. As a result, the 
+administrator must complete these tasks before the system fully launches.
+
+After the system launches, navigate to http://localhost:8080/ to interact with the reservation system.
 ```bash
 mvn -q clean compile exec:java -Dexec.executable="com.crd.carrental.Main"
 ```
@@ -177,12 +182,12 @@ the database with these initial records.
 Declares an interface common to all supported database insert algorithms. Concrete strategies must implement this 
 interface.
 
-***InsertCustomer***\
+***InsertCustomerStrategy***\
 Insert customer information into the database. The customer table uses the customerId (e.g., the customers email) as 
 the primary key, so a customer is only inserted if the provided email address doesn't already exist. This allows the 
 system to maintain a unique record of customer information.
 
-***InsertReservation***\
+***InsertReservationStrategy***\
 Insert reservation details whenever a new reservation is made. This insert operation includes the reservation id, 
 customer id, start date, and end date. An ExistingReservationRequest also uses this table to check if a particular 
 vehicle is available for reservation or not. For example, a vehicle cannot be reserved if the new request overlaps with 
