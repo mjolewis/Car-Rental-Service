@@ -22,13 +22,13 @@ public class InsertVehicles {
         this.con = OpenConnection.getDataSourceConnection();
     }
 
-    public void insert(RentalComponent cars) {
-        Iterator<RentalComponent> iterator = cars.createIterator();
+    public void insert(RentalComponent vehicles) {
+        Iterator<RentalComponent> iterator = vehicles.createIterator();
 
         while (iterator.hasNext()) {
             RentalComponent component = iterator.next();
 
-            if (component.isChild()) {                                // Only add cars to the database
+            if (component.isChild()) {                                // Only add vehicles to the database
                 try {
                     createPreparedStatement(component);
                     executeUpdate();

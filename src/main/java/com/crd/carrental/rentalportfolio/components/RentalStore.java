@@ -11,7 +11,7 @@ import java.util.List;
  *********************************************************************************************************************/
 public class RentalStore extends RentalComponent {
     private String storeId;
-    private List<RentalComponent> carRentalPortfolio = new ArrayList<>();
+    private List<RentalComponent> branches = new ArrayList<>();
     private Iterator<RentalComponent> iterator;
 
     public RentalStore(String storeId) {
@@ -20,18 +20,18 @@ public class RentalStore extends RentalComponent {
 
     @Override
     public void add(RentalComponent rentalComponent) {
-        carRentalPortfolio.add(rentalComponent);
+        branches.add(rentalComponent);
     }
 
     @Override
     public void remove(RentalComponent rentalComponent) {
-        carRentalPortfolio.remove(rentalComponent);
+        branches.remove(rentalComponent);
     }
 
     @Override
     public Iterator<RentalComponent> createIterator() {
         if (iterator == null) {
-            iterator = new CompositeIterator(carRentalPortfolio.iterator());
+            iterator = new CompositeIterator(branches.iterator());
         }
         return iterator;
     }
@@ -43,7 +43,7 @@ public class RentalStore extends RentalComponent {
 
     @Override
     public RentalComponent getChild(int i) {
-        return carRentalPortfolio.get(i);
+        return branches.get(i);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class RentalStore extends RentalComponent {
         System.out.println("\nStore ID: " + storeId);
         System.out.println("-------------");
 
-        Iterator<RentalComponent> iterator = carRentalPortfolio.iterator();
+        Iterator<RentalComponent> iterator = branches.iterator();
         while (iterator.hasNext()) {
             RentalComponent rentalComponent = iterator.next();
             rentalComponent.print();

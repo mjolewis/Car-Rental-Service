@@ -5,8 +5,8 @@ import com.crd.carrental.database.createoperations.CreateSystemTables;
 import com.crd.carrental.database.createoperations.CreateTableStrategy;
 import com.crd.carrental.database.insertoperations.DbLoader;
 import com.crd.carrental.database.insertoperations.InsertVehicles;
-import com.crd.carrental.factories.VehicleFactory;
-import com.crd.carrental.factories.VehicleFactoryImpl;
+import com.crd.carrental.factories.VehicleCreator;
+import com.crd.carrental.factories.VehicleCreatorImpl;
 import com.crd.carrental.rentalportfolio.components.RentalComponent;
 import com.crd.carrental.rentalportfolio.components.RentalStore;
 import com.crd.carrental.rentalportfolio.vehicledata.Vehicles;
@@ -52,7 +52,7 @@ public class Main {
         // Create dialog box to create more Sedans
         int numberOfSedansToAdd = createOptionPaneForAddingAdditionalSedan();
         for (int i = 0; i < numberOfSedansToAdd; ++i) {
-            VehicleFactory factory = VehicleFactoryImpl.getInstance();
+            VehicleCreator factory = VehicleCreatorImpl.getInstance();
             store.add(
                     factory.createCar(
                             Vehicles.CAMRY,
@@ -63,7 +63,7 @@ public class Main {
         // Create dialog box to create more SUVs
         int numberOfSuvsToAdd = createOptionPaneForAddingAdditionalSuv();
         for (int i = 0; i < numberOfSuvsToAdd; ++i) {
-            VehicleFactory factory = VehicleFactoryImpl.getInstance();
+            VehicleCreator factory = VehicleCreatorImpl.getInstance();
             store.add(
                     factory.createCar(
                             Vehicles.ESCAPE,
@@ -74,7 +74,7 @@ public class Main {
         // Create dialog box to create more Vans
         int numberOfVansToAdd = createOptionPaneForAddingAdditionalVan();
         for (int i = 0; i < numberOfVansToAdd; ++i) {
-            VehicleFactory factory = VehicleFactoryImpl.getInstance();
+            VehicleCreator factory = VehicleCreatorImpl.getInstance();
             store.add(
                     factory.createCar(Vehicles.SIENNA,
                             Hasher.getSeventeenCharacterSaltString(),

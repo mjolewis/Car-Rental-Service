@@ -8,7 +8,7 @@ import com.crd.carrental.rentalportfolio.vehicledata.Vehicles;
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public interface VehicleFactory {
+public interface VehicleCreator {
 
     RentalComponent createCar(Vehicles model, String vehicleId, String storeId);
 }
