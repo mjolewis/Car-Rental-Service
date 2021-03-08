@@ -1,6 +1,8 @@
 # Vehicle Reservation System
+Github Link: https://github.com/mjolewis/Vehicle-Reservation-System
 
-# Description
+# Project Tasks
+#### Provide A Description of The Application Use Case
 The Vehicle Reservation System provides a simple user interface to allow customers to reserve vehicles and check the 
 details of existing reservations. The system is built around the Model-View-Controller design pattern. The front-end 
 uses HTML, CSS, Javascript, and JQuery while the backend and model are built with Java and MySQL, respectively. This 
@@ -12,7 +14,10 @@ production application, the system should be refactored to take full advantage o
 Please also note that the classes attempt to use techniques outlined by the seminal book "Clean Code" by Robert Martin. 
 As a result, the system avoids the type of documentation that does not add to the reader (e.g. Accessors and Mutators).
 
-Finally, the application uses several object oriented design principles including: 
+#### What Are The Design Goals
+The primary design goals are to make the system sufficient, flexible, and maintainable. As a result, the system makes 
+an efficiency trade-off because the primary design objectives often require adding additional classes and function call 
+overhead. For a more complete description, please see the list below.
 1) The application uses interface based programming techniques to reduce coupling across the system. 
 2) The Factory Method pattern is used to declare an interface for creating Vehicles. As is typical, the 
 VehicleFactoryImpl implements this interface as a Singleton.
@@ -32,6 +37,20 @@ needs to implement different CRUD operations.
 6) The Data Transfer Object pattern is used to reduce the number of expensive method calls between the frontend and 
 backend. The Data Transfer Object can hold all the data necessary to resolve a request from the customer, which is a 
 more efficient technique than transferring one unit of data at a time.
+7) The Callback Pattern is used by the frontend (app.js) to execute code after certain click events occur. For example, 
+a customer can submit a vehicle reservation request by clicking on a button. The button will listen for a click event 
+and execute an anonymous callback function whenever that click event occurs.
+
+#### How Flexible Is The System
+The design patterns used in this system make it very flexible. For example, the Strategy Pattern makes it very easy to 
+alter how certain database operations occur should there ever be a need to extend the business logic. Additionally, the 
+Composite Pattern allows the business and system to scale in a flexible manner. Whenever new branches are added, the 
+system simply composes the stores and associated vehicles into a tree-like structure that can subsequently be 
+maintained in the MySQL database.  
+
+#### How Does The System Avoid Duplicated Code
+As mentioned, the system uses abstract base classes where possible to avoid duplicated code. The specialized classes 
+provide compile time polymorphism by overriding the abstract base methods wherever necessary.
 
 # How To Compile The Project
 The system uses Apache Maven. As a result, you need to install Apache Maven (https://maven.apache.org) on your system.
@@ -113,7 +132,7 @@ A POJO for Escape's. An Escape is a type of vehicle that this business has purch
 ***Sienna***\
 A POJO for Sienna's. An Sienna is a type of vehicle that this business has purchased and has available for rent.
 
-***DataTransferObject***\
+***Response***\
 An interface for concrete Data Transfer Objects. The Data Transfer Object can hold all the data necessary to resolve a 
 request from the customer, which is a more efficient technique than transferring one unit of data at a time. The Data 
 Transfer Object is a useful design pattern when working with a remote interface.
@@ -121,7 +140,7 @@ Transfer Object is a useful design pattern when working with a remote interface.
 ***ExistingReservationRequest***\
 The ExistingReservationRequest class provides a data model representing a customer request to check details about an 
 existing reservation. The customer provides the reservation id and the system queries the database to see if the 
-reservation exists. If it does, the system uses the ExistingReservationDataTransferObject to respond with useful 
+reservation exists. If it does, the system uses the ExistingReservationResponseto respond with useful 
 reservation details.
 
 ***ExistingReservationController***\
@@ -129,12 +148,12 @@ The ExistingReservationController class is an annotated class that works with Sp
 handles a web request and uses the @MessageMapping annotation to route that request to the appropriate destination. In 
 particular, it handles the ```/reservation/lookup``` route and subsequently works the the database to perform select 
 and update operations. Finally, it use the @SendTo annotation to respond to the client with the 
-ExistingReservationDataTransferObject and updates the view.
+ExistingReservationResponse and updates the view.
 
-***ExistingReservationDataTransferObject***\
-The ExistingReservationDataTransferObject class provides a data model representing the response to the customers 
-request. The object is converted into JSON and sent back to the view. The registered observer extracts necessary 
-information and updates the view.
+***ExistingReservationResponse***\
+The ExistingReservationResponse class provides a data model representing the response to the customers request. The 
+object is converted into JSON and sent back to the view. The registered observer extracts necessary information and 
+updates the view.
 
 ***NewReservationRequest***\
 The NewReservationRequest class provides a data model representing the customers request to rent a vehicle. The 
@@ -147,12 +166,12 @@ The NewReservationController class is an annotated class that works with Spring 
 web request and uses the @MessageMapping annotation to route that request to the appropriate destination. In 
 particular, it handles the ```/reservation/request``` route and subsequently works the the database to perform select 
 and update operations. Finally, it use the @SendTo annotation to respond to the client with the 
-NewReservationDataTransferObject and updates the view.
+NewReservationResponse and updates the view.
 
-***NewReservationDataTransferObject***\
-The NewReservationDataTransferObject class provides a data model representing the response to the customers request
-The object is converted into JSON and sent back to the view. The registered observer extracts necessary information and 
-updates the view.
+***NewReservationResponse***\
+The NewReservationResponse class provides a data model representing the response to the customers request. The object 
+is converted into JSON and sent back to the view. The registered observer extracts necessary information and updates 
+the view.
 
 ***DateAndTimeUtil***\
 The DateAndTimeUtil is a useful utility class capable of converting strings into Timestamps as well as performing 
@@ -211,7 +230,7 @@ to inform the customer that their request cannot be fulfilled.
 ***SelectExistingReservation***\
 The SelectExistingReservation queries the reservation table for the reservation id provided by the customer. This query 
 is initiated by the customer, routed to the ExistingReservationController, and then returns an 
-ExistingReservationDataTransferObject that is used to update the view with either the reservation details or a message 
+ExistingReservationResponse that is used to update the view with either the reservation details or a message 
 indicating that the reservation id is not in the system.
 
 ***CloseConnection***\
@@ -230,9 +249,10 @@ Additionally, the application uses the following patterns:
 5) Observer Pattern
 6) Strategy Pattern
 7) Data Transfer Object Pattern
+8) Callback Pattern
 
 UML Diagram:
-![Vehicle Reservation System Class Diagram](https://user-images.githubusercontent.com/12025538/110245866-14906880-7f33-11eb-9bd7-554926ae78ee.png)
+![Vehicle Reservation System Class Diagram (1)](https://user-images.githubusercontent.com/12025538/110372953-ee46f780-801c-11eb-8140-466c6f49770a.png)
 
 
 

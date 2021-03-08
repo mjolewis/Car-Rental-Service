@@ -1,8 +1,8 @@
 package com.crd.carrental.database.selectoperations;
 
-import com.crd.carrental.controllers.DataTransferObject;
 import com.crd.carrental.controllers.ExistingReservationController;
-import com.crd.carrental.controllers.ExistingReservationDataTransferObject;
+import com.crd.carrental.controllers.ExistingReservationResponse;
+import com.crd.carrental.controllers.Response;
 import com.crd.carrental.database.connectionoperations.OpenConnection;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -22,9 +22,9 @@ public class SelectExistingReservation extends SelectStrategy {
     }
 
     @Override
-    public DataTransferObject select(ExistingReservationController controller) {
+    public Response select(ExistingReservationController controller) {
         this.reservationId = controller.getReservationId();
-        DataTransferObject dataTransferObject = null;
+        Response response = null;
 
         String selectStatement =
                 "SELECT "
@@ -53,14 +53,14 @@ public class SelectExistingReservation extends SelectStrategy {
         try {
             createPreparedStatement(selectStatement);
             resultSet = executeQuery(pstmt);
-            dataTransferObject = (resultSet.next()) ? createValidResponse(resultSet) : createInvalidResponse();
+            response = (resultSet.next()) ? createValidResponse(resultSet) : createInvalidResponse();
         } catch (SQLException e) {
             handleException(e);
         }
 
         closePreparedStatement(resultSet, pstmt);
 
-        return dataTransferObject;
+        return response;
 
     }
 
@@ -71,7 +71,7 @@ public class SelectExistingReservation extends SelectStrategy {
     }
 
     @Override
-    public DataTransferObject createValidResponse(ResultSet resultSet) throws SQLException {
+    public Response createValidResponse(ResultSet resultSet) throws SQLException {
         String firstName = resultSet.getString("first_name");
         String lastName = resultSet.getString("last_name");
         Timestamp start = resultSet.getTimestamp("start");
@@ -85,13 +85,13 @@ public class SelectExistingReservation extends SelectStrategy {
         String state = resultSet.getString("state");
         String zipCode = resultSet.getString("zip_code");
 
-        return new ExistingReservationDataTransferObject(firstName, lastName, start, end, manufacturer, model,
+        return new ExistingReservationResponse(firstName, lastName, start, end, manufacturer, model,
                 dailyPrice, streetNumber, streetName, city, state, zipCode);
     }
 
     @Override
-    public DataTransferObject createInvalidResponse() {
-        return new ExistingReservationDataTransferObject(null, null, null, null, null,
+    public Response createInvalidResponse() {
+        return new ExistingReservationResponse(null, null, null, null, null,
                 null, null, null, null, null, null, null);
     }
 }

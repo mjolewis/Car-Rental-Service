@@ -9,6 +9,9 @@ import java.sql.Timestamp;
  *********************************************************************************************************************/
 public class DateAndTimeUtil {
 
+    // Suppress default constructor for non-instantiability
+    private DateAndTimeUtil() {}
+
     /**
      * Converts a DateTime-Local into a Timestamp.
      * @param dateTimeLocal The Date-Time Local represents the desired start or end of the customers reservation

@@ -37,7 +37,7 @@ public class NewReservationController {
 
     @MessageMapping("/request")
     @SendTo("/reservation/request")
-    public DataTransferObject requestReservation(NewReservationRequest request) {
+    public Response requestReservation(NewReservationRequest request) {
         this.city = request.getCity();
         this.classification = request.getClassification();
         this.start = DateAndTimeUtil.convertDateAndTime(request.getStart());
@@ -48,26 +48,26 @@ public class NewReservationController {
         this.creditCardNumber = request.getCreditCardNumber();
 
         if (DateAndTimeUtil.isStartAndEndValid(start, end)) {
-            DataTransferObject dataTransferObject = isVehicleAvailableForReservation();
+            Response response = isVehicleAvailableForReservation();
 
-            if (dataTransferObject.isAvailable()) {
+            if (response.isAvailable()) {
                 // Extract attributes needed by insertReservation operation
-                vehicleId = dataTransferObject.getVehicleId();
-                reservationId = dataTransferObject.getReservationId();
+                vehicleId = response.getVehicleId();
+                reservationId = response.getReservationId();
 
                 insertIntoReservationTable();
                 insertIntoCustomerTable();
 
-                return dataTransferObject;
+                return response;
             }
         }
 
         // This occurs if the start and end are invalid or if a reservation isn't available
-        return new NewReservationDataTransferObject(null, null, null,
+        return new NewReservationResponse(null, null, null,
                 null, null, null, null, false);
     }
 
-    private DataTransferObject isVehicleAvailableForReservation() {
+    private Response isVehicleAvailableForReservation() {
         return selector.select(this);
     }
 

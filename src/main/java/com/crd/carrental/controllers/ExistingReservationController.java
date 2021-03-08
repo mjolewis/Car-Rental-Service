@@ -20,7 +20,7 @@ public class ExistingReservationController {
 
     @MessageMapping("/lookup")
     @SendTo("/reservation/lookup")
-    public DataTransferObject lookupReservationId(ExistingReservationRequest request) {
+    public Response lookupReservationId(ExistingReservationRequest request) {
         this.reservationId = request.getReservationId();
         return selector.select(this);
     }
