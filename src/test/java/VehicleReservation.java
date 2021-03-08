@@ -24,7 +24,7 @@ public class VehicleReservation {
                 new NewReservationRequest("Cambridge", "Sedan", start, end, "Michael",
                         "Lewis", "mjolewis@bu.edu", "2837-9237-4293-7423");
         NewReservationController controller = new NewReservationController();
-        DataTransferObject dto = controller.requestReservation(reservationRequest);
+        Response dto = controller.requestReservation(reservationRequest);
 
         assertEquals("456", dto.getStreetNumber());
         assertEquals("Alan Turing Drive", dto.getStreetName());
@@ -45,7 +45,7 @@ public class VehicleReservation {
         String reservationId = "LZI9FPURU491IMIIZG15";
         ExistingReservationRequest reservationRequest = new ExistingReservationRequest(reservationId);
         ExistingReservationController controller = new ExistingReservationController();
-        DataTransferObject dto = controller.lookupReservationId(reservationRequest);
+        Response dto = controller.lookupReservationId(reservationRequest);
 
         assertEquals("Michael", dto.getFirstName());
         assertEquals("Lewis", dto.getLastName());

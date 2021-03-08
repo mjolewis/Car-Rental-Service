@@ -8,14 +8,14 @@ import java.sql.Timestamp;
  *
  * @author Michael Lewis
  *********************************************************************************************************************/
-public class ExistingReservationDataTransferObject extends DataTransferObject {
+public class ExistingReservationResponse extends Response {
 
-    public ExistingReservationDataTransferObject() {}
+    public ExistingReservationResponse() {}
 
-    public ExistingReservationDataTransferObject(String firstName, String lastName, Timestamp start, Timestamp end,
-                                                 String manufacturer, String model, BigDecimal dailyPrice,
-                                                 String streetNumber, String streetName, String city,
-                                                 String state, String zipCode) {
+    public ExistingReservationResponse(String firstName, String lastName, Timestamp start, Timestamp end,
+                                       String manufacturer, String model, BigDecimal dailyPrice,
+                                       String streetNumber, String streetName, String city,
+                                       String state, String zipCode) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.start = (start == null) ? null : (Timestamp) start.clone();

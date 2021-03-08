@@ -15,8 +15,8 @@ stompClient.connect({}, function (frame) {
     console.log('Connected: ' + frame);
 
     // Listens for a new reservation event
-    stompClient.subscribe('/reservation/request', function (newReservationDTO) {
-        let newReservationJson = JSON.parse(newReservationDTO.body);
+    stompClient.subscribe('/reservation/request', function (response) {
+        let newReservationJson = JSON.parse(response.body);
         if (newReservationJson.available) {
             displayReservationConfirmation(newReservationJson);
         } else {
@@ -25,10 +25,10 @@ stompClient.connect({}, function (frame) {
     });
 
     // Listens for a lookup reservation event
-    stompClient.subscribe('/reservation/lookup', function (existingReservationDTO) {
-        const existingReservationStart = JSON.parse(existingReservationDTO.body).start;
+    stompClient.subscribe('/reservation/lookup', function (response) {
+        const existingReservationStart = JSON.parse(response.body).start;
         if (existingReservationStart != null) {
-            displayReservationDetails(JSON.parse(existingReservationDTO.body));
+            displayReservationDetails(JSON.parse(response.body));
         } else {
             displayInvalidReservationId();
         }
@@ -36,7 +36,8 @@ stompClient.connect({}, function (frame) {
 });
 
 /**
- * Send the customer information to the controller to check if a car is available.
+ * Send the customer information to the controller to check if a car is available. The data is transferred using the
+ * Data Transfer Object Pattern to avoid making multiple calls to the remote server.
  */
 function sendReservationRequest() {
     const city = document.getElementById("city").value;
@@ -62,15 +63,14 @@ function sendReservationRequest() {
 }
 
 /**
- * Echos reservation confirmation details to the customer.
- * @param reservation JSON object containing reservation details.
+ * Echos response confirmation details to the customer.
+ * @param response JSON object containing response details.
  */
-function displayReservationConfirmation(reservation) {
+function displayReservationConfirmation(response) {
     $("#confirmation")
         .empty()
-        .append(`<tr><td>Confirmation Number: ${reservation.reservationId} <br/>Vehicle address: 
-                ${reservation.streetNumber} ${reservation.streetName}, ${reservation.city} ${reservation.state},
-                ${reservation.zipCode}</td></tr>`);
+        .append(`<tr><td>Confirmation Number: ${response.reservationId} <br/>Vehicle address: ${response.streetNumber} 
+                ${response.streetName}, ${response.city} ${response.state}, ${response.zipCode}</td></tr>`);
 }
 
 /**
@@ -92,17 +92,16 @@ function lookupReservationDetails() {
 }
 
 /**
- * Echos reservationDTO confirmation details to the customer.
- * @param reservationDTO JSON object containing reservationDTO details.
+ * Echos response confirmation details to the customer.
+ * @param response JSON object containing response details.
  */
-function displayReservationDetails(reservationDTO) {
+function displayReservationDetails(response) {
     $("#reservationDetails")
         .empty()
-        .append(`<tr><td> Reservation Owner: ${reservationDTO.firstName} ${reservationDTO.lastName} </br> From: 
-            ${reservationDTO.start} </br>To: ${reservationDTO.end} </br>Vehicle: ${reservationDTO.manufacturer} 
-            ${reservationDTO.model} </br>Daily price: $${reservationDTO.dailyPrice} </br>Vehicle address: 
-            ${reservationDTO.streetNumber} ${reservationDTO.streetName}, ${reservationDTO.city} ${reservationDTO.state} 
-            , ${reservationDTO.zipCode}</td></tr>`);
+        .append(`<tr><td> Reservation Owner: ${response.firstName} ${response.lastName} </br> From: ${response.start} 
+            </br>To: ${response.end} </br>Vehicle: ${response.manufacturer} ${response.model} </br>Daily price: 
+            $${response.dailyPrice} </br>Vehicle address: ${response.streetNumber} ${response.streetName}, 
+            ${response.city} ${response.state}, ${response.zipCode}</td></tr>`);
 }
 
 function displayInvalidReservationId() {
